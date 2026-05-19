@@ -78,8 +78,8 @@ const HomePage = () => {
   return (
     <div>
       <Helmet>
-        <title>Top Clinical Research & Pharmacovigilance Institute in India | Clinidea</title>
-        <meta name="description" content="India's premier institute for Clinical Research, Pharmacovigilance, Clinical Data Management (CDM), Regulatory Affairs (RA), Medical Writing & Medical Coding courses. 100% Placement Support, live projects, and Argus safety tools training." />
+        <title>Clinidea | Top Clinical Research & PV Institute in India</title>
+        <meta name="description" content="India's top Clinical Research & Pharmacovigilance institute. Get 100% placement support, live projects & global certifications. Accelerate your career!" />
         <link rel="canonical" href="https://clinidea.in/" />
         <meta name="keywords" content="Clinical Research Course, Pharmacovigilance Course, Clinical Data Management Course, Regulatory Affairs Course, Medical Writing Course, Medical Coding Course, CPC Certification, drug safety associate training, CRA training, clinical trial management, PG diploma in clinical research, clinical SAS training, GCP certification online, best clinical research institute, Argus safety training, signal detection, eCTD submissions, USFDA compliance, ICH GCP, medical writing jobs work from home, medical coding salary in India, pharmacovigilance salary for freshers, best alternative to Cliniminds, Cliniindia, Royed Training, GIHS, BCRI Bangalore Clinical Research Institute, online clinical research training, job-oriented drug safety courses India" />
         <meta property="og:type" content="website" />
