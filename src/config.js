@@ -6,4 +6,4 @@ const currentProtocol = window.location.protocol; // 'http:' or 'https:'
 export const BASE_URL = import.meta.env.VITE_API_URL || 
   (currentHostname === 'localhost' 
     ? 'http://localhost:5000' 
-    : `${currentProtocol}//${currentHostname}${currentProtocol === 'https:' ? '/api' : ':5000'}`);
+    : `${currentProtocol}//${currentHostname}${currentProtocol === 'https:' ? '' : ':5000'}`);
