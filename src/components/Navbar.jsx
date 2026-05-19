@@ -4,6 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileCoursesOpen, setMobileCoursesOpen] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -17,6 +18,7 @@ const Navbar = () => {
   // Close mobile menu on route change
   useEffect(() => {
     setMobileMenuOpen(false);
+    setMobileCoursesOpen(false);
   }, [location.pathname]);
 
   return (
@@ -170,6 +172,92 @@ const Navbar = () => {
         .premium-navbar.scrolled {
           top: -40px; /* Hide top bar when scrolled */
         }
+        
+        /* Dropdown custom style */
+        .nav-dropdown-wrapper {
+          position: relative;
+          display: inline-block;
+        }
+        .nav-dropdown-menu {
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          transform: translateX(-50%) translateY(10px);
+          background: #ffffff;
+          box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+          border-radius: 12px;
+          min-width: 320px;
+          padding: 12px 0;
+          z-index: 1051;
+          border: 1px solid rgba(0,0,0,0.08);
+          opacity: 0;
+          visibility: hidden;
+          transition: all 0.3s ease;
+        }
+        .nav-dropdown-wrapper:hover .nav-dropdown-menu {
+          opacity: 1;
+          visibility: visible;
+          transform: translateX(-50%) translateY(0);
+        }
+        .dropdown-item-link {
+          display: block;
+          padding: 10px 24px;
+          color: var(--color-primary);
+          font-weight: 600;
+          font-size: 0.95rem;
+          text-decoration: none;
+          transition: all 0.2s ease;
+          border-bottom: 1px solid rgba(0,0,0,0.02);
+          text-align: left;
+        }
+        .dropdown-item-link:last-child {
+          border-bottom: none;
+        }
+        .dropdown-item-link:hover {
+          background-color: rgba(13, 148, 136, 0.05);
+          color: var(--color-accent);
+          padding-left: 30px;
+        }
+        .dropdown-toggle {
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+        
+        @media (max-width: 991px) {
+          .nav-dropdown-menu {
+            position: static;
+            transform: none !important;
+            box-shadow: none;
+            border: none;
+            padding: 0 0 0 15px;
+            background: transparent;
+            min-width: auto;
+            margin-top: 5px;
+            display: none;
+            opacity: 1;
+            visibility: visible;
+          }
+          .nav-dropdown-menu.mobile-show {
+            display: block;
+          }
+          .dropdown-item-link {
+            padding: 8px 10px;
+            font-size: 0.95rem;
+            color: var(--color-primary);
+            border-bottom: none;
+            text-align: center;
+          }
+          .dropdown-item-link:hover {
+            background: transparent;
+            color: var(--color-accent);
+            padding-left: 10px;
+          }
+          .dropdown-toggle {
+            justify-content: center;
+          }
+        }
       `}</style>
 
       <header className={`premium-navbar ${isScrolled ? 'scrolled' : ''}`}>
@@ -198,7 +286,23 @@ const Navbar = () => {
           <div className={`nav-links ${mobileMenuOpen ? 'mobile-active' : ''}`}>
             <Link to="/" className={`nav-link ${location.pathname === '/' ? 'active' : ''}`}>Home</Link>
             <Link to="/about" className={`nav-link ${location.pathname === '/about' ? 'active' : ''}`}>About Us</Link>
-            <Link to="/program" className={`nav-link ${location.pathname === '/program' || location.pathname.includes('course') || location.pathname.includes('clinical') ? 'active' : ''}`}>Courses</Link>
+            <div className="nav-dropdown-wrapper">
+              <span 
+                className={`nav-link ${location.pathname === '/program' || location.pathname.includes('course') || location.pathname.includes('clinical') ? 'active' : ''} dropdown-toggle`}
+                onClick={() => setMobileCoursesOpen(!mobileCoursesOpen)}
+              >
+                Courses <i className="fa fa-chevron-down" style={{ fontSize: '10px' }}></i>
+              </span>
+              <div className={`nav-dropdown-menu ${mobileCoursesOpen ? 'mobile-show' : ''}`}>
+                <Link to="/program" className="dropdown-item-link">All Programs</Link>
+                <Link to="/clinical-research-pharmacovigilance-course" className="dropdown-item-link">Clinical Research & Pharmacovigilance</Link>
+                <Link to="/clinical-research-data-management-course" className="dropdown-item-link">Clinical Research & Data Management</Link>
+                <Link to="/clinical-research-cr-pv-dm-course" className="dropdown-item-link">Clinical Research, PV & Data Management</Link>
+                <Link to="/clinical-research-regulatory-affairs-course" className="dropdown-item-link">Clinical Research & Regulatory Affairs</Link>
+                <Link to="/clinical-research-medical-writing-course" className="dropdown-item-link">Clinical Research & Medical Writing</Link>
+                <Link to="/clinical-research-medical-coding-course" className="dropdown-item-link">Clinical Research & Medical Coding</Link>
+              </div>
+            </div>
             <Link to="/events" className={`nav-link ${location.pathname === '/events' ? 'active' : ''}`}>Events</Link>
             <Link to="/blogs" className={`nav-link ${location.pathname === '/blogs' ? 'active' : ''}`}>Blogs</Link>
             <Link to="/placements" className={`nav-link ${location.pathname === '/placements' ? 'active' : ''}`}>Placements</Link>
