@@ -13,8 +13,8 @@ const Footer = () => {
         }
         .footer-grid {
           display: grid;
-          grid-template-columns: 1.5fr 1fr 1fr 1.5fr;
-          gap: 3rem;
+          grid-template-columns: 1.5fr 1fr 1.3fr 1fr 1.2fr;
+          gap: 2rem;
           margin-bottom: 3rem;
         }
         .footer-brand img {
@@ -116,18 +116,26 @@ const Footer = () => {
             <div className="footer-col">
               <h3 className="footer-heading">Quick Links</h3>
               <ul className="footer-links">
+                <li><Link to="/">Home</Link></li>
                 <li><Link to="/about">About Us</Link></li>
                 <li><Link to="/program">All Courses</Link></li>
-                <li><Link to="/clinical-research-pharmacovigilance-course">Clinical Research & PV</Link></li>
-                <li><Link to="/clinical-research-data-management-course">Clinical Research & Data Management</Link></li>
+                <li><Link to="/placements">Placements</Link></li>
                 <li><Link to="/events">Events</Link></li>
+                <li><Link to="/blogs">Blogs</Link></li>
                 <li><Link to="/contact">Contact</Link></li>
               </ul>
-              <div style={{ marginTop: '1.5rem' }}>
-                <Link to="/login" className="newsletter-btn" style={{ textDecoration: 'none', display: 'inline-block', textAlign: 'center', backgroundColor: '#ffffff', color: 'var(--color-primary)' }}>
-                  <i className="fa fa-user-graduate" style={{ marginRight: '8px' }}></i> Student Login / LMS
-                </Link>
-              </div>
+            </div>
+
+            <div className="footer-col">
+              <h3 className="footer-heading">Our Courses</h3>
+              <ul className="footer-links">
+                <li><Link to="/clinical-research-pharmacovigilance-course">Clinical Research & PV</Link></li>
+                <li><Link to="/clinical-research-data-management-course">Clinical Research & DM</Link></li>
+                <li><Link to="/clinical-research-cr-pv-dm-course">Clinical Research, PV & DM</Link></li>
+                <li><Link to="/clinical-research-regulatory-affairs-course">Regulatory Affairs</Link></li>
+                <li><Link to="/clinical-research-medical-writing-course">Medical Writing</Link></li>
+                <li><Link to="/clinical-research-medical-coding-course">Medical Coding</Link></li>
+              </ul>
             </div>
             
             <div className="footer-col">
@@ -150,15 +158,20 @@ const Footer = () => {
                   </span>
                 </li>
               </ul>
+              <div style={{ marginTop: '1.5rem' }}>
+                <Link to="/login" className="newsletter-btn" style={{ textDecoration: 'none', display: 'inline-block', textAlign: 'center', backgroundColor: '#ffffff', color: 'var(--color-primary)' }}>
+                  <i className="fa fa-user-graduate" style={{ marginRight: '8px' }}></i> LMS Login
+                </Link>
+              </div>
             </div>
             
             <div className="footer-col">
               <h3 className="footer-heading">Stay Updated</h3>
               <p className="footer-desc" style={{ marginBottom: '15px' }}>
-                Subscribe to our newsletter for the latest industry updates, course offers, and placement news.
+                Subscribe to our newsletter for the latest updates.
               </p>
               <form onSubmit={(e) => e.preventDefault()}>
-                <input type="email" placeholder="Your Email Address" className="newsletter-input" required />
+                <input type="email" placeholder="Email Address" className="newsletter-input" required />
                 <button type="submit" className="newsletter-btn">Subscribe <i className="fa fa-paper-plane" style={{ marginLeft: '5px' }}></i></button>
               </form>
             </div>
