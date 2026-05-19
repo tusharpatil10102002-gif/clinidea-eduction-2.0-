@@ -129,12 +129,12 @@ const Footer = () => {
             <div className="footer-col">
               <h3 className="footer-heading">Our Courses</h3>
               <ul className="footer-links">
-                <li><Link to="/clinical-research-pharmacovigilance-course">Clinical Research & PV</Link></li>
-                <li><Link to="/clinical-research-data-management-course">Clinical Research & DM</Link></li>
-                <li><Link to="/clinical-research-cr-pv-dm-course">Clinical Research, PV & DM</Link></li>
-                <li><Link to="/clinical-research-regulatory-affairs-course">Regulatory Affairs</Link></li>
-                <li><Link to="/clinical-research-medical-writing-course">Medical Writing</Link></li>
-                <li><Link to="/clinical-research-medical-coding-course">Medical Coding</Link></li>
+                <li><Link to="/clinical-research-pharmacovigilance-course">Clinical Research & Pharmacovigilance</Link></li>
+                <li><Link to="/clinical-research-data-management-course">Clinical Research & Data Management</Link></li>
+                <li><Link to="/clinical-research-cr-pv-dm-course">Clinical Research, Pharmacovigilance & Data Management</Link></li>
+                <li><Link to="/clinical-research-regulatory-affairs-course">Clinical Research & Regulatory Affairs</Link></li>
+                <li><Link to="/clinical-research-medical-writing-course">Clinical Research & Medical Writing</Link></li>
+                <li><Link to="/clinical-research-medical-coding-course">Clinical Research & Medical Coding</Link></li>
               </ul>
             </div>
             
