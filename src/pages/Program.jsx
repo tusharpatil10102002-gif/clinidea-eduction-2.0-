@@ -15,9 +15,15 @@ const Program = () => {
         <meta name="description" content="Enroll in India's top Clinical Research & PV programs. Better than Cliniminds and Cliniindia, our industry-aligned syllabus offers 100% placement support in Pharmacovigilance, Regulatory Affairs, and Medical Coding." />
         <meta name="keywords" content="Best Clinical Research courses, Pharmacovigilance training institute, Clinical Data Management course, Medical Coding certification, Regulatory Affairs diploma online, Healthcare career training institute India, Cliniminds alternative, Cliniindia equivalent, Biotecnika courses, IGMPI clinical research, Top PV institute" />
         <link rel="canonical" href="https://clinidea.in/program" />
+        <meta property="og:type" content="website" />
         <meta property="og:title" content="Premium Clinical Research & PV Courses | 100% Placement" />
         <meta property="og:description" content="Advance your career with India's best healthcare institute. Industry-led training in PV, CDM, and Regulatory Affairs." />
         <meta property="og:url" content="https://clinidea.in/program" />
+        <meta property="og:image" content="https://clinidea.in/images/about.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Premium Healthcare Courses | Clinidea Education" />
+        <meta name="twitter:description" content="Enroll in India's top Clinical Research & PV programs. 100% placement support in Pharmacovigilance, Regulatory Affairs, and Medical Coding." />
+        <meta name="twitter:image" content="https://clinidea.in/images/about.jpg" />
 
         <script type="application/ld+json">
           {JSON.stringify({

@@ -1,11 +1,16 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 
 const RegisterInstructions = () => {
   const navigate = useNavigate();
 
   return (
     <div className="container py-5 mt-5">
+      <Helmet>
+        <title>Registration Instructions | Clinidea Education</title>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       <div className="row justify-content-center">
         <div className="col-lg-8">
           <div className="card shadow-lg border-0 rounded-4">

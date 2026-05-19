@@ -98,6 +98,15 @@ const Events = () => {
         <meta name="description" content="Join our upcoming healthcare and clinical research events, webinars, and demo sessions. Learn from industry experts and boost your career." />
         <meta name="keywords" content="Clinical Research webinars, Pharmacovigilance events, Healthcare career seminars" />
         <link rel="canonical" href="https://clinidea.in/events" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Upcoming Events & Webinars | Clinidea Education" />
+        <meta property="og:description" content="Join our upcoming healthcare and clinical research events, webinars, and demo sessions." />
+        <meta property="og:url" content="https://clinidea.in/events" />
+        <meta property="og:image" content="https://clinidea.in/images/about.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Upcoming Events & Webinars | Clinidea Education" />
+        <meta name="twitter:description" content="Join our upcoming healthcare and clinical research events, webinars, and demo sessions." />
+        <meta name="twitter:image" content="https://clinidea.in/images/about.jpg" />
       </Helmet>
 
       {/* Hero Section */}

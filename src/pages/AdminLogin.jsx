@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { BASE_URL } from '../config';
 
 const AdminLogin = () => {
@@ -45,6 +46,10 @@ const AdminLogin = () => {
 
   return (
     <div className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh', background: 'var(--color-bg-light)' }}>
+      <Helmet>
+        <title>Admin Login | Clinidea Education</title>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       <div className="p-5 bg-white rounded-4 shadow-lg" style={{ maxWidth: '400px', width: '100%' }}>
         <div className="text-center mb-4">
           <h2 style={{ fontWeight: '800', color: 'var(--color-primary)' }}>Admin Login</h2>

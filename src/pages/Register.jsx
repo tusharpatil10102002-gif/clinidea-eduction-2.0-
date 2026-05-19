@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import { BASE_URL } from '../config';
@@ -136,6 +137,10 @@ const Register = () => {
 
   return (
     <div className="d-flex align-items-center justify-content-center py-5 mt-5" style={{ minHeight: '100vh', background: 'var(--color-bg-light)' }}>
+      <Helmet>
+        <title>Student Registration | Clinidea Education</title>
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       <div className="p-4 p-md-5 bg-white rounded-4 shadow-lg mx-3" style={{ maxWidth: '500px', width: '100%' }}>
         
         {step === 1 && !success && (

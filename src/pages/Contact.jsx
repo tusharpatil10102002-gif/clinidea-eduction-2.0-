@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import EnquiryForm from '../components/EnquiryForm';
 
 const Contact = () => {
@@ -8,6 +9,21 @@ const Contact = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Contact Us | Admissions & Inquiries | Clinidea Education</title>
+        <meta name="description" content="Get in touch with Clinidea Education. Reach out to our career counselors, join our WhatsApp group, or contact us for clinical research course admissions." />
+        <meta name="keywords" content="Contact Clinidea Education, Clinidea WhatsApp group, clinical research course admission, pharmacovigilance training contact, Clinidea phone number" />
+        <link rel="canonical" href="https://clinidea.in/contact" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Contact Us | Admissions & Inquiries | Clinidea Education" />
+        <meta property="og:description" content="Have questions about our Clinical Research, PV, or CDM courses? Contact our team or join our WhatsApp community for instant guidance." />
+        <meta property="og:url" content="https://clinidea.in/contact" />
+        <meta property="og:image" content="https://clinidea.in/images/about.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Contact Us | Clinidea Education" />
+        <meta name="twitter:description" content="Reach out to Clinidea Education for course inquiries, batch timings, and student support details." />
+        <meta name="twitter:image" content="https://clinidea.in/images/about.jpg" />
+      </Helmet>
       {/* Hero Section */}
       <section className="hero-wrap hero-wrap-2" style={{ backgroundImage: 'url(/images/bg_2.jpg)' }} data-stellar-background-ratio="0.5">
         <div className="overlay"></div>

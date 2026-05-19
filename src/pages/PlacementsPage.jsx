@@ -60,8 +60,19 @@ const PlacementsPage = () => {
   return (
     <>
       <Helmet>
-        <title>Recent Placements | Clinidea Education</title>
+        <title>Recent Placements | Student Placements & Wall of Fame | Clinidea Education</title>
         <meta name="description" content="Explore our wall of fame! See the recent placements of our successful students at top healthcare and life science companies." />
+        <meta name="keywords" content="Clinidea Education placements, student success stories, pharma placement record, clinical research jobs freshers" />
+        <link rel="canonical" href="https://clinidea.in/placements" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Recent Placements | Wall of Fame | Clinidea Education" />
+        <meta property="og:description" content="See our student success stories and recent placements at top-tier healthcare & CRO companies." />
+        <meta property="og:url" content="https://clinidea.in/placements" />
+        <meta property="og:image" content="https://clinidea.in/images/about.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Recent Placements | Clinidea Education" />
+        <meta name="twitter:description" content="See our student success stories and recent placements at top-tier healthcare & CRO companies." />
+        <meta name="twitter:image" content="https://clinidea.in/images/about.jpg" />
       </Helmet>
 
       {/* Hero Section */}

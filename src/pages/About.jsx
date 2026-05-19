@@ -26,8 +26,19 @@ const About = () => {
   return (
     <div>
       <Helmet>
-        <title>About Us | Clinidea Education</title>
-        <meta name="description" content="Learn more about Clinidea Education, our expert faculties, and our goal to empower students in Clinical Research and Pharmacovigilance." />
+        <title>About Us | Top Clinical Research & Pharmacovigilance Institute | Clinidea</title>
+        <meta name="description" content="Learn more about Clinidea Education, our expert founders, faculty, and our mission to provide placement-backed training in Clinical Research, Pharmacovigilance, and Data Management." />
+        <meta name="keywords" content="Clinidea Education about, Tushar Patil founder Clinidea, clinical research institute team, drug safety faculty India, pharmacovigilance course directors" />
+        <link rel="canonical" href="https://clinidea.in/about" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="About Us | Top Clinical Research & PV Institute | Clinidea" />
+        <meta property="og:description" content="Meet our founder and expert mentors. Join India's leading career-focused institute for Clinical Research & Pharmacovigilance training." />
+        <meta property="og:url" content="https://clinidea.in/about" />
+        <meta property="og:image" content="https://clinidea.in/images/about.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="About Us | Top Clinical Research Institute" />
+        <meta name="twitter:description" content="Learn about our expert mentors, founder Tushar Patil, and placement record in Clinical Research & Pharmacovigilance." />
+        <meta name="twitter:image" content="https://clinidea.in/images/about.jpg" />
       </Helmet>
 
       {/* Top Contact Bar */}

@@ -60,7 +60,17 @@ const BlogDetail = () => {
     <>
       <Helmet>
         <title>{blog.metaTitle || `${blog.title} | Clinidea Insights`}</title>
-        <meta name="description" content={blog.metaDescription || blog.title} />
+        <meta name="description" content={blog.metaDescription || blog.title.substring(0, 160)} />
+        <link rel="canonical" href={`https://clinidea.in/blogs/${blog.slug}`} />
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content={blog.metaTitle || blog.title} />
+        <meta property="og:description" content={blog.metaDescription || blog.title.substring(0, 160)} />
+        <meta property="og:url" content={`https://clinidea.in/blogs/${blog.slug}`} />
+        <meta property="og:image" content={blog.featuredImage ? (blog.featuredImage.startsWith('http') ? blog.featuredImage : `https://clinidea.in${blog.featuredImage}`) : 'https://clinidea.in/images/about.jpg'} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={blog.metaTitle || blog.title} />
+        <meta name="twitter:description" content={blog.metaDescription || blog.title.substring(0, 160)} />
+        <meta name="twitter:image" content={blog.featuredImage ? (blog.featuredImage.startsWith('http') ? blog.featuredImage : `https://clinidea.in${blog.featuredImage}`) : 'https://clinidea.in/images/about.jpg'} />
       </Helmet>
 
       {/* Hero Banner for Blog - Premium layout */}

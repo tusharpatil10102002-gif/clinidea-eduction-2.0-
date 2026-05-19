@@ -33,6 +33,15 @@ const Blogs = () => {
         <meta name="description" content="Stay updated with the latest trends, tips, and insights in Clinical Research, Pharmacovigilance, and Data Management from Clinidea Education." />
         <meta name="keywords" content="Clinical Research blogs, Pharmacovigilance career guides, Healthcare article insights" />
         <link rel="canonical" href="https://clinidea.in/blogs" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Insights & Industry Blogs | Clinidea Education" />
+        <meta property="og:description" content="Stay updated with the latest trends, tips, and insights in Clinical Research, Pharmacovigilance, and Data Management." />
+        <meta property="og:url" content="https://clinidea.in/blogs" />
+        <meta property="og:image" content="https://clinidea.in/images/about.jpg" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Insights & Industry Blogs | Clinidea Education" />
+        <meta name="twitter:description" content="Stay updated with the latest trends, tips, and insights in Clinical Research, Pharmacovigilance, and Data Management." />
+        <meta name="twitter:image" content="https://clinidea.in/images/about.jpg" />
       </Helmet>
 
       {/* Hero Section */}

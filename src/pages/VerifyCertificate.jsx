@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { BASE_URL } from '../config';
 
 const VerifyCertificate = () => {
@@ -57,6 +58,11 @@ const VerifyCertificate = () => {
 
   return (
     <div className="container py-5" style={{ minHeight: '80vh', marginTop: '60px' }}>
+      <Helmet>
+        <title>Verify Certificate | Clinidea Education</title>
+        <meta name="description" content="Authenticate and verify student training certificates issued by Clinidea Education." />
+        <meta name="robots" content="noindex, nofollow" />
+      </Helmet>
       <div className="row justify-content-center">
         <div className="col-md-8 col-lg-6">
           <div className="card shadow-lg border-0 rounded-4">
