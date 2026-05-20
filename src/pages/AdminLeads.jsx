@@ -276,7 +276,7 @@ const AdminLeads = () => {
                             }
                             const registerLink = `${BASE_URL}/register?course=${encodeURIComponent(selectedLead.courseInterest || '')}`;
                             
-                            return `Hello ${selectedLead.name}, 👋\n\nThank you for showing interest in the Advanced Certification Course ${selectedLead.courseInterest}.\n\n${brochureLink ? `📥 Download Brochure: ${brochureLink}\n\n` : ''}🚀 Register Now: ${registerLink}\n\nOur team will connect with you soon to guide you further regarding the course.\n\nIf you have any questions regarding the course, placements, internship, or career opportunities, feel free to reply to this message. We’ll be happy to assist you.\n\nRegards,\nTeam Clinidea Education`;
+                            return `Hello ${selectedLead.name}, \uD83D\uDC4B\n\nThank you for showing interest in the Advanced Certification Course ${selectedLead.courseInterest}.\n\n${brochureLink ? `\uD83D\uDCE5 Download Brochure: ${brochureLink}\n\n` : ''}\uD83D\uDE80 Register Now: ${registerLink}\n\nOur team will connect with you soon to guide you further regarding the course.\n\nIf you have any questions regarding the course, placements, internship, or career opportunities, feel free to reply to this message. We’ll be happy to assist you.\n\nRegards,\nTeam Clinidea Education`;
                           })()
                         )}`}
                         target="_blank"
