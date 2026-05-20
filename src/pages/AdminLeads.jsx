@@ -274,8 +274,9 @@ const AdminLeads = () => {
                             if (selectedCourseData?.brochureUrl) {
                               brochureLink = selectedCourseData.brochureUrl.startsWith('/') ? `${BASE_URL}${selectedCourseData.brochureUrl}` : `${BASE_URL}/${selectedCourseData.brochureUrl}`;
                             }
-                            const enrollLink = `${BASE_URL}/enroll?course=${encodeURIComponent(selectedLead.courseInterest || '')}`;
-                            return `Hello ${selectedLead.name},\n\nThank you for your interest in the ${selectedLead.courseInterest} program at Clinidea Education.\n\nHere are some quick links for you:\n${brochureLink ? `📥 Download Brochure: ${brochureLink}\n` : ''}🚀 Enroll Now: ${enrollLink}\n\nPlease let me know if you have any questions!`;
+                            const registerLink = `${BASE_URL}/register?course=${encodeURIComponent(selectedLead.courseInterest || '')}`;
+                            
+                            return `Hello ${selectedLead.name}, 👋\n\nThank you for showing interest in the Advanced Certification Course ${selectedLead.courseInterest}.\n\n${brochureLink ? `📥 Download Brochure: ${brochureLink}\n\n` : ''}🚀 Register Now: ${registerLink}\n\nOur team will connect with you soon to guide you further regarding the course.\n\nIf you have any questions regarding the course, placements, internship, or career opportunities, feel free to reply to this message. We’ll be happy to assist you.\n\nRegards,\nTeam Clinidea Education`;
                           })()
                         )}`}
                         target="_blank"
