@@ -270,8 +270,10 @@ const AdminLeads = () => {
                         href={`https://wa.me/${selectedLead.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
                           (() => {
                             const registerLink = `${BASE_URL}/register?course=${encodeURIComponent(selectedLead.courseInterest || '')}`;
+                            const wave = String.fromCodePoint(0x1F44B);
+                            const rocket = String.fromCodePoint(0x1F680);
                             
-                            return `Hello *${selectedLead.name}*,\n\nThank you for showing interest in the *Advanced Certification Course ${selectedLead.courseInterest}*.\n\n*Register Now:* ${registerLink}\n\nOur team will connect with you soon to guide you further regarding the course.\n\nIf you have any questions regarding the course, placements, internship, or career opportunities, feel free to reply to this message. We’ll be happy to assist you.\n\nRegards,\n*Team Clinidea Education*`;
+                            return `Hello *${selectedLead.name}* ${wave},\n\nThank you for showing interest in the *Advanced Certification Course ${selectedLead.courseInterest}*.\n\n${rocket} *Register Now:* ${registerLink}\n\nOur team will connect with you soon to guide you further regarding the course.\n\nIf you have any questions regarding the course, placements, internship, or career opportunities, feel free to reply to this message. We’ll be happy to assist you.\n\nRegards,\n*Team Clinidea Education*`;
                           })()
                         )}`}
                         target="_blank"
