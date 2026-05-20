@@ -1,8 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /admin/
-Disallow: /student/
-Disallow: /backend/
-Disallow: /api/
 
-Sitemap: https://clinidea.in/sitemap.xml
+Sitemap: https://www.clinidea.in/sitemap.xml
