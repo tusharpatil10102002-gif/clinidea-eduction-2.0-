@@ -267,15 +267,17 @@ const AdminLeads = () => {
                         <i className="fa fa-phone me-2"></i> Call
                       </a>
                       <a 
-                        href={`https://wa.me/${selectedLead.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(() => {
-                          const selectedCourseData = courses.find(c => c.name === selectedLead.courseInterest);
-                          let brochureLink = "";
-                          if (selectedCourseData?.brochureUrl) {
-                            brochureLink = selectedCourseData.brochureUrl.startsWith('/') ? `${BASE_URL}${selectedCourseData.brochureUrl}` : `${BASE_URL}/${selectedCourseData.brochureUrl}`;
-                          }
-                          const enrollLink = `${BASE_URL}/enroll?course=${encodeURIComponent(selectedLead.courseInterest || '')}`;
-                          return `Hello ${selectedLead.name},\n\nThank you for your interest in the ${selectedLead.courseInterest} program at Clinidea Education.\n\nHere are some quick links for you:\n${brochureLink ? `📥 Download Brochure: ${brochureLink}\n` : ''}🚀 Enroll Now: ${enrollLink}\n\nPlease let me know if you have any questions!`;
-                        }())}`}
+                        href={`https://wa.me/${selectedLead.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
+                          (() => {
+                            const selectedCourseData = courses.find(c => c.name === selectedLead.courseInterest);
+                            let brochureLink = "";
+                            if (selectedCourseData?.brochureUrl) {
+                              brochureLink = selectedCourseData.brochureUrl.startsWith('/') ? `${BASE_URL}${selectedCourseData.brochureUrl}` : `${BASE_URL}/${selectedCourseData.brochureUrl}`;
+                            }
+                            const enrollLink = `${BASE_URL}/enroll?course=${encodeURIComponent(selectedLead.courseInterest || '')}`;
+                            return `Hello ${selectedLead.name},\n\nThank you for your interest in the ${selectedLead.courseInterest} program at Clinidea Education.\n\nHere are some quick links for you:\n${brochureLink ? `📥 Download Brochure: ${brochureLink}\n` : ''}🚀 Enroll Now: ${enrollLink}\n\nPlease let me know if you have any questions!`;
+                          })()
+                        )}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="btn rounded-pill fw-bold text-white px-4 shadow-sm flex-grow-1"
