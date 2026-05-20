@@ -7,6 +7,7 @@ const AdminLeads = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navigate = useNavigate();
   const [leads, setLeads] = useState([]);
+  const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // Search and Filter States
@@ -51,6 +52,13 @@ const AdminLeads = () => {
 
   useEffect(() => {
     fetchLeads();
+    // Fetch courses for brochure links
+    fetch(`${BASE_URL}/api/courses`)
+      .then(res => res.ok ? res.json() : [])
+      .then(data => {
+        if (Array.isArray(data)) setCourses(data);
+      })
+      .catch(console.error);
   }, [navigate]);
 
   const handleUpdateLead = async () => {
@@ -199,7 +207,7 @@ const AdminLeads = () => {
                           <td className="fw-bold">{lead.name}</td>
                           <td>{lead.phone}</td>
                           <td>{lead.email}</td>
-                          <td><span className="text-secondary small">{lead.course_interest}</span></td>
+                          <td><span className="text-secondary small">{lead.courseInterest}</span></td>
                           <td>
                             <span className={`badge ${getStatusBadgeClass(lead.status)}`}>
                               {lead.status}
@@ -245,7 +253,7 @@ const AdminLeads = () => {
                   </div>
                   <div className="mb-3">
                     <label className="text-muted small fw-bold">Course Interest</label>
-                    <p className="mb-0 badge bg-secondary text-wrap fs-6">{selectedLead.course_interest}</p>
+                    <p className="mb-0 badge bg-secondary text-wrap fs-6">{selectedLead.courseInterest}</p>
                   </div>
                   
                   <div className="mb-3">
@@ -259,7 +267,15 @@ const AdminLeads = () => {
                         <i className="fa fa-phone me-2"></i> Call
                       </a>
                       <a 
-                        href={`https://wa.me/${selectedLead.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(`Hello ${selectedLead.name},\n\nThank you for your interest in the ${selectedLead.course_interest} program at Clinidea Education.\n\nYou can find all the details and download our official information brochure directly from our website here: https://clinidea.com/program\n\nPlease let me know if you have any questions!`)}`}
+                        href={`https://wa.me/${selectedLead.phone.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(() => {
+                          const selectedCourseData = courses.find(c => c.name === selectedLead.courseInterest);
+                          let brochureLink = "";
+                          if (selectedCourseData?.brochureUrl) {
+                            brochureLink = selectedCourseData.brochureUrl.startsWith('/') ? `${BASE_URL}${selectedCourseData.brochureUrl}` : `${BASE_URL}/${selectedCourseData.brochureUrl}`;
+                          }
+                          const enrollLink = `${BASE_URL}/enroll?course=${encodeURIComponent(selectedLead.courseInterest || '')}`;
+                          return `Hello ${selectedLead.name},\n\nThank you for your interest in the ${selectedLead.courseInterest} program at Clinidea Education.\n\nHere are some quick links for you:\n${brochureLink ? `📥 Download Brochure: ${brochureLink}\n` : ''}🚀 Enroll Now: ${enrollLink}\n\nPlease let me know if you have any questions!`;
+                        }())}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="btn rounded-pill fw-bold text-white px-4 shadow-sm flex-grow-1"
