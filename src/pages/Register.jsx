@@ -215,6 +215,7 @@ const Register = () => {
                     <option value="Clinical Research, Pharmacovigilance & Data Management">Clinical Research, Pharmacovigilance & Data Management</option>
                     <option value="Clinical Research & Regulatory Affairs">Clinical Research & Regulatory Affairs</option>
                     <option value="Clinical Research & Medical Writing">Clinical Research & Medical Writing</option>
+                    <option value="Clinical Research and Medical Coding">Clinical Research and Medical Coding</option>
                   </select>
                 )}
               </div>

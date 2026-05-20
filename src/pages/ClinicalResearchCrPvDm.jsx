@@ -6,11 +6,12 @@ const ClinicalResearchCrPvDm = () => {
   const [courseData, setCourseData] = useState(null);
 
   useEffect(() => {
-    fetch(`${BASE_URL}/api/courses/clinical-research-cr-pv-dm`)
+    fetch(`${BASE_URL}/api/courses`)
       .then(res => res.ok ? res.json() : null)
       .then(data => {
-        if(data && !data.error) {
-           setCourseData(data);
+        if(data && Array.isArray(data)) {
+           const course = data.find(c => c.name === "Clinical Research, Pharmacovigilance & Data Management");
+           if (course) setCourseData(course);
         }
       })
       .catch(err => console.error('Error fetching course API:', err));

@@ -142,7 +142,7 @@ const CourseCTAs = ({ courseData, courseName, variant = 'default' }) => {
           <button onClick={handleEnroll} className={isHero ? "glass-btn" : "cr-btn cr-btn-accent"} style={(isHero || isBottom) ? {width: 'auto', minWidth: '220px'} : {}}>
             <span className="cr-btn-icon">🚀</span> Enroll Now
           </button>
-          <button onClick={() => window.dispatchEvent(new CustomEvent('open-enquiry-modal'))} className={isHero ? "glass-btn" : "cr-btn cr-btn-accent"} style={(isHero || isBottom) ? {width: 'auto', minWidth: '220px'} : {}}>
+          <button onClick={() => window.dispatchEvent(new CustomEvent('open-enquiry-modal', { detail: { course: courseName } }))} className={isHero ? "glass-btn" : "cr-btn cr-btn-accent"} style={(isHero || isBottom) ? {width: 'auto', minWidth: '220px'} : {}}>
             <span className="cr-btn-icon">❓</span> Enquiry Now
           </button>
         </div>
