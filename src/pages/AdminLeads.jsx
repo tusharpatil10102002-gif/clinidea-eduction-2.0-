@@ -29,24 +29,25 @@ const AdminLeads = () => {
       navigate('/admin/lms');
       return;
     }
-    const url = `${BASE_URL}/api/admin/leads`;
-    fetch(url, { headers: { 'Authorization': `Bearer ${token}` } })
+    fetch(`${BASE_URL}/api/admin/leads`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
       .then(res => {
-        if(!res.ok) {
-          if (res.status === 401) throw new Error('Unauthorized');
-          throw new Error('Failed to fetch');
+        if (res.status === 401 || res.status === 403) {
+          navigate('/admin/login');
+          throw new Error('Unauthorized');
         }
+        if (!res.ok) throw new Error('ServerError');
         return res.json();
       })
       .then(data => {
         setLeads(data);
+        setFilteredLeads(data);
         setLoading(false);
       })
-      .catch((err) => {
-        if (err.message !== 'Unauthorized') {
-          console.error("Fetch error:", err);
-          setLoading(false);
-        }
+      .catch(err => {
+        console.error('Error fetching leads:', err);
+        setLoading(false);
       });
   };
 
@@ -142,6 +143,24 @@ const AdminLeads = () => {
     }
   };
 
+  const getWhatsAppLink = (lead) => {
+    const phoneNum = lead.phone.replace(/[^0-9]/g, '');
+    const registerLink = `${BASE_URL}/register?course=${encodeURIComponent(lead.courseInterest || '')}`;
+    const text = `Hello *${lead.name}* 👋,\n\nThank you for showing interest in the *Advanced Certification Course ${lead.courseInterest}*.\n\n🚀 *Register Now:* ${registerLink}\n\nOur team will connect with you soon to guide you further regarding the course.\n\nIf you have any questions regarding the course, placements, internship, or career opportunities, feel free to reply to this message. We’ll be happy to assist you.\n\nRegards,\n*Team Clinidea Education*`;
+    const encodedText = encodeURIComponent(text);
+    
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    if (isAndroid) {
+      return `intent://send/?phone=${phoneNum}&text=${encodedText}#Intent;scheme=whatsapp;package=com.whatsapp.w4b;end`;
+    } else if (isIOS) {
+      return `whatsapp-smb://send?phone=${phoneNum}&text=${encodedText}`;
+    } else {
+      return `https://api.whatsapp.com/send?phone=${phoneNum}&text=${encodedText}`;
+    }
+  };
+
   if (loading) return <div className="d-flex justify-content-center mt-5">Loading...</div>;
 
   return (
@@ -184,7 +203,7 @@ const AdminLeads = () => {
 
         <div className="row">
           {/* Table Column */}
-          <div className={selectedLead ? "col-lg-8" : "col-lg-12"}>
+          <div className="col-12">
             <div className="card border-0 shadow-sm rounded-4">
               <div className="card-body p-0">
                 <div className="table-responsive" style={{ maxHeight: '70vh' }}>
@@ -233,15 +252,16 @@ const AdminLeads = () => {
             </div>
           </div>
 
-          {/* Details Sidebar / Modal Alternative */}
+          {/* Details Modal */}
           {selectedLead && (
-            <div className="col-lg-4 mt-4 mt-lg-0">
-              <div className="card border-0 shadow rounded-4 sticky-top" style={{ top: '20px' }}>
-                <div className="card-header bg-white border-0 py-4 px-4 d-flex justify-content-between align-items-center">
-                  <h4 className="mb-0 fw-bold border-bottom pb-2">Lead Details</h4>
-                  <button className="btn-close" onClick={() => setSelectedLead(null)}></button>
-                </div>
-                <div className="card-body px-4 pb-4">
+            <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={(e) => { if (e.target.classList.contains('modal')) setSelectedLead(null); }}>
+              <div className="modal-dialog modal-dialog-centered modal-lg">
+                <div className="modal-content border-0 shadow rounded-4">
+                  <div className="modal-header bg-white border-bottom py-3 px-4 d-flex justify-content-between align-items-center">
+                    <h4 className="mb-0 fw-bold">Lead Details</h4>
+                    <button className="btn-close" onClick={() => setSelectedLead(null)}></button>
+                  </div>
+                  <div className="modal-body px-4 pb-4 pt-3">
                   <div className="mb-3">
                     <label className="text-muted small fw-bold">Full Name</label>
                     <p className="fs-5 fw-bold mb-0">{selectedLead.name}</p>
@@ -267,20 +287,14 @@ const AdminLeads = () => {
                         <i className="fa fa-phone me-2"></i> Call
                       </a>
                       <a 
-                        href={`https://api.whatsapp.com/send?phone=${selectedLead.phone.replace(/[^0-9]/g, '')}&text=${encodeURIComponent(
-                          (() => {
-                            const registerLink = `${BASE_URL}/register?course=${encodeURIComponent(selectedLead.courseInterest || '')}`;
-                            
-                            return `Hello *${selectedLead.name}* 👋,\n\nThank you for showing interest in the *Advanced Certification Course ${selectedLead.courseInterest}*.\n\n🚀 *Register Now:* ${registerLink}\n\nOur team will connect with you soon to guide you further regarding the course.\n\nIf you have any questions regarding the course, placements, internship, or career opportunities, feel free to reply to this message. We’ll be happy to assist you.\n\nRegards,\n*Team Clinidea Education*`;
-                          })()
-                        )}`}
+                        href={getWhatsAppLink(selectedLead)}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="btn rounded-pill fw-bold text-white px-4 shadow-sm flex-grow-1"
                         style={{ backgroundColor: '#25D366', borderColor: '#25D366' }}
-                        title="Message on WhatsApp"
+                        title="Message on WhatsApp Business"
                       >
-                        <i className="fab fa-whatsapp me-2"></i> WhatsApp
+                        <i className="fab fa-whatsapp me-2"></i> WA Business
                       </a>
                     </div>
                   </div>
@@ -337,6 +351,7 @@ const AdminLeads = () => {
                   </button>
                 </div>
               </div>
+            </div>
             </div>
           )}
         </div>
