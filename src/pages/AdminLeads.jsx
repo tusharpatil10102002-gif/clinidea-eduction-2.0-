@@ -254,7 +254,7 @@ const AdminLeads = () => {
           {/* Details Modal */}
           {selectedLead && (
             <div className="modal fade show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }} onClick={(e) => { if (e.target.classList.contains('modal')) setSelectedLead(null); }}>
-              <div className="modal-dialog modal-dialog-centered modal-lg">
+              <div className="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
                 <div className="modal-content border-0 shadow rounded-4">
                   <div className="modal-header bg-white border-bottom py-3 px-4 d-flex justify-content-between align-items-center">
                     <h4 className="mb-0 fw-bold">Lead Details</h4>
