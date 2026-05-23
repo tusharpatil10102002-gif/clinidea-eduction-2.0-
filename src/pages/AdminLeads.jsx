@@ -42,7 +42,6 @@ const AdminLeads = () => {
       })
       .then(data => {
         setLeads(data);
-        setFilteredLeads(data);
         setLoading(false);
       })
       .catch(err => {

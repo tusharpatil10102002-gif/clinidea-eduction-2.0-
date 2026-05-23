@@ -27,7 +27,11 @@ const AdminDashboard = () => {
       headers: { 'Authorization': `Bearer ${token}` }
     })
       .then(res => {
-        if (!res.ok) throw new Error('Unauthorized');
+        if (res.status === 401 || res.status === 403) {
+          navigate('/admin/login');
+          throw new Error('Unauthorized');
+        }
+        if (!res.ok) throw new Error('ServerError');
         return res.json();
       })
       .then(data => {
@@ -35,10 +39,8 @@ const AdminDashboard = () => {
         setLoading(false);
       })
       .catch((err) => {
-        if (err.message !== 'Unauthorized') {
-          console.error("Dashboard fetch error:", err);
-          setLoading(false);
-        }
+        console.error("Dashboard fetch error:", err);
+        setLoading(false);
       });
   }, [navigate]);
 
