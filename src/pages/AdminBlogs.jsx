@@ -16,8 +16,10 @@ const AdminBlogs = () => {
     id: null,
     title: '',
     content: '',
+    slug: '',
     metaTitle: '',
     metaDescription: '',
+    schemaMarkup: '',
     featuredImage: '',
     isPublished: false
   });
@@ -63,8 +65,10 @@ const AdminBlogs = () => {
       id: blog.id,
       title: blog.title || '',
       content: blog.content || '',
+      slug: blog.slug || '',
       metaTitle: blog.metaTitle || '',
       metaDescription: blog.metaDescription || '',
+      schemaMarkup: blog.schemaMarkup || '',
       featuredImage: blog.featuredImage || '',
       isPublished: blog.isPublished || false
     });
@@ -158,8 +162,10 @@ const AdminBlogs = () => {
       id: null,
       title: '',
       content: '',
+      slug: '',
       metaTitle: '',
       metaDescription: '',
+      schemaMarkup: '',
       featuredImage: '',
       isPublished: false
     });
@@ -210,6 +216,30 @@ const AdminBlogs = () => {
                   <label className="form-check-label fw-bold" htmlFor="isPublished">Published</label>
                 </div>
               </div>
+              
+              <div className="col-md-6 mb-3">
+                <label className="form-label fw-bold">URL Slug (SEO)</label>
+                <input 
+                  type="text" 
+                  className="form-control" 
+                  name="slug" 
+                  value={formData.slug} 
+                  onChange={handleInputChange} 
+                  placeholder="Leave blank to auto-generate"
+                />
+              </div>
+
+              <div className="col-md-6 mb-3">
+                <label className="form-label fw-bold">Meta Title (SEO)</label>
+                <input 
+                  type="text" 
+                  className="form-control" 
+                  name="metaTitle" 
+                  value={formData.metaTitle} 
+                  onChange={handleInputChange} 
+                  placeholder="Enter meta title for search engines"
+                />
+              </div>
 
               <div className="col-md-12 mb-3">
                 <label className="form-label fw-bold">Content (HTML allowed) *</label>
@@ -249,6 +279,19 @@ const AdminBlogs = () => {
                   onChange={handleInputChange} 
                   placeholder="Short description for search engines"
                 ></textarea>
+              </div>
+              
+              <div className="col-md-12 mb-3">
+                <label className="form-label fw-bold">Schema Markup (JSON-LD)</label>
+                <textarea 
+                  className="form-control font-monospace" 
+                  name="schemaMarkup" 
+                  rows="4" 
+                  value={formData.schemaMarkup} 
+                  onChange={handleInputChange} 
+                  placeholder='{"@context": "https://schema.org", "@type": "BlogPosting", ...}'
+                ></textarea>
+                <small className="text-muted">For Answer Engine Optimization (AEO). Only valid JSON-LD structure should go here without script tags.</small>
               </div>
             </div>
 
