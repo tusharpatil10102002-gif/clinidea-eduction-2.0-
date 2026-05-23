@@ -260,7 +260,7 @@ const AdminLeads = () => {
                     <h4 className="mb-0 fw-bold">Lead Details</h4>
                     <button className="btn-close" onClick={() => setSelectedLead(null)}></button>
                   </div>
-                  <div className="modal-body px-4 pb-4 pt-3">
+                  <div className="modal-body px-4 pb-4 pt-3" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
                   <div className="mb-3">
                     <label className="text-muted small fw-bold">Full Name</label>
                     <p className="fs-5 fw-bold mb-0">{selectedLead.name}</p>
