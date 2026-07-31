@@ -30,7 +30,7 @@ const RegisterInstructions = () => {
                   <li className="mb-3 d-flex align-items-start">
                     <i className="fa fa-check-circle text-success mt-1 me-3 fs-5"></i>
                     <div>
-                      <strong>Step 1: Seat Booking Fee (₹500)</strong>
+                      <strong>Step 1: Seat Booking Fee (₹10,000)</strong>
                       <p className="text-muted small mb-0">A nominal fee is required to confirm your dedication and block your seat. This will be adjusted against your total course fees.</p>
                     </div>
                   </li>

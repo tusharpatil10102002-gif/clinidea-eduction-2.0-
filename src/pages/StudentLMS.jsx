@@ -102,13 +102,11 @@ function StudentLMS() {
       );
     }
     return (
-      <img 
-        src={`https://drive.google.com/thumbnail?id=${item.driveFileId}&sz=w200`} 
+      <img loading="lazy" src={`https://drive.google.com/thumbnail?id=${item.driveFileId}&sz=w200`} 
         onError={() => setImgError(true)}
         className="rounded shadow-sm" 
         style={{ width: '60px', height: '45px', objectFit: 'cover', flexShrink: 0, border: active ? '2px solid white' : '1px solid var(--color-border)' }} 
         alt="thumb" 
-        loading="lazy"
       />
     );
   };
@@ -173,31 +171,53 @@ function StudentLMS() {
                   }}
                 >
                   {activeVideo.driveWebViewLink ? (
-                    <>
-                      <iframe 
-                        src={activeVideo.driveWebViewLink.replace('/view', '/preview')} 
-                        width="100%" 
-                        height="100%" 
-                        frameBorder="0"
-                        allow="autoplay; fullscreen"
-                        allowFullScreen
-                        webkitallowfullscreen="true"
-                        mozallowfullscreen="true"
-                        style={{ border: 'none', backgroundColor: '#000' }}
-                        title={activeVideo.title}
-                      ></iframe>
+                    (() => {
+                      const link = activeVideo.driveWebViewLink;
+                      const isDirectVideo = link.endsWith('.mp4') || link.endsWith('.webm') || link.endsWith('.ogg') || link.includes('/uploads/');
                       
-                      {/* SOLID Mask over the Google Drive Popout Button to hide it visually without shifting the iframe */}
-                      <div 
-                        style={{ 
-                          position: 'absolute', top: 0, right: 0, width: '60px', height: '60px', 
-                          backgroundColor: '#000', zIndex: 10, display: 'flex', justifyContent: 'center', alignItems: 'center',
-                          borderBottomLeftRadius: '10px'
-                        }}
-                      >
-                        <i className="fa fa-shield-alt text-secondary opacity-25" style={{ fontSize: '1.2rem' }}></i>
-                      </div>
-                    </>
+                      if (activeVideo.contentType === 'video') {
+                        return isDirectVideo ? (
+                          <video 
+                            src={link.startsWith('http') || link.startsWith('/') ? link : `/${link}`} 
+                            controls 
+                            autoPlay 
+                            style={{ width: '100%', height: '100%', outline: 'none' }}
+                          >
+                            Your browser does not support the video tag.
+                          </video>
+                        ) : (
+                          <div className="w-100 h-100 d-flex flex-column justify-content-center align-items-center" style={{ backgroundColor: '#0f172a', color: '#fff', position: 'absolute', inset: 0 }}>
+                            {activeVideo.driveFileId && (
+                              <img src={`https://drive.google.com/thumbnail?id=${activeVideo.driveFileId}&sz=w800`} style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', opacity: 0.3 }} alt="thumbnail" />
+                            )}
+                            <div style={{ position: 'relative', zIndex: 10, textAlign: 'center', padding: '20px' }}>
+                              <i className="fa fa-play-circle mb-3" style={{ fontSize: '5rem', color: '#fff', cursor: 'pointer', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.5))' }} onClick={() => window.open(link, '_blank')}></i>
+                              <h4 className="fw-bold mb-3">{activeVideo.title}</h4>
+                              <button className="btn btn-danger btn-lg px-4 rounded-pill fw-bold shadow-lg d-flex align-items-center mx-auto" onClick={() => window.open(link, '_blank')} style={{ gap: '8px' }}>
+                                <i className="fa fa-external-link-alt"></i> Play Video Natively
+                              </button>
+                              <p className="text-white-50 mt-3 small max-w-sm mx-auto">Click to open directly in Google Drive player for the best fullscreen experience and perfect controls.</p>
+                            </div>
+                          </div>
+                        );
+                      } else {
+                        // For PDFs, PPTs, etc. use the iframe
+                        return (
+                          <iframe 
+                            src={link.replace('/view', '/preview')} 
+                            width="100%" 
+                            height="100%" 
+                            frameBorder="0"
+                            allow="autoplay; fullscreen"
+                            allowFullScreen
+                            webkitallowfullscreen="true"
+                            mozallowfullscreen="true"
+                            style={{ border: 'none', backgroundColor: '#000' }}
+                            title={activeVideo.title}
+                          ></iframe>
+                        );
+                      }
+                    })()
                   ) : (
                     <div className="d-flex flex-column justify-content-center align-items-center h-100 text-white-50">
                       <i className="fa fa-exclamation-circle mb-2" style={{ fontSize: '2rem' }}></i>
@@ -205,7 +225,9 @@ function StudentLMS() {
                     </div>
                   )}
                   {/* Transparent overlay over the top right to block any remaining click targets */}
-                  <div style={{ position: 'absolute', top: 0, right: 0, width: '80px', height: '60px', zIndex: 10 }}></div>
+                  {!(activeVideo.driveWebViewLink && (activeVideo.driveWebViewLink.endsWith('.mp4') || activeVideo.driveWebViewLink.endsWith('.webm') || activeVideo.driveWebViewLink.endsWith('.ogg') || activeVideo.driveWebViewLink.includes('/uploads/'))) && (
+                    <div style={{ position: 'absolute', top: 0, right: 0, width: '80px', height: '60px', zIndex: 10 }}></div>
+                  )}
                 </div>
 
                 {/* Video Details Area */}

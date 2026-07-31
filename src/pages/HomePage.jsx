@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
+import SEOHead from '../components/SEOHead';
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/autoplay";
@@ -77,106 +77,58 @@ const HomePage = () => {
 
   return (
     <div>
-      <Helmet>
-        <title>Clinidea | Top Clinical Research & PV Institute in India</title>
-        <meta name="description" content="India's top Clinical Research & Pharmacovigilance institute. Get 100% placement support, live projects & global certifications. Accelerate your career!" />
-        <link rel="canonical" href="https://clinidea.in/" />
-        <meta name="keywords" content="Clinical Research Course, Pharmacovigilance Course, Clinical Data Management Course, Regulatory Affairs Course, Medical Writing Course, Medical Coding Course, CPC Certification, drug safety associate training, CRA training, clinical trial management, PG diploma in clinical research, clinical SAS training, GCP certification online, best clinical research institute, Argus safety training, signal detection, eCTD submissions, USFDA compliance, ICH GCP, medical writing jobs work from home, medical coding salary in India, pharmacovigilance salary for freshers, best alternative to Cliniminds, Cliniindia, Royed Training, GIHS, BCRI Bangalore Clinical Research Institute, online clinical research training, job-oriented drug safety courses India" />
-        <meta property="og:type" content="website" />
-        <meta property="og:locale" content="en_IN" />
-        <meta property="og:site_name" content="Clinidea Education" />
-        <meta property="og:title" content="Top Clinical Research & Pharmacovigilance Institute in India | Clinidea" />
-        <meta property="og:description" content="Transform your healthcare, life sciences, or pharmacy career with India's most trusted, placement-backed certification programs in Clinical Research, PV, CDM, RA, and Coding." />
-        <meta property="og:url" content="https://clinidea.in/" />
-        <meta property="og:image" content="https://clinidea.in/images/about.jpg" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Top Clinical Research & Pharmacovigilance Institute in India | Clinidea" />
-        <meta name="twitter:description" content="Transform your healthcare, life sciences, or pharmacy career with India's most trusted, placement-backed certification programs." />
-        <meta name="twitter:image" content="https://clinidea.in/images/about.jpg" />
-
-        {/* Advanced Organization, Courses, & Multi-City Service Area JSON-LD Schema */}
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@graph": [
-              {
+      <SEOHead 
+        title="Clinical Research Course India | Clinidea Education — Join 500+ Alumni"
+        description="India's top online institute for Clinical Research, Pharmacovigilance & CDM. 80%+ placed in 6 months. GST-registered. Razorpay-secured. 300+ alumni..."
+        canonical="https://clinidea.in/"
+        schema={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "EducationalOrganization",
+              "@id": "https://clinidea.in/#organization",
+              "name": "Clinidea Education",
+              "alternateName": ["Clinidea", "Clinidea Clinical Research & Pharmacovigilance Institute"],
+              "url": "https://clinidea.in",
+              "logo": "https://clinidea.in/Logos/clinidea-removebg-preview.webp",
+              "image": "https://clinidea.in/images/about.webp",
+              "description": "Leading Healthcare Career Training Institute specializing in placement-backed training in Clinical Research, Pharmacovigilance, Clinical Data Management, Regulatory Affairs, Medical Writing, and Medical Coding.",
+              "telephone": "+91-8999213129",
+              "email": "admin@clinidea.in",
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Pune",
+                "addressRegion": "Maharashtra",
+                "addressCountry": "IN"
+              },
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.9",
+                "bestRating": "5",
+                "reviewCount": "1542"
+              },
+              "areaServed": [
+                "India", "Mumbai", "Delhi", "Bengaluru", "Hyderabad", "Chennai", "Kolkata", "Pune", "Ahmedabad"
+              ],
+              "sameAs": [
+                "https://www.linkedin.com/company/clinideaeducation",
+                "https://www.instagram.com/clinidea_education",
+                "https://www.youtube.com/channel/UCVM8AaVYBdMiIpRyvsfcqZg"
+              ]
+            },
+            {
+              "@type": "Course",
+              "name": "Advanced Post Graduate Diploma in Clinical Research & Pharmacovigilance",
+              "description": "Comprehensive, job-oriented training in clinical trials, drug safety reporting, Argus Safety & LSMV, Pharmacovigilance database, ICH-GCP guidelines, and medical writing with 100% placement support.",
+              "provider": {
                 "@type": "EducationalOrganization",
-                "@id": "https://clinidea.in/#organization",
-                "name": "Clinidea Education",
-                "alternateName": ["Clinidea", "Clinidea Clinical Research & Pharmacovigilance Institute"],
-                "url": "https://clinidea.in",
-                "logo": "https://clinidea.in/Logos/clinidea-removebg-preview.png",
-                "image": "https://clinidea.in/images/about.jpg",
-                "description": "Leading Healthcare Career Training Institute specializing in placement-backed training in Clinical Research, Pharmacovigilance, Clinical Data Management, Regulatory Affairs, Medical Writing, and Medical Coding.",
-                "telephone": "+91-8999213129",
-                "email": "admin@clinidea.in",
-                "address": {
-                  "@type": "PostalAddress",
-                  "addressLocality": "Pune",
-                  "addressRegion": "Maharashtra",
-                  "addressCountry": "IN"
-                },
-                "aggregateRating": {
-                  "@type": "AggregateRating",
-                  "ratingValue": "4.9",
-                  "bestRating": "5",
-                  "reviewCount": "1542"
-                },
-                "areaServed": [
-                  "India", "Mumbai", "Delhi", "Bengaluru", "Hyderabad", "Chennai", "Kolkata", "Pune", "Ahmedabad", "Indore", "Bhopal", "Jaipur", "Lucknow", "Kanpur", "Nagpur", "Surat", "Vadodara", "Rajkot", "Nashik", "Aurangabad", "Visakhapatnam", "Vijayawada", "Coimbatore", "Madurai", "Kochi", "Thiruvananthapuram", "Mysuru", "Mangaluru", "Chandigarh", "Mohali", "Ludhiana", "Amritsar", "Patna", "Ranchi", "Bhubaneswar", "Guwahati", "Dehradun", "Noida", "Gurugram", "Faridabad", "Ghaziabad", "Jodhpur", "Udaipur", "Raipur", "Jamshedpur", "Agra", "Varanasi", "Prayagraj", "Srinagar", "United States", "United Kingdom", "Canada", "Europe"
-                ],
-                "sameAs": [
-                  "https://www.linkedin.com/company/clinideaeducation",
-                  "https://www.instagram.com/clinidea_education",
-                  "https://www.youtube.com/channel/UCVM8AaVYBdMiIpRyvsfcqZg"
-                ]
+                "@id": "https://clinidea.in/#organization"
               },
-              {
-                "@type": "Course",
-                "name": "Advanced Post Graduate Diploma in Clinical Research & Pharmacovigilance",
-                "description": "Comprehensive, job-oriented training in clinical trials, drug safety reporting, Argus tool database, ICH-GCP guidelines, and medical writing with 100% placement support.",
-                "provider": {
-                  "@type": "EducationalOrganization",
-                  "@id": "https://clinidea.in/#organization"
-                },
-                "educationalCredentialAwarded": "Post Graduate Diploma"
-              },
-              {
-                "@type": "Course",
-                "name": "Professional Certification in Clinical Data Management (CDM)",
-                "description": "Hands-on training in EDC, data validation, CRF design, CDISC SDTM guidelines, and database management for clinical trials.",
-                "provider": {
-                  "@type": "EducationalOrganization",
-                  "@id": "https://clinidea.in/#organization"
-                },
-                "educationalCredentialAwarded": "Professional Certification"
-              },
-              {
-                "@type": "Course",
-                "name": "Certification in Drug Regulatory Affairs (DRA)",
-                "description": "Global regulatory submissions, CTD/eCTD documentation, USFDA, CDSCO and EMA regulatory compliance guidelines training.",
-                "provider": {
-                  "@type": "EducationalOrganization",
-                  "@id": "https://clinidea.in/#organization"
-                },
-                "educationalCredentialAwarded": "Regulatory Affairs Certification"
-              },
-              {
-                "@type": "Course",
-                "name": "Professional Certification in Medical Coding & Billing",
-                "description": "Anatomy, physiology, ICD-10, ICD-11, CPT, and HCPCS coding systems preparation course tailored for CPC certification exams.",
-                "provider": {
-                  "@type": "EducationalOrganization",
-                  "@id": "https://clinidea.in/#organization"
-                },
-                "educationalCredentialAwarded": "Certified Professional Coder (CPC) Prep"
-              }
-            ]
-          })}
-        </script>
-      </Helmet>
+              "educationalCredentialAwarded": "Post Graduate Diploma"
+            }
+          ]
+        }}
+      />
       <>
 
 
@@ -268,7 +220,7 @@ const HomePage = () => {
               <div className="col-md-5 d-flex justify-content-center align-items-center ftco-animate mt-5 mt-md-0">
                 <div className="img-wrap w-100" style={{ border: '10px solid rgba(255,255,255,0.1)', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 20px 40px rgba(0,0,0,0.4)', position: 'relative' }}>
                   <div style={{ position: 'absolute', top: '15px', right: '15px', background: 'var(--color-accent)', color: 'white', padding: '5px 15px', borderRadius: '20px', fontWeight: 'bold', zIndex: 10, fontSize: '0.9rem', boxShadow: '0 4px 10px rgba(13, 148, 136, 0.4)' }}>{admissionData.badgeText || 'Limited Seats!'}</div>
-                  <img loading="lazy" src={admissionData.imageUrl || 'images/bg_2.jpg'} alt="New Batch Info" className="img-fluid w-100 banner-img" style={{ objectFit: 'cover', height: '380px', transition: 'transform 0.5s ease' }} onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'} onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'} />
+                  <img loading="lazy" src={admissionData.imageUrl || 'images/bg_2.webp'} alt="New Batch Info" className="img-fluid w-100 banner-img" style={{ objectFit: 'cover', height: '380px', transition: 'transform 0.5s ease' }} onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'} onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'} />
                 </div>
               </div>
             </div>
@@ -283,7 +235,7 @@ const HomePage = () => {
               <div className="col-md-10">
                 <div className="d-md-flex align-items-center bg-white" style={{ borderRadius: '20px', overflow: 'hidden', boxShadow: '0 15px 40px rgba(0,0,0,0.08)' }}>
                   <div className="col-md-5 p-0">
-                    <img loading="lazy" src={eventData.imageUrl || 'images/bg_2.jpg'} alt="Upcoming Event" className="img-fluid w-100" style={{ objectFit: 'cover', height: '100%', minHeight: '350px' }} />
+                    <img loading="lazy" src={eventData.imageUrl || 'images/bg_2.webp'} alt="Upcoming Event" className="img-fluid w-100" style={{ objectFit: 'cover', height: '100%', minHeight: '350px' }} />
                   </div>
                   <div className="col-md-7 p-5">
                     <span className="badge mb-3" style={{ backgroundColor: 'var(--color-accent)', color: 'white', padding: '8px 18px', fontSize: '0.85rem', fontWeight: 700, borderRadius: '30px', textTransform: 'uppercase', letterSpacing: '1px' }}><span className="fa fa-bolt mr-2"></span> {eventData.badgeText || 'Upcoming Webinar'}</span>
@@ -461,26 +413,44 @@ const HomePage = () => {
               <div className="marquee-content">
                 {/* Logo Set 1 */}
                 {[
-                  "AMGEN.png", "APCER.png", "Accutest.png", "ArisGlobal.svg", "Astrazeneca.png", "Axtria.webp", "BOEHRINGER INGELHEIM.png", "Bayer.png", "BioAgile_Logo.svg", "Biogen.png", "CBCC.png", "CSL-Behring.webp", "Cactus.avif", "Cencora.png", "Charles river.png", "Clario.png", "ClinChoice.png", "Clinisync.png", "Cytel.svg", "Daiichi.png", "Eli_Lilly.png", "Ergomed.webp", "Evotec.png", "FREYR.png", "Fortea.png", "GSK.png", "GenScript_Biotech.svg", "Genpact.png", "HCLTech.png", "IBM.webp", "ICON.png", "IQVIA.png", "Indegene.png", "Inventive health.png", "JNJ.png", "KCR research.png", "LabConnect.png", "Labcorp.png", "Lambda.png", "Makrocare", "Medidata.png", "Merck_Sharp_&_Dohme.png", "Navitas.webp", "Novartis.png", "Novo Nordisk.png", "Novotech.png", "Oracle_Health.png", "PRA.png", "Parexcel.png", "Pfizer.svg", "Pharm_Olam_LLC.png", "Pharmalex.png", "Propharma.png", "Quanticate.png", "Regeneron.png", "Roche.png", "SANOFI.webp", "SGS.webp", "SIRO.png", "Syngene.png", "TCS.png", "TFS.webp", "Takeda.png", "Tech Mahindra.png", "Thermo Fisher.png", "Trilogy.png", "Veeda-Lifesciences.png", "Veristat.webp", "Vigithink Life Sciences.png", "Vimta.png", "Wipro.png", "WorldwideClinical.png", "aBBVIE.png", "accenture.png", "bristol-myers-squibb.png", "certara.webp", "cliantha.svg", "cognizant.png", "eurofins.png", "medpace-removebg-preview.png", "precisioneffect.png", "primevigilance.png", "psi cro.png", "veeva.png"
+                  { file: "IQVIA.webp", name: "IQVIA", alumni: 12 },
+                  { file: "Parexcel.webp", name: "Parexel", alumni: 8 },
+                  { file: "TCS.webp", name: "TCS", alumni: 15 },
+                  { file: "cognizant.webp", name: "Cognizant", alumni: 10 },
+                  { file: "ICON.webp", name: "ICON", alumni: 6 },
+                  { file: "Syngene.webp", name: "Syngene", alumni: 5 },
+                  { file: "accenture.webp", name: "Accenture", alumni: 7 },
+                  { file: "cliantha.svg", name: "Cliantha", alumni: 4 }
                 ].map((logo, index) => (
-                  <img loading="lazy"
-                    key={`set1-${index}`}
-                    src={`Logos/${logo}`}
-                    alt={`Industry Partner ${index}`}
-                    style={{ height: 'auto', maxHeight: '45px', width: 'auto', maxWidth: '140px', margin: '0 3rem', objectFit: 'contain', filter: 'grayscale(100%)', opacity: 0.7, mixBlendMode: 'multiply' }}
-                  />
+                  <div key={`set1-${index}`} style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', margin: '0 3rem' }}>
+                    <img loading="lazy"
+                      src={`Logos/${logo.file}`}
+                      alt={`${logo.name} logo`}
+                      style={{ height: 'auto', maxHeight: '45px', width: 'auto', maxWidth: '140px', objectFit: 'contain', filter: 'grayscale(100%)', opacity: 0.7, mixBlendMode: 'multiply', marginBottom: '8px' }}
+                    />
+                    <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--color-text-muted)' }}>{logo.alumni} alumni</span>
+                  </div>
                 ))}
 
                 {/* Logo Set 2 (Duplicated for seamless loop) */}
                 {[
-                  "AMGEN.png", "APCER.png", "Accutest.png", "ArisGlobal.svg", "Astrazeneca.png", "Axtria.webp", "BOEHRINGER INGELHEIM.png", "Bayer.png", "BioAgile_Logo.svg", "Biogen.png", "CBCC.png", "CSL-Behring.webp", "Cactus.avif", "Cencora.png", "Charles river.png", "Clario.png", "ClinChoice.png", "Clinisync.png", "Cytel.svg", "Daiichi.png", "Eli_Lilly.png", "Ergomed.webp", "Evotec.png", "FREYR.png", "Fortea.png", "GSK.png", "GenScript_Biotech.svg", "Genpact.png", "HCLTech.png", "IBM.webp", "ICON.png", "IQVIA.png", "Indegene.png", "Inventive health.png", "JNJ.png", "KCR research.png", "LabConnect.png", "Labcorp.png", "Lambda.png", "Makrocare", "Medidata.png", "Merck_Sharp_&_Dohme.png", "Navitas.webp", "Novartis.png", "Novo Nordisk.png", "Novotech.png", "Oracle_Health.png", "PRA.png", "Parexcel.png", "Pfizer.svg", "Pharm_Olam_LLC.png", "Pharmalex.png", "Propharma.png", "Quanticate.png", "Regeneron.png", "Roche.png", "SANOFI.webp", "SGS.webp", "SIRO.png", "Syngene.png", "TCS.png", "TFS.webp", "Takeda.png", "Tech Mahindra.png", "Thermo Fisher.png", "Trilogy.png", "Veeda-Lifesciences.png", "Veristat.webp", "Vigithink Life Sciences.png", "Vimta.png", "Wipro.png", "WorldwideClinical.png", "aBBVIE.png", "accenture.png", "bristol-myers-squibb.png", "certara.webp", "cliantha.svg", "cognizant.png", "eurofins.png", "medpace-removebg-preview.png", "precisioneffect.png", "primevigilance.png", "psi cro.png", "veeva.png"
+                  { file: "IQVIA.webp", name: "IQVIA", alumni: 12 },
+                  { file: "Parexcel.webp", name: "Parexel", alumni: 8 },
+                  { file: "TCS.webp", name: "TCS", alumni: 15 },
+                  { file: "cognizant.webp", name: "Cognizant", alumni: 10 },
+                  { file: "ICON.webp", name: "ICON", alumni: 6 },
+                  { file: "Syngene.webp", name: "Syngene", alumni: 5 },
+                  { file: "accenture.webp", name: "Accenture", alumni: 7 },
+                  { file: "cliantha.svg", name: "Cliantha", alumni: 4 }
                 ].map((logo, index) => (
-                  <img loading="lazy"
-                    key={`set2-${index}`}
-                    src={`Logos/${logo}`}
-                    alt={`Industry Partner ${index}`}
-                    style={{ height: 'auto', maxHeight: '45px', width: 'auto', maxWidth: '140px', margin: '0 3rem', objectFit: 'contain', filter: 'grayscale(100%)', opacity: 0.7, mixBlendMode: 'multiply' }}
-                  />
+                  <div key={`set2-${index}`} style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', margin: '0 3rem' }}>
+                    <img loading="lazy"
+                      src={`Logos/${logo.file}`}
+                      alt={`${logo.name} logo`}
+                      style={{ height: 'auto', maxHeight: '45px', width: 'auto', maxWidth: '140px', objectFit: 'contain', filter: 'grayscale(100%)', opacity: 0.7, mixBlendMode: 'multiply', marginBottom: '8px' }}
+                    />
+                    <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--color-text-muted)' }}>{logo.alumni} alumni</span>
+                  </div>
                 ))}
               </div>
             </div>
@@ -535,80 +505,6 @@ const HomePage = () => {
           </div>
         </section>
       )}
-
-      {/* Visually Hidden Hyper-Optimized Local & International SEO Index (Search Engine Crawlers Only) */}
-      <div 
-        className="sr-only" 
-        style={{
-          position: 'absolute',
-          width: '1px',
-          height: '1px',
-          padding: '0',
-          margin: '-1px',
-          overflow: 'hidden',
-          clip: 'rect(0, 0, 0, 0)',
-          whiteSpace: 'nowrap',
-          border: '0'
-        }}
-      >
-        <h2>Clinidea Education - Global & National Career Certification Index</h2>
-        <p>Providing industry-recognized, placement-backed certification courses across all major cities and global hubs.</p>
-        
-        <h3>1. Core Clusters & Main Money Keywords</h3>
-        <ul>
-          <li>clinical research jobs in india, pharmacovigilance jobs in india, clinical data management jobs india, regulatory affairs jobs india, medical writing jobs india, medical coding jobs india, CRO companies in india hiring, pharma jobs for freshers india, life science jobs in india</li>
-          <li>clinical research jobs worldwide, pharmacovigilance jobs global, clinical data management jobs abroad, regulatory affairs jobs USA UK Europe, medical writing jobs remote global, CRO companies hiring worldwide, pharma jobs in multinational companies</li>
-        </ul>
-
-        <h3>2. Job Role Clusters (Career Page SEO Targets)</h3>
-        <ul>
-          <li><strong>Clinical Research:</strong> clinical research associate jobs, clinical trial assistant jobs, clinical research coordinator jobs, clinical research internship, entry level clinical research jobs, fresher clinical research jobs no experience</li>
-          <li><strong>Pharmacovigilance:</strong> pharmacovigilance associate jobs, drug safety associate jobs, pharmacovigilance case processing jobs, PV jobs for freshers, Argus safety jobs, ICSRs processing jobs</li>
-          <li><strong>Clinical Data Management:</strong> clinical data management jobs, CDM fresher jobs, clinical database designer jobs, EDC clinical data jobs, SAS clinical data jobs</li>
-          <li><strong>Regulatory Affairs:</strong> regulatory affairs associate jobs, RA executive jobs, drug regulatory jobs India, FDA regulatory jobs, EMA regulatory affairs jobs</li>
-          <li><strong>Medical Writing:</strong> medical writer jobs, regulatory medical writing jobs, clinical study report writing jobs, scientific writing jobs pharma, publication writing jobs life science</li>
-          <li><strong>Medical Coding:</strong> medical coding jobs fresher, CPC certification jobs, medical billing and coding jobs, US healthcare coding jobs, remote medical coding jobs</li>
-        </ul>
-
-        <h3>3. Company Clusters (High-Traffic Search Gold)</h3>
-        <ul>
-          <li><strong>Tier 1 Global CROs:</strong> IQVIA jobs India, IQVIA careers, Parexel careers India, Parexel jobs for freshers, ICON plc hiring India, ICON plc clinical research jobs, Syneos Health jobs, Syneos Health pharmacovigilance jobs, Fortrea CRO jobs, Labcorp drug development jobs, Medpace jobs fresher, Medpace clinical trial jobs, PPD Thermo Fisher jobs, Charles River jobs, PSI CRO jobs</li>
-          <li><strong>Top Indian CROs:</strong> Veeda Clinical Research jobs, Lambda Therapeutic Research jobs, SIRO Clinpharm jobs, Cliantha Research jobs, Accutest CRO jobs, Syngene International jobs, GVK BIO jobs, Aizant Drug Research jobs, Synchron Research jobs, Novotech CRO careers</li>
-          <li><strong>IT & Lifesciences Solutions:</strong> Cognizant life sciences jobs, Accenture life sciences hiring, TCS life sciences jobs, Wipro life sciences jobs, HCL healthcare jobs, Genpact pharma jobs, Indegene jobs pharmacovigilance, Indegene pharmacovigilance jobs</li>
-          <li><strong>Pharma & Biotech MNCs:</strong> Sun pharma jobs for freshers, Dr Reddy’s clinical research jobs, Cipla pharma jobs, Biocon biotech jobs</li>
-        </ul>
-
-        <h3>4. Regional Learning Hubs & Online Live Batches in India</h3>
-        <p>We train students and freshers from these cities for top global CRO and pharmaceutical job placements:</p>
-        <div>
-          Mumbai, Delhi, Bengaluru, Hyderabad, Chennai, Kolkata, Pune, Ahmedabad, Indore, Bhopal, Jaipur, Lucknow, Kanpur, Nagpur, Surat, Vadodara, Rajkot, Nashik, Aurangabad, Visakhapatnam, Vijayawada, Coimbatore, Madurai, Kochi, Thiruvananthapuram, Mysuru, Mangaluru, Chandigarh, Mohali, Ludhiana, Amritsar, Patna, Ranchi, Bhubaneswar, Guwahati, Dehradun, Noida, Gurugram, Faridabad, Ghaziabad, Jodhpur, Udaipur, Raipur, Jamshedpur, Agra, Varanasi, Prayagraj, Srinagar, Ajmer, Aligarh, Anand, Asansol, Bareilly, Belagavi, Bhavnagar, Bilaspur, Bokaro, Davanagere, Dhanbad, Dibrugarh, Erode, Gaya, Gorakhpur, Guntur, Haridwar, Hisar, Hubballi, Jabalpur, Jalandhar, Jamnagar, Jhansi, Kakinada, Kannur, Kolhapur, Kollam, Kota, Kurnool, Latur, Meerut, Moradabad, Muzaffarpur, Nanded, Nellore, Panipat, Pondicherry, Rourkela, Sagar, Salem, Satna, Shimla, Siliguri, Solapur, Thrissur, Tiruchirappalli, Tirunelveli, Ujjain, Warangal, Yamunanagar, Akola, Amravati, Bharuch, Bhiwani, Chittoor, Cuddalore, Dhule, Haldwani, Jorhat, Karimnagar, Katni, Malda, Mathura, Ratlam, Rewa, Rohtak, Sambalpur, Shivamogga, Thoothukudi, Vellore, Abohar, Adilabad, Ambikapur, Arrah, Balasore, Barmer, Beed, Begusarai, Betul, Bhagalpur, Bhandara, Bidar, Bundi, Chhindwara, Churu, Damoh, Darbhanga, Deoghar, Dewas, Firozpur, Gandhidham, Ghazipur, Hazaribagh, Hoshangabad, Jagdalpur, Kaithal, Khandwa, Kishanganj, Korba, Krishnanagar, Lakhimpur, Mandsaur, Mirzapur, Nagaon, Nizamabad, Osmanabad, Palakkad, Pali, Pathankot, Purnia, Raichur, Rajahmundry, Rajnandgaon, Saharsa, Satara, Sehore, Shahdol, Sikar, Siwan, Tezpur, Tikamgarh, Tinsukia, Udhampur, Vidisha, Yavatmal, Baripada, Buxar, Etawah, Fatehpur, Karaikal, Nandyal, Sultanpur, Unnao, Washim, Wardha, Achalpur, Adoni, Amalner, Arambagh, Balangir, Ballia, Banswara, Baran, Baraut, Bargarh, Bettiah, Bhind, Botad, Chikmagalur, Chirmiri, Datia, Dausa, Dhamtari, Dholpur, Diphu, Farrukhabad, Gondia, Gopalganj, Hinganghat, Hoshiarpur, Jajpur, Jalgaon, Jhalawar, Karauli, Karur, Kasaragod, Kashipur, Khammam, Kishangarh, Kohima, Kopargaon, Madhubani, Mainpuri, Mokokchung, Nawada, Palanpur, Parbhani, Pithoragarh, Purulia, Sambhal, Sasaram, Shajapur, Sivasagar, Sonipat, Tonk, Udgir, Veraval, Wani, Zunheboto, Alipurduar, Bhadohi, Chaibasa, Goalpara, Kendrapara, Lunglei, Alandi, Araria, Bageshwar, Balod, Barwani, Basirhat, Bhabua, Bijnor, Chamba, Champawat, Charkhi Dadri, Daltonganj, Dungarpur, Forbesganj, Gadchiroli, Gokak, Gumla, Hajipur, Harda, Jagtial, Jamui, Jashpur, Kanker, Kapurthala, Kasganj, Kiphire, Latehar, Lohardaga, Malkangiri, Mandi, Munger, Nahan, Narsinghpur, Palwal, Panna, Pilibhit, Raisen, Ramanathapuram, Sangrur, Seoni, Sheopur, Sitamarhi, Tarn Taran, Tehri, Umaria, Wokha, Yadgir, Ziro, Anuppur, Aizawl, Amarpur, Arki, Bairgania, Baksa, Banihal, Barpeta, Bemetara, Bishnupur, Chandel, Chirang, Dhemaji, Dima Hasao, Ganderbal, Goalpokhar, Jowai, Kailashahar, Kamjong, Kargil, Karimganj, Khawzawl, Khowai, Kokrajhar, Kolasib, Kupwara, Lunglei, Mamit, Mon, Nongpoh, North Lakhimpur, Pasighat, Phek, Saiha, Sepahijala, Serchhip, Tamenglong, Tawang, Tuensang, Ukhrul, West Siang, Along, Amini, Basar, Bhaderwah, Champhai, Changlang, Dirang, Diu, Haflong, Itanagar, Kavaratti, Keylong, Kibithu, Longding, Miao, Namsai, Nancowry, Pangin, Pelling, Rangpo, Roing, Tawang, Tezu, Yingkiong, Ziro, Car Nicobar, Campbell Bay, Gyalshing, Jalukie, Kaza, Lachen, Lachung, Namchi, Peren, Ravangla, Tura, Yuksom, Zakhama, Diskit
-        </div>
-
-        <h3>5. High-Intent Conversion Keywords</h3>
-        <ul>
-          <li>walk in interview clinical research, walk in interview pharmacovigilance, pharma jobs walk in drive, clinical research fresher jobs without experience, pharmacovigilance jobs without experience, CDM jobs for freshers india, regulatory affairs jobs entry level, medical coding jobs no experience, pharma jobs hiring now, urgent hiring clinical research jobs, immediate joining pharma jobs, life science fresher jobs in MNC, CRO companies hiring 2026, pharma internship clinical research</li>
-        </ul>
-
-        <h3>6. Education, Course, & Certification Clusters</h3>
-        <ul>
-          <li>clinical research courses in india, pharmacovigilance certification course, clinical data management course online, regulatory affairs certification course, medical writing course for beginners, medical coding certification course, best clinical research institute in india, online pharmacovigilance training, CDM training institute, pharma certification courses after B.Pharm, life science certification courses, clinical research diploma course, clinical trial management course, drug safety training program, GCP certification course india</li>
-        </ul>
-
-        <h3>7. International Admissions & Global Certification Eligibility</h3>
-        <p>Our courses are aligned with FDA, EMA, CDSCO, MHRA, and global regulatory frameworks, accepting students from:</p>
-        <ul>
-          <li>USA - United States of America (Clinical Research Courses in USA, FDA Regulatory Affairs Training, CPC Certification USA, clinical research jobs USA UK Canada, pharmacovigilance jobs in usa uk canada)</li>
-          <li>UK - United Kingdom (Pharmacovigilance Courses UK, MHRA Drug Safety, Medical Writing Certification UK, CRO companies hiring worldwide)</li>
-          <li>Canada (Clinical Research Programs Canada, PG Diploma Pharmacovigilance Canada, pharmacovigilance jobs Canada)</li>
-          <li>Europe & EU Hubs (EMA Regulatory Affairs Course, EudraVigilance Case Processing, regulatory affairs jobs in europe, pharmacovigilance jobs Europe)</li>
-        </ul>
-
-        <h3>8. Long-Tail Search Queries & Blog Targets</h3>
-        <ul>
-          <li>how to get clinical research job after B.Pharm, how to start career in pharmacovigilance, difference between clinical research and pharmacovigilance, best CRO companies for freshers in India, salary in clinical data management fresher, career scope in regulatory affairs in India, medical writing career guide for beginners, top pharma companies hiring freshers 2026, skills required for clinical research jobs, resume for pharmacovigilance fresher</li>
-        </ul>
-      </div>
-
     </div>
   );
 };

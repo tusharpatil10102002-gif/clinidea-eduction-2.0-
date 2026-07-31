@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
+import SEOHead from '../components/SEOHead';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/autoplay';
@@ -25,21 +25,12 @@ const About = () => {
 
   return (
     <div>
-      <Helmet>
-        <title>About Us | Top Clinical Research & Pharmacovigilance Institute | Clinidea</title>
-        <meta name="description" content="Learn more about Clinidea Education, our expert founders, faculty, and our mission to provide placement-backed training in Clinical Research, Pharmacovigilance, and Data Management." />
-        <meta name="keywords" content="Clinidea Education about, Tushar Patil founder Clinidea, clinical research institute team, drug safety faculty India, pharmacovigilance course directors" />
-        <link rel="canonical" href="https://clinidea.in/about" />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="About Us | Top Clinical Research & PV Institute | Clinidea" />
-        <meta property="og:description" content="Meet our founder and expert mentors. Join India's leading career-focused institute for Clinical Research & Pharmacovigilance training." />
-        <meta property="og:url" content="https://clinidea.in/about" />
-        <meta property="og:image" content="https://clinidea.in/images/about.jpg" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="About Us | Top Clinical Research Institute" />
-        <meta name="twitter:description" content="Learn about our expert mentors, founder Tushar Patil, and placement record in Clinical Research & Pharmacovigilance." />
-        <meta name="twitter:image" content="https://clinidea.in/images/about.jpg" />
-      </Helmet>
+      <SEOHead
+        title="About Us | Top Clinical Research & Pharmacovigilance Institute | Clinidea"
+        description="Learn more about Clinidea Education, our expert founders, faculty, and our mission to provide placement-backed training in Clinical Research, Pharmacovigilance, and Data Management."
+        canonical="https://clinidea.in/about"
+        ogImage="https://clinidea.in/images/about.webp"
+      />
 
       {/* Top Contact Bar */}
 
@@ -48,7 +39,7 @@ const About = () => {
 
 
       {/* Hero Section */}
-      <section className="hero-wrap hero-wrap-2" style={{ backgroundImage: 'url(/images/bg_2.jpg)' }} data-stellar-background-ratio="0.5">
+      <section className="hero-wrap hero-wrap-2" style={{ backgroundImage: 'url(/images/bg_2.webp)' }} data-stellar-background-ratio="0.5">
         <div className="overlay"></div>
         <div className="container">
           <div className="row no-gutters slider-text align-items-end">
@@ -244,7 +235,7 @@ const About = () => {
               <div className="position-relative d-inline-block">
                 <img
                   loading="lazy"
-                  src="/Founder.jpg"
+                  src="/Founder.webp"
                   alt="Tushar Patil - Founder"
                   className="img-fluid rounded-circle shadow-lg"
                   style={{ width: '280px', height: '280px', objectFit: 'cover', border: '5px solid var(--color-bg-light)' }}
@@ -275,7 +266,7 @@ const About = () => {
           <div className="row align-items-center">
             <div className="col-lg-5 mb-4 mb-lg-0">
               <div className="position-relative">
-                <img loading="lazy" src="/images/our_impact.jpg" alt="Students in healthcare" className="img-fluid" style={{ borderRadius: '20px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', border: '8px solid white' }} />
+                <img loading="lazy" src="/images/our_impact.webp" alt="Students in healthcare" className="img-fluid" style={{ borderRadius: '20px', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', border: '8px solid white' }} />
               </div>
             </div>
             <div className="col-lg-6 offset-lg-1">

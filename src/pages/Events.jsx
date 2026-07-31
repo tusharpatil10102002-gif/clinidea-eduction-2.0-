@@ -102,15 +102,15 @@ const Events = () => {
         <meta property="og:title" content="Upcoming Events & Webinars | Clinidea Education" />
         <meta property="og:description" content="Join our upcoming healthcare and clinical research events, webinars, and demo sessions." />
         <meta property="og:url" content="https://clinidea.in/events" />
-        <meta property="og:image" content="https://clinidea.in/images/about.jpg" />
+        <meta property="og:image" content="https://clinidea.in/images/about.webp" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Upcoming Events & Webinars | Clinidea Education" />
         <meta name="twitter:description" content="Join our upcoming healthcare and clinical research events, webinars, and demo sessions." />
-        <meta name="twitter:image" content="https://clinidea.in/images/about.jpg" />
+        <meta name="twitter:image" content="https://clinidea.in/images/about.webp" />
       </Helmet>
 
       {/* Hero Section */}
-      <section className="hero-wrap hero-wrap-2" style={{ backgroundImage: 'url(/images/bg_2.jpg)' }} data-stellar-background-ratio="0.5">
+      <section className="hero-wrap hero-wrap-2" style={{ backgroundImage: 'url(/images/bg_2.webp)' }} data-stellar-background-ratio="0.5">
         <div className="overlay"></div>
         <div className="container">
           <div className="row no-gutters slider-text align-items-end">
@@ -144,8 +144,8 @@ const Events = () => {
                     onMouseOut={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.05)'; }}
                   >
                     {event.imageUrl && (
-                      <div style={{ width: '100%', overflow: 'hidden', backgroundColor: '#f8f9fa', display: 'flex', justifyContent: 'center' }}>
-                        <img loading="lazy" src={event.imageUrl.startsWith('http') ? event.imageUrl : `${BASE_URL}${event.imageUrl}`} alt={event.title} style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
+                      <div style={{ width: '100%', backgroundColor: '#f8f9fa' }}>
+                        <img loading="lazy" src={event.imageUrl.startsWith('http') ? event.imageUrl : `${BASE_URL}${event.imageUrl}`} alt={event.title} style={{ width: '100%', height: 'auto', display: 'block' }} />
                       </div>
                     )}
                     <div className="card-body p-4 p-md-4 d-flex flex-column" style={{ flexGrow: 1 }}>
@@ -160,7 +160,7 @@ const Events = () => {
                         <div className="mb-1"><span className="fa fa-calendar mr-2" style={{ color: 'var(--color-secondary)' }}></span> {new Date(event.eventDate).toLocaleDateString()}</div>
                         <div><span className="fa fa-clock-o mr-2" style={{ color: 'var(--color-secondary)' }}></span> {event.eventTime}</div>
                       </div>
-                      <p className="card-text mb-4 flex-grow-1" style={{ color: 'var(--color-text-muted)', fontSize: '0.95rem' }}>{event.description}</p>
+                      <p className="card-text mb-4 flex-grow-1" style={{ color: 'var(--color-text-muted)', fontSize: '0.95rem', maxHeight: '180px', overflowY: 'auto', paddingRight: '5px', whiteSpace: 'pre-wrap' }}>{event.description}</p>
                       
                       <div className="mt-auto d-flex flex-column gap-2">
                         {event.youtubeUrl && (

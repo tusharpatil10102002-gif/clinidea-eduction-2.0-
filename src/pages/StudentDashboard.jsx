@@ -30,6 +30,7 @@ const StudentDashboard = () => {
   // LMS Content
   const [contents, setContents] = useState([]);
   const [enrolledBatches, setEnrolledBatches] = useState([]);
+  const [pendingEnrollments, setPendingEnrollments] = useState([]);
 
   // File Upload State
   const [uploadType, setUploadType] = useState('photo');
@@ -82,6 +83,11 @@ const StudentDashboard = () => {
       const payRes = await fetch(paymentUrl, { headers: { 'Authorization': `Bearer ${token}` } });
       if (payRes.ok) setPayments((await payRes.json()).payments || []);
 
+      // 5.5 Fetch Pending Enrollments
+      const pendingUrl = `${BASE_URL}/api/student/pending-enrollments`;
+      const pendRes = await fetch(pendingUrl, { headers: { 'Authorization': `Bearer ${token}` } });
+      if (pendRes.ok) setPendingEnrollments((await pendRes.json()).enrollments || []);
+
       // 6. Fetch LMS Content
       const lmsRes = await fetch(`${BASE_URL}/api/student/content`, { headers: { 'Authorization': `Bearer ${token}` } });
       if (lmsRes.ok) {
@@ -131,6 +137,62 @@ const StudentDashboard = () => {
       setNotifications([]);
       setShowNotifications(false);
     } catch (e) {}
+  };
+
+  const handlePayPending = async (enrollment) => {
+    try {
+      const token = localStorage.getItem('userToken');
+      const orderRes = await fetch(`${BASE_URL}/api/student/pay-pending-order`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ enrollmentId: enrollment.id })
+      });
+      const orderData = await orderRes.json();
+      if (!orderRes.ok) throw new Error(orderData.error);
+
+      const options = {
+        key: 'dummy_key', // This is handled in backend but required by Razorpay frontend script in some versions, or it uses the global script
+        amount: orderData.amount,
+        currency: "INR",
+        name: "Clinidea Education",
+        description: `Pending Fee Payment - ${enrollment.courseName}`,
+        order_id: orderData.orderId,
+        handler: async function (response) {
+          try {
+            const verifyRes = await fetch(`${BASE_URL}/api/student/verify-pending-payment`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                enrollmentId: enrollment.id
+              })
+            });
+            const verifyData = await verifyRes.json();
+            if (!verifyRes.ok) throw new Error(verifyData.error);
+            alert("Payment Successful!");
+            fetchDashboardData();
+          } catch (err) {
+            alert(err.message);
+          }
+        },
+        prefill: {
+          name: userContext.fullName,
+          email: userContext.email,
+          contact: userContext.phone
+        },
+        theme: { color: "#4f46e5" }
+      };
+
+      const rzp1 = new window.Razorpay(options);
+      rzp1.on('payment.failed', function (response){
+        alert("Payment Failed: " + response.error.description);
+      });
+      rzp1.open();
+    } catch (err) {
+      alert("Failed to initiate payment: " + err.message);
+    }
   };
 
   const handleProfileChange = (e) => setProfile(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -395,6 +457,28 @@ const StudentDashboard = () => {
         {/* Tab Content: LMS */}
         {activeTab === 'lms' && (
           <div className="row g-4">
+
+            {pendingEnrollments.length > 0 && (
+              <div className="col-12">
+                <div className="card border-warning border-2 shadow-sm mb-2" style={{ backgroundColor: '#fffbeb' }}>
+                  <div className="card-body d-flex flex-column flex-md-row justify-content-between align-items-center">
+                    <div>
+                      <h5 className="text-warning mb-1"><i className="fa fa-exclamation-circle me-2"></i>Pending Fees Notice</h5>
+                      <p className="mb-0 text-dark">You have pending fees for your enrolled courses.</p>
+                    </div>
+                    <div className="d-flex flex-column gap-2 mt-3 mt-md-0 w-100" style={{ maxWidth: '400px' }}>
+                      {pendingEnrollments.map(enr => (
+                        <div key={enr.id} className="d-flex justify-content-between align-items-center bg-white p-2 border rounded shadow-sm">
+                          <span className="fw-bold text-dark" style={{fontSize: '0.9rem'}}>{enr.courseName} <br/><span className="text-danger">₹{enr.feesPending} Pending</span></span>
+                          <button onClick={() => handlePayPending(enr)} className="btn btn-sm text-white fw-bold shadow-sm" style={{ backgroundColor: '#4f46e5' }}>Pay Now</button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div className="col-12">
               <div className="card-premium p-4 min-vh-50">
                 <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
@@ -463,7 +547,7 @@ const StudentDashboard = () => {
                           onClick={() => {
                             if (item.driveWebViewLink) {
                               const url = `/watch?link=${encodeURIComponent(item.driveWebViewLink)}&title=${encodeURIComponent(item.title)}&type=${item.contentType}`;
-                              window.open(url, '_blank');
+                              navigate(url);
                             }
                           }}
                           onMouseOver={e => { e.currentTarget.style.transform='translateY(-4px)'; e.currentTarget.classList.add('shadow'); }}

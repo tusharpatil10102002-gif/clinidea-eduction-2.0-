@@ -37,15 +37,15 @@ const Blogs = () => {
         <meta property="og:title" content="Insights & Industry Blogs | Clinidea Education" />
         <meta property="og:description" content="Stay updated with the latest trends, tips, and insights in Clinical Research, Pharmacovigilance, and Data Management." />
         <meta property="og:url" content="https://clinidea.in/blogs" />
-        <meta property="og:image" content="https://clinidea.in/images/about.jpg" />
+        <meta property="og:image" content="https://clinidea.in/images/about.webp" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Insights & Industry Blogs | Clinidea Education" />
         <meta name="twitter:description" content="Stay updated with the latest trends, tips, and insights in Clinical Research, Pharmacovigilance, and Data Management." />
-        <meta name="twitter:image" content="https://clinidea.in/images/about.jpg" />
+        <meta name="twitter:image" content="https://clinidea.in/images/about.webp" />
       </Helmet>
 
       {/* Hero Section */}
-      <section className="hero-wrap hero-wrap-2" style={{ backgroundImage: 'url(/images/bg_2.jpg)' }} data-stellar-background-ratio="0.5">
+      <section className="hero-wrap hero-wrap-2" style={{ backgroundImage: 'url(/images/bg_2.webp)' }} data-stellar-background-ratio="0.5">
         <div className="overlay"></div>
         <div className="container">
           <div className="row no-gutters slider-text align-items-end">
@@ -108,7 +108,7 @@ const Blogs = () => {
                     }}
                   >
                     <div style={{ width: '100%', overflow: 'hidden', backgroundColor: '#f8f9fa', display: 'flex', justifyContent: 'center' }}>
-                      <img 
+                      <img loading="lazy" 
                         loading="lazy" 
                         src={blog.featuredImage ? `${BASE_URL}${blog.featuredImage}` : 'https://via.placeholder.com/600x400?text=Clinidea+Blog'} 
                         alt={blog.title} 

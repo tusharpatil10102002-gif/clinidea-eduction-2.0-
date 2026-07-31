@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Helmet } from 'react-helmet-async';
+import SEOHead from '../components/SEOHead';
 import SharedCourseGrid from '../components/SharedCourseGrid';
 
 const Program = () => {
@@ -10,51 +10,39 @@ const Program = () => {
   return (
     <>
 
-      <Helmet>
-        <title>Premium Healthcare Courses | Clinical Research & PV | Clinidea Education</title>
-        <meta name="description" content="Enroll in India's top Clinical Research & PV programs. Better than Cliniminds and Cliniindia, our industry-aligned syllabus offers 100% placement support in Pharmacovigilance, Regulatory Affairs, and Medical Coding." />
-        <meta name="keywords" content="Best Clinical Research courses, Pharmacovigilance training institute, Clinical Data Management course, Medical Coding certification, Regulatory Affairs diploma online, Healthcare career training institute India, Cliniminds alternative, Cliniindia equivalent, Biotecnika courses, IGMPI clinical research, Top PV institute" />
-        <link rel="canonical" href="https://clinidea.in/program" />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="Premium Clinical Research & PV Courses | 100% Placement" />
-        <meta property="og:description" content="Advance your career with India's best healthcare institute. Industry-led training in PV, CDM, and Regulatory Affairs." />
-        <meta property="og:url" content="https://clinidea.in/program" />
-        <meta property="og:image" content="https://clinidea.in/images/about.jpg" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="Premium Healthcare Courses | Clinidea Education" />
-        <meta name="twitter:description" content="Enroll in India's top Clinical Research & PV programs. 100% placement support in Pharmacovigilance, Regulatory Affairs, and Medical Coding." />
-        <meta name="twitter:image" content="https://clinidea.in/images/about.jpg" />
-
-        <script type="application/ld+json">
-          {JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "Course",
-            "name": "Advanced Certification in Clinical Research & Pharmacovigilance",
-            "description": "Premium Healthcare career training program offering deep expertise in Clinical Research, Pharmacovigilance, Data Management, and Medical Coding with 100% placement support in India.",
-            "provider": {
-              "@type": "EducationalOrganization",
-              "name": "Clinidea Education",
-              "sameAs": "https://clinidea.in"
-            },
-            "aggregateRating": {
-              "@type": "AggregateRating",
-              "ratingValue": "4.8",
-              "reviewCount": "512"
-            },
-            "offers": {
-              "@type": "Offer",
-              "category": "Educational Program",
-              "price": "Contact Us",
-              "priceCurrency": "INR"
-            }
-          })}
-        </script>
-      </Helmet>
+      <SEOHead
+        title="Premium Healthcare Courses | Clinical Research & PV | Clinidea Education"
+        description="Enroll in India's top Clinical Research & PV programs. Better than Cliniminds and Cliniindia, our industry-aligned syllabus offers 100% placement support in Pharmacovigilance, Regulatory Affairs, and Medical Coding."
+        canonical="https://clinidea.in/program"
+        ogImage="https://clinidea.in/images/about.webp"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "Course",
+          "name": "Advanced Certification in Clinical Research & Pharmacovigilance",
+          "description": "Premium Healthcare career training program offering deep expertise in Clinical Research, Pharmacovigilance, Data Management, and Medical Coding with 100% placement support in India.",
+          "provider": {
+            "@type": "EducationalOrganization",
+            "name": "Clinidea Education",
+            "sameAs": "https://clinidea.in"
+          },
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.8",
+            "reviewCount": "512"
+          },
+          "offers": {
+            "@type": "Offer",
+            "category": "Educational Program",
+            "price": "Contact Us",
+            "priceCurrency": "INR"
+          }
+        }}
+      />
 
 
 	
 	
-	<section className="hero-wrap hero-wrap-2" style={{ backgroundImage: 'url(/images/bg_2.jpg)' }}
+	<section className="hero-wrap hero-wrap-2" style={{ backgroundImage: 'url(/images/bg_2.webp)' }}
 		data-stellar-background-ratio="0.5">
 		<div className="overlay"></div>
 		<div className="container">

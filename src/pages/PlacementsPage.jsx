@@ -68,15 +68,15 @@ const PlacementsPage = () => {
         <meta property="og:title" content="Recent Placements | Wall of Fame | Clinidea Education" />
         <meta property="og:description" content="See our student success stories and recent placements at top-tier healthcare & CRO companies." />
         <meta property="og:url" content="https://clinidea.in/placements" />
-        <meta property="og:image" content="https://clinidea.in/images/about.jpg" />
+        <meta property="og:image" content="https://clinidea.in/images/about.webp" />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Recent Placements | Clinidea Education" />
         <meta name="twitter:description" content="See our student success stories and recent placements at top-tier healthcare & CRO companies." />
-        <meta name="twitter:image" content="https://clinidea.in/images/about.jpg" />
+        <meta name="twitter:image" content="https://clinidea.in/images/about.webp" />
       </Helmet>
 
       {/* Hero Section */}
-      <section className="hero-wrap hero-wrap-2" style={{ backgroundImage: 'url(/images/bg_2.jpg)' }} data-stellar-background-ratio="0.5">
+      <section className="hero-wrap hero-wrap-2" style={{ backgroundImage: 'url(/images/bg_2.webp)' }} data-stellar-background-ratio="0.5">
         <div className="overlay"></div>
         <div className="container">
           <div className="row no-gutters slider-text align-items-end">
@@ -130,12 +130,11 @@ const PlacementsPage = () => {
                         e.currentTarget.style.transform = 'translateY(0)';
                         e.currentTarget.style.boxShadow = '0 10px 25px rgba(0,0,0,0.08)';
                       }}
-                      onClick={() => setLightboxImage(`${BASE_URL}${p.imageUrl}`)}
+                      onClick={() => setLightboxImage(p.imageUrl.startsWith('http') ? p.imageUrl : `${BASE_URL}/${p.imageUrl.replace(/^\/+/, '')}`)}
                     >
                       <div style={{ position: 'relative', width: '100%', background: '#f8f9fa' }}>
                         <span className="badge bg-primary" style={{ position: 'absolute', top: '10px', right: '10px', zIndex: 2, opacity: 0.9 }}>Hired</span>
-                        <img 
-                          src={`${BASE_URL}${p.imageUrl}`} 
+                        <img loading="lazy" src={p.imageUrl.startsWith('http') ? p.imageUrl : `${BASE_URL}/${p.imageUrl.replace(/^\/+/, '')}`} 
                           alt={p.studentName} 
                           style={{ width: '100%', height: 'auto', display: 'block' }}
                           loading="lazy"

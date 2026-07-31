@@ -21,7 +21,7 @@ export default function SEOHead({
   description,
   canonical,
   schema,
-  ogImage = "https://www.clinidea.in/og-default.jpg",
+  ogImage = "https://www.clinidea.in/favicon.png",
   ogType = "website",
   noIndex = false,
 }) {

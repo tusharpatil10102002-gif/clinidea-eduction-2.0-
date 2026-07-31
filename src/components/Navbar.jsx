@@ -188,7 +188,7 @@ const Navbar = () => {
         </div>
         <div className="nav-container">
           <Link to="/" className="nav-logo">
-            <img loading="lazy" src="/clinidea Logo/Clinidea_Education_Logo_header.png" alt="Clinidea Education Logo" />
+            <img loading="lazy" src="/clinidea Logo/Clinidea_Education_Logo_header.webp" alt="Clinidea Education Logo" />
           </Link>
           
           <button className="hamburger" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>

@@ -66,11 +66,11 @@ const BlogDetail = () => {
         <meta property="og:title" content={blog.metaTitle || blog.title} />
         <meta property="og:description" content={blog.metaDescription || blog.title.substring(0, 160)} />
         <meta property="og:url" content={`https://clinidea.in/blogs/${blog.slug}`} />
-        <meta property="og:image" content={blog.featuredImage ? (blog.featuredImage.startsWith('http') ? blog.featuredImage : `https://clinidea.in${blog.featuredImage}`) : 'https://clinidea.in/images/about.jpg'} />
+        <meta property="og:image" content={blog.featuredImage ? (blog.featuredImage.startsWith('http') ? blog.featuredImage : `https://clinidea.in${blog.featuredImage}`) : 'https://clinidea.in/images/about.webp'} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={blog.metaTitle || blog.title} />
         <meta name="twitter:description" content={blog.metaDescription || blog.title.substring(0, 160)} />
-        <meta name="twitter:image" content={blog.featuredImage ? (blog.featuredImage.startsWith('http') ? blog.featuredImage : `https://clinidea.in${blog.featuredImage}`) : 'https://clinidea.in/images/about.jpg'} />
+        <meta name="twitter:image" content={blog.featuredImage ? (blog.featuredImage.startsWith('http') ? blog.featuredImage : `https://clinidea.in${blog.featuredImage}`) : 'https://clinidea.in/images/about.webp'} />
         {blog.schemaMarkup && (
           <script type="application/ld+json">
             {blog.schemaMarkup}

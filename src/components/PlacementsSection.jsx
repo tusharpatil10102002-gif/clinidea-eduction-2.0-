@@ -75,11 +75,23 @@ const PlacementsSection = () => {
             </div>
           </div>
 
-          <div className="row g-4 justify-content-center pb-4">
-            {placements.slice(0, visibleCount).map((p) => (
-              <div key={p.id} className="col-11 col-sm-6 col-md-4 col-lg-3 mb-4">
+          <Swiper
+            modules={[Autoplay, Pagination]}
+            spaceBetween={30}
+            slidesPerView={1}
+            breakpoints={{
+              576: { slidesPerView: 2 },
+              768: { slidesPerView: 3 },
+              992: { slidesPerView: 4 }
+            }}
+            autoplay={{ delay: 3000, disableOnInteraction: false }}
+            pagination={{ clickable: true, dynamicBullets: true }}
+            className="pb-5"
+          >
+            {placements.map((p) => (
+              <SwiperSlide key={p.id}>
                 <div 
-                  className="placement-card text-center" 
+                  className="placement-card text-center mb-4" 
                   style={{ 
                     cursor: 'pointer',
                     transition: 'all 0.3s ease',
@@ -97,31 +109,19 @@ const PlacementsSection = () => {
                     e.currentTarget.style.transform = 'translateY(0)';
                     e.currentTarget.style.boxShadow = '0 10px 25px rgba(0,0,0,0.08)';
                   }}
-                  onClick={() => setLightboxImage(`${BASE_URL}${p.imageUrl}`)}
+                  onClick={() => setLightboxImage(p.imageUrl ? (p.imageUrl.startsWith('http') ? p.imageUrl : `${BASE_URL}/${p.imageUrl.replace(/^\/+/, '')}`) : '')}
                 >
                   <div style={{ position: 'relative', width: '100%', background: '#f8f9fa' }}>
                     <img loading="lazy" 
-                      src={`${BASE_URL}${p.imageUrl}`} 
+                      src={p.imageUrl ? (p.imageUrl.startsWith('http') ? p.imageUrl : `${BASE_URL}/${p.imageUrl.replace(/^\/+/, '')}`) : ''} 
                       alt={p.studentName} 
                       style={{ width: '100%', height: 'auto', display: 'block' }}
                     />
                   </div>
                 </div>
-              </div>
+              </SwiperSlide>
             ))}
-          </div>
-
-          {visibleCount < placements.length && (
-            <div className="text-center mt-3">
-              <button 
-                className="btn btn-primary px-5 py-3 fw-bold shadow-sm" 
-                onClick={() => setVisibleCount(prev => prev + 8)}
-                style={{ borderRadius: '50px', fontSize: '1.1rem' }}
-              >
-                Load More Placements <i className="fa fa-refresh ms-2"></i>
-              </button>
-            </div>
-          )}
+          </Swiper>
         </div>
       </section>
 

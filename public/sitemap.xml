@@ -1,51 +1,82 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
   <url>
-    <loc>https://www.clinidea.in/</loc>
+    <loc>https://clinidea.in/</loc>
+    <lastmod>2026-07-19T12:40:28.187Z</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://www.clinidea.in/about</loc>
+    <loc>https://clinidea.in/about</loc>
+    <lastmod>2026-07-19T12:40:28.188Z</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.clinidea.in/program</loc>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://www.clinidea.in/clinical-research-pharmacovigilance-course</loc>
+    <loc>https://clinidea.in/contact</loc>
+    <lastmod>2026-07-19T12:40:28.188Z</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.clinidea.in/clinical-research-data-management-course</loc>
+    <loc>https://clinidea.in/program</loc>
+    <lastmod>2026-07-19T12:40:28.188Z</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.clinidea.in/clinical-research-cr-pv-dm-course</loc>
+    <loc>https://clinidea.in/clinical-research-cr-pv-dm-course</loc>
+    <lastmod>2026-07-19T12:40:28.188Z</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.clinidea.in/clinical-research-regulatory-affairs-course</loc>
+    <loc>https://clinidea.in/clinical-research-medical-writing-course</loc>
+    <lastmod>2026-07-19T12:40:28.188Z</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.clinidea.in/clinical-research-medical-writing-course</loc>
+    <loc>https://clinidea.in/clinical-research-pharmacovigilance-course</loc>
+    <lastmod>2026-07-19T12:40:28.188Z</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.clinidea.in/clinical-research-medical-coding-course</loc>
+    <loc>https://clinidea.in/clinical-research-regulatory-affairs-course</loc>
+    <lastmod>2026-07-19T12:40:28.188Z</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.clinidea.in/events</loc>
-    <priority>0.7</priority>
+    <loc>https://clinidea.in/clinical-research-data-management-course</loc>
+    <lastmod>2026-07-19T12:40:28.188Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.clinidea.in/blogs</loc>
-    <priority>0.7</priority>
+    <loc>https://clinidea.in/clinical-research-medical-coding-course</loc>
+    <lastmod>2026-07-19T12:40:28.188Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://www.clinidea.in/placements</loc>
-    <priority>0.7</priority>
+    <loc>https://clinidea.in/blogs</loc>
+    <lastmod>2026-07-19T12:40:28.188Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://clinidea.in/events</loc>
+    <lastmod>2026-07-19T12:40:28.188Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://clinidea.in/placements</loc>
+    <lastmod>2026-07-19T12:40:28.188Z</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
 </urlset>

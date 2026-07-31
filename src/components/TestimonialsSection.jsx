@@ -1,9 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Pagination } from 'swiper/modules';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/autoplay';
 import { BASE_URL } from '../config';
 
 const TestimonialsSection = () => {
@@ -28,6 +23,10 @@ const TestimonialsSection = () => {
 
   if (testimonials.length === 0) return null;
 
+  const handleShowMore = () => {
+    setVisibleCount(prevCount => prevCount + 3);
+  };
+
   return (
     <section className="testimonials-section py-5" style={{ background: 'var(--color-bg-light)', borderTop: '1px solid var(--color-border)' }}>
       <div className="container">
@@ -43,11 +42,12 @@ const TestimonialsSection = () => {
           </div>
         </div>
 
-        <div className="row g-4 justify-content-center pb-4">
-          {testimonials.slice(0, visibleCount).map((t) => (
-            <div key={t.id} className="col-12 col-md-6 col-lg-4 mb-4">
+        <div className="row justify-content-center pb-4">
+          <div className="col-lg-10 col-xl-8">
+            {testimonials.slice(0, visibleCount).map((t) => (
               <div 
-                className="testimonial-card p-4 h-100 d-flex flex-column" 
+                key={t.id}
+                className="testimonial-card p-4 p-md-5 d-flex flex-column mb-4" 
                 style={{ 
                   background: '#fff', 
                   borderRadius: '20px', 
@@ -61,49 +61,55 @@ const TestimonialsSection = () => {
                 <div className="d-flex align-items-center mb-4">
                   {t.imageUrl ? (
                     <img loading="lazy" 
-                      src={`${BASE_URL}${t.imageUrl}`} 
+                      src={t.imageUrl.startsWith('http') ? t.imageUrl : `${BASE_URL}/${t.imageUrl.replace(/^\/+/, '')}`} 
                       alt={t.studentName} 
-                      style={{ width: '60px', height: '60px', borderRadius: '50%', objectFit: 'cover', border: '3px solid rgba(13, 148, 136, 0.2)' }}
+                      style={{ width: '70px', height: '70px', borderRadius: '50%', objectFit: 'cover', border: '3px solid rgba(13, 148, 136, 0.2)' }}
                     />
                   ) : (
                     <div 
                       className="d-flex align-items-center justify-content-center fw-bold" 
-                      style={{ width: '60px', height: '60px', borderRadius: '50%', background: 'rgba(2, 132, 199, 0.1)', color: 'var(--color-secondary)', fontSize: '1.5rem', border: '3px solid rgba(2, 132, 199, 0.2)' }}
+                      style={{ width: '70px', height: '70px', borderRadius: '50%', background: 'rgba(2, 132, 199, 0.1)', color: 'var(--color-secondary)', fontSize: '1.8rem', border: '3px solid rgba(2, 132, 199, 0.2)' }}
                     >
                       {t.studentName.charAt(0).toUpperCase()}
                     </div>
                   )}
-                  <div className="ms-3">
-                    <h5 className="mb-0 fw-bold" style={{ color: 'var(--color-primary)', fontSize: '1.1rem' }}>{t.studentName}</h5>
-                    <div style={{ color: '#F59E0B', fontSize: '0.9rem', marginTop: '4px' }}>
+                  <div className="ms-4">
+                    <h5 className="mb-0 fw-bold" style={{ color: 'var(--color-primary)', fontSize: '1.3rem' }}>{t.studentName}</h5>
+                    <div style={{ color: '#F59E0B', fontSize: '1rem', marginTop: '4px' }}>
                       {[...Array(5)].map((star, i) => (
                         <i key={i} className={`fa fa-star ${i < t.rating ? '' : 'text-muted opacity-25'}`}></i>
                       ))}
                     </div>
                   </div>
                 </div>
-                <div className="flex-grow-1 position-relative">
-                  <i className="fa fa-quote-left position-absolute" style={{ fontSize: '3rem', color: 'rgba(0,0,0,0.03)', top: '-10px', left: '-10px', zIndex: 0 }}></i>
-                  <p className="position-relative" style={{ color: 'var(--color-text-dark)', lineHeight: 1.7, fontStyle: 'italic', zIndex: 1 }}>
+                <div className="flex-grow-1 position-relative mt-2">
+                  <i className="fa fa-quote-left position-absolute" style={{ fontSize: '3rem', color: 'rgba(0,0,0,0.03)', top: '-15px', left: '-15px', zIndex: 0 }}></i>
+                  <p className="position-relative" style={{ color: 'var(--color-text-dark)', lineHeight: 1.8, fontStyle: 'italic', zIndex: 1, fontSize: '1.1rem' }}>
                     "{t.reviewText}"
                   </p>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
 
-        {visibleCount < testimonials.length && (
-          <div className="text-center mt-3">
-            <button 
-              className="btn btn-primary px-5 py-3 fw-bold shadow-sm" 
-              onClick={() => setVisibleCount(prev => prev + 6)}
-              style={{ borderRadius: '50px', fontSize: '1.1rem' }}
-            >
-              Load More Reviews <i className="fa fa-refresh ms-2"></i>
-            </button>
+            {visibleCount < testimonials.length && (
+              <div className="text-center mt-4">
+                <button 
+                  onClick={handleShowMore} 
+                  className="btn px-4 py-2" 
+                  style={{ 
+                    background: 'var(--color-primary)', 
+                    color: '#fff', 
+                    borderRadius: '30px', 
+                    fontWeight: 600,
+                    boxShadow: '0 4px 15px rgba(15, 23, 42, 0.2)' 
+                  }}
+                >
+                  Show More Reviews <i className="fa fa-angle-down ms-2"></i>
+                </button>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
     </section>
   );

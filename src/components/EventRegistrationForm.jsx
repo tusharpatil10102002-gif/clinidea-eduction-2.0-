@@ -48,7 +48,7 @@ const EventRegistrationForm = ({ event, onClose }) => {
 
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 9999, display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '15px' }}>
-      <div className="bg-white p-4" style={{ borderRadius: '15px', width: '100%', maxWidth: '500px', position: 'relative', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
+      <div className="bg-white p-4" style={{ borderRadius: '15px', width: '100%', maxWidth: '500px', maxHeight: '90vh', overflowY: 'auto', position: 'relative', boxShadow: '0 10px 30px rgba(0,0,0,0.2)' }}>
         <button onClick={onClose} style={{ position: 'absolute', top: '15px', right: '20px', background: 'none', border: 'none', fontSize: '1.5rem', cursor: 'pointer', color: '#666' }}>&times;</button>
         <h3 className="mb-1" style={{ fontWeight: '700', color: 'var(--color-primary)' }}>Register for Event</h3>
         <p className="text-muted mb-4">{event.title}</p>

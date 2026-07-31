@@ -63,29 +63,29 @@ const EventPopup = () => {
 
   return (
     <div className="enquiry-popup-overlay event-popup-active active" style={{ zIndex: 1060 }}>
-      <div className="enquiry-popup-content" style={{ maxWidth: '500px', padding: '0', overflow: 'hidden' }}>
+      <div className="enquiry-popup-content" style={{ maxWidth: '500px', width: '95%', maxHeight: '80vh', overflowY: 'auto', padding: '0', margin: '0 auto', position: 'relative', display: 'flex', flexDirection: 'column' }}>
         <button 
           className="enquiry-popup-close" 
           onClick={() => setIsOpen(false)}
           title="Close"
-          style={{ position: 'absolute', top: '15px', right: '15px', zIndex: 10, background: 'rgba(255,255,255,0.8)', borderRadius: '50%' }}
+          style={{ position: 'absolute', top: '15px', right: '15px', zIndex: 10, background: 'rgba(255,255,255,0.9)', borderRadius: '50%', width: '30px', height: '30px', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 2px 5px rgba(0,0,0,0.2)' }}
         >
           &times;
         </button>
         
         {eventData.imageUrl && (
-          <div style={{ width: '100%', overflow: 'hidden', backgroundColor: '#f8f9fa', display: 'flex', justifyContent: 'center' }}>
-            <img loading="lazy" src={eventData.imageUrl.startsWith('http') ? eventData.imageUrl : `${BASE_URL}${eventData.imageUrl}`} alt={eventData.title} style={{ width: '100%', maxHeight: '250px', objectFit: 'contain' }} />
+          <div style={{ width: '100%', backgroundColor: '#f8f9fa', display: 'flex', justifyContent: 'center', flexShrink: 0 }}>
+            <img loading="lazy" src={eventData.imageUrl.startsWith('http') ? eventData.imageUrl : `${BASE_URL}${eventData.imageUrl}`} alt={eventData.title} style={{ width: '100%', maxHeight: '200px', objectFit: 'contain' }} />
           </div>
         )}
         
-        <div style={{ padding: '30px' }}>
-          <span className="badge" style={{ backgroundColor: '#eef2ff', color: 'var(--color-secondary)', padding: '6px 10px', fontSize: '0.7rem', fontWeight: 'bold', marginBottom: '10px', display: 'inline-block' }}>
+        <div style={{ padding: '20px', paddingBottom: '25px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+          <span className="badge" style={{ backgroundColor: '#eef2ff', color: 'var(--color-secondary)', padding: '6px 10px', fontSize: '0.7rem', fontWeight: 'bold', marginBottom: '10px', display: 'inline-block', alignSelf: 'flex-start' }}>
             UPCOMING {eventData.eventType ? eventData.eventType.toUpperCase() : 'EVENT'}
           </span>
-          <h3 style={{ marginBottom: '15px', color: 'var(--color-primary)', fontWeight: '800' }}>{eventData.title}</h3>
+          <h3 style={{ marginBottom: '10px', color: 'var(--color-primary)', fontWeight: '800', fontSize: '1.25rem' }}>{eventData.title}</h3>
           
-          <div className="mb-3 text-muted" style={{ fontSize: '0.9rem' }}>
+          <div className="mb-3 text-muted" style={{ fontSize: '0.85rem' }}>
             <div className="mb-1"><span className="fa fa-calendar mr-2" style={{ color: 'var(--color-secondary)' }}></span> {new Date(eventData.eventDate).toLocaleDateString()}</div>
             <div><span className="fa fa-clock-o mr-2" style={{ color: 'var(--color-secondary)' }}></span> {eventData.eventTime}</div>
           </div>
@@ -93,7 +93,7 @@ const EventPopup = () => {
           <div onClick={() => setIsExpanded(!isExpanded)} style={{ cursor: 'pointer', marginBottom: '20px' }}>
             <p style={{ 
               color: '#666', 
-              fontSize: '0.95rem', 
+              fontSize: '0.9rem', 
               marginBottom: '5px', 
               display: isExpanded ? 'block' : '-webkit-box', 
               WebkitLineClamp: isExpanded ? 'unset' : 2, 
@@ -103,13 +103,13 @@ const EventPopup = () => {
               {eventData.description}
             </p>
             {eventData.description && eventData.description.length > 80 && (
-              <span style={{ color: 'var(--color-primary)', fontSize: '0.85rem', fontWeight: 'bold' }}>
+              <span style={{ color: 'var(--color-primary)', fontSize: '0.8rem', fontWeight: 'bold' }}>
                 {isExpanded ? 'Show Less' : 'View Full Details...'}
               </span>
             )}
           </div>
           
-          <div className="d-flex gap-2">
+          <div className="d-flex flex-column flex-sm-row gap-2 mt-auto pb-2">
              <button onClick={() => { setIsOpen(false); navigate('/events'); }} className="btn btn-primary w-100 py-2" style={{ background: 'linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary) 100%)', border: 'none', borderRadius: '8px', fontWeight: 'bold' }}>
                Register Now
              </button>

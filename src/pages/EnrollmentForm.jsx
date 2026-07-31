@@ -124,7 +124,7 @@ const EnrollmentForm = () => {
     
     const selectedCourse = dbCourses.find(c => c.name === profile.courseName);
     const baseFee = selectedCourse && selectedCourse.fees ? selectedCourse.fees : 50000;
-    const discount = isRegistered ? 500 : 0;
+    const discount = isRegistered ? 10000 : 0;
     
     if (profile.paymentType === 'full') {
       const amountPayingNow = baseFee - discount;
@@ -136,12 +136,14 @@ const EnrollmentForm = () => {
       };
     } else {
       const surcharge = 2000;
-      const installmentAmount = (baseFee + surcharge) / 2;
-      const amountPayingNow = installmentAmount - discount;
+      const remainingBase = baseFee - discount;
+      const totalInstallmentAmount = remainingBase + surcharge;
+      const installmentAmount = totalInstallmentAmount / 2;
+      const amountPayingNow = installmentAmount;
       const remainingFees = installmentAmount;
       return { 
         baseFee, 
-        totalFees: amountPayingNow + remainingFees, 
+        totalFees: totalInstallmentAmount, 
         amountPayingNow, 
         remainingFees 
       };
@@ -392,8 +394,8 @@ const EnrollmentForm = () => {
                     <div className="col-md-6">
                       <h4 className="fw-bold text-dark border-bottom pb-2 mb-4"><i className="fa fa-upload me-2 text-primary"></i>Upload Documents</h4>
                       <div className="mb-2"><label className="form-label fw-bold small">Resume (PDF) *</label><input type="file" className="form-control form-control-sm" accept=".pdf" onChange={e => handleFileChange(e, 'resume')} required /></div>
-                      <div className="mb-2"><label className="form-label fw-bold small">Educational Certificates *</label><input type="file" className="form-control form-control-sm" accept=".pdf,.jpg,.jpeg,.png" onChange={e => handleFileChange(e, 'edu_cert')} required /></div>
-                      <div className="mb-2"><label className="form-label fw-bold small">ID Proof (Aadhar/PAN) *</label><input type="file" className="form-control form-control-sm" accept=".pdf,.jpg,.jpeg,.png" onChange={e => handleFileChange(e, 'id_proof')} required /></div>
+                      <div className="mb-2"><label className="form-label fw-bold small">Educational Certificates *</label><input type="file" className="form-control form-control-sm" accept=".pdf,.jpg,.jpeg,.webp" onChange={e => handleFileChange(e, 'edu_cert')} required /></div>
+                      <div className="mb-2"><label className="form-label fw-bold small">ID Proof (Aadhar/PAN) *</label><input type="file" className="form-control form-control-sm" accept=".pdf,.jpg,.jpeg,.webp" onChange={e => handleFileChange(e, 'id_proof')} required /></div>
                       <div className="mb-2"><label className="form-label fw-bold small">Passport Size Photo *</label><input type="file" className="form-control form-control-sm" accept="image/jpeg,image/png" onChange={e => handleFileChange(e, 'photo')} required /></div>
                     </div>
                   </div>
@@ -404,7 +406,7 @@ const EnrollmentForm = () => {
                       <h5 className="fw-bold mb-3"><i className="fa fa-calculator me-2"></i>Payment Summary</h5>
                       <div className="d-flex justify-content-between mb-2"><span>Base Fees:</span><span>₹{feesData.baseFee}</span></div>
                       {profile.paymentType === 'installment' && <div className="d-flex justify-content-between mb-2 text-warning"><span>Installment Surcharge:</span><span>+ ₹2000</span></div>}
-                      {isRegistered && <div className="d-flex justify-content-between mb-2 text-success"><span>Registration Fee Auto-Adjustment:</span><span>- ₹500</span></div>}
+                      {isRegistered && <div className="d-flex justify-content-between mb-2 text-success"><span>Registration Fee Auto-Adjustment:</span><span>- ₹10,000</span></div>}
                       <hr/>
                       <div className="d-flex justify-content-between mb-2 fw-bold"><span>Total Fees Payable:</span><span>₹{feesData.totalFees}</span></div>
                       <div className="d-flex justify-content-between mb-2 fs-5 text-dark fw-bold"><span>Amount Paying Now:</span><span>₹{feesData.amountPayingNow}</span></div>

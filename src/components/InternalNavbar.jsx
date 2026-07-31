@@ -44,7 +44,7 @@ const InternalNavbar = () => {
       <header className="internal-navbar">
         <div className="internal-nav-container">
           <div className="internal-logo d-flex align-items-center">
-            <img loading="lazy" src="/clinidea Logo/Clinidea_Education_Logo_header.png" alt="Clinidea Education Logo" />
+            <img loading="lazy" src="/clinidea Logo/Clinidea_Education_Logo_header.webp" alt="Clinidea Education Logo" />
             <span className="internal-lms-text ms-3 fw-bold fs-5 text-secondary border-start ps-3 border-2">Learning Management System</span>
           </div>
           <div>

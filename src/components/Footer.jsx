@@ -106,7 +106,7 @@ const Footer = () => {
             
             <div className="footer-col">
               <Link to="/" className="footer-brand">
-                <img loading="lazy" src="/clinidea Logo/Clinidea_Education_Logo_footer.png" alt="Clinidea Education" />
+                <img loading="lazy" src="/clinidea Logo/Clinidea_Education_Logo_footer.webp" alt="Clinidea Education" />
               </Link>
               <p className="footer-desc">
                 Empowering the next generation of life sciences professionals with industry-leading insights and career-focused mentorship in Clinical Research, Pharmacovigilance, and Data Management.

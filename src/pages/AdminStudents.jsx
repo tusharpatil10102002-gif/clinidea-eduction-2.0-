@@ -327,7 +327,7 @@ const AdminStudents = () => {
             </details>
 
             <hr className="my-3" />
-            <p className="mb-1 fw-bold text-dark fs-6 mt-3">Registration Payment (₹500)</p>
+            <p className="mb-1 fw-bold text-dark fs-6 mt-3">Registration Payment (₹10,000)</p>
             {selectedStudent.registrationFeePaid ? (
                <div className="mb-2">
                  <span className="badge bg-success mb-2">Paid</span>

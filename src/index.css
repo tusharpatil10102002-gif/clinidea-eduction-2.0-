@@ -204,7 +204,7 @@ h3 { font-size: clamp(1.5rem, 3vw, 2rem); }
   justify-content: center;
   background-size: cover;
   background-position: center;
-  background-image: url('/images/bg_1.jpg');
+  background-image: url('/images/bg_1.webp');
   background-position: center top;
 }
 

@@ -138,7 +138,7 @@ const CheckoutPanel = ({ courseName }) => {
             className="btn btn-lg fw-bold px-5 py-3 shadow-sm border"
             style={{ borderRadius: '12px', background: '#e0e7ff', color: 'var(--color-secondary)' }}
           >
-            {loading ? 'Routing...' : 'Reserve Seat (₹500)'}
+            {loading ? 'Routing...' : 'Reserve Seat (₹10,000)'}
           </button>
           
           <button 

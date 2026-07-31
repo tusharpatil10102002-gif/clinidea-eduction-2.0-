@@ -217,8 +217,8 @@ const AdminPlacements = () => {
                           <td className="px-4 fw-bold text-dark">{p.studentName}</td>
                           <td>
                             {p.imageUrl ? (
-                              <a href={`${BASE_URL}${p.imageUrl}`} target="_blank" rel="noreferrer">
-                                <img loading="lazy" src={`${BASE_URL}${p.imageUrl}`} alt="poster" className="rounded shadow-sm" style={{width:'80px', height:'50px', objectFit:'cover', border: '1px solid #ddd'}}/>
+                              <a href={p.imageUrl.startsWith('http') ? p.imageUrl : `${BASE_URL}/${p.imageUrl.replace(/^\/+/, '')}`} target="_blank" rel="noreferrer">
+                                <img loading="lazy" src={p.imageUrl.startsWith('http') ? p.imageUrl : `${BASE_URL}/${p.imageUrl.replace(/^\/+/, '')}`} alt="poster" className="rounded shadow-sm" style={{width:'80px', height:'50px', objectFit:'cover', border: '1px solid #ddd'}}/>
                               </a>
                             ) : (
                               <span className="text-muted small">No Image</span>

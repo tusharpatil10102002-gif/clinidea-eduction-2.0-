@@ -245,7 +245,7 @@ const Register = () => {
               </div>
 
               <div className="alert alert-info border-0 rounded-3 text-center mb-4">
-                <h6 className="fw-bold mb-1">Registration Fee: ₹500</h6>
+                <h6 className="fw-bold mb-1">Registration Fee: ₹10,000</h6>
                 <p className="small mb-0 text-muted">Complete this one-time payment to confirm your seat securely.</p>
               </div>
 
@@ -255,7 +255,7 @@ const Register = () => {
                 style={{ borderRadius: '12px', background: 'linear-gradient(135deg, #4f46e5 0%, #6366f1 100%)', border: 'none' }} 
                 disabled={loading}
               >
-                {loading ? 'Processing...' : 'Proceed to Pay ₹500'}
+                {loading ? 'Processing...' : 'Proceed to Pay ₹10,000'}
               </button>
 
               <div className="text-center mt-4">
@@ -286,7 +286,7 @@ const Register = () => {
               </div>
               <div className="mb-2 d-flex justify-content-between">
                 <span className="text-muted fw-bold">Amount Paid:</span>
-                <span className="fw-bold text-theme-secondary">₹500</span>
+                <span className="fw-bold text-theme-secondary">₹10,000</span>
               </div>
             </div>
 

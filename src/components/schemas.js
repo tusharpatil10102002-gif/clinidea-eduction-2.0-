@@ -10,7 +10,7 @@ export const organizationSchema = {
   name: "Clinidea Education",
   alternateName: "Clinidea",
   url: "https://www.clinidea.in",
-  logo: "https://www.clinidea.in/logo.png",
+  logo: "https://www.clinidea.in/logo.webp",
   description:
     "Clinidea Education is India's leading institute for Clinical Research, Pharmacovigilance, Clinical Data Management, Regulatory Affairs, and Medical Writing training with 100% placement support.",
   foundingDate: "2018",

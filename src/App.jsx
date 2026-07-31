@@ -74,6 +74,7 @@ function App() {
           <Route path="/clinical-research-medical-coding-course" element={<ClinicalResearchMedicalCoding />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/index" element={<HomePage />} />
+          <Route path="/index.html" element={<HomePage />} />
           <Route path="/program" element={<Program />} />
           <Route path="/thank-you" element={<ThankYou />} />
 

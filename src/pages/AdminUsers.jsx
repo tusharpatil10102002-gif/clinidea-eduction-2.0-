@@ -16,6 +16,12 @@ const AdminUsers = () => {
   // Selected User Panel
   const [selectedUser, setSelectedUser] = useState(null);
 
+  // Add User Modal
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [addingUser, setAddingUser] = useState(false);
+  const [newUser, setNewUser] = useState({ fullName: '', email: '', phone: '', password: '', registeredCourse: '' });
+
+
   useEffect(() => {
     fetchUsers();
   }, [navigate]);
@@ -74,7 +80,7 @@ const AdminUsers = () => {
   };
 
   const handleGrantFreeAccess = async (id) => {
-    if (!window.confirm("Are you sure you want to bypass the 500 INR registration fee for this user?")) return;
+    if (!window.confirm("Are you sure you want to bypass the 10,000 INR registration fee for this user?")) return;
     const token = localStorage.getItem('adminToken');
     try {
       const url = `${BASE_URL}/api/admin/users/${id}`;
@@ -126,6 +132,41 @@ const AdminUsers = () => {
     }
   };
 
+  const handleAddUser = async (e) => {
+    e.preventDefault();
+    setAddingUser(true);
+    const token = localStorage.getItem('adminToken');
+    try {
+      const res = await fetch(`${BASE_URL}/api/admin/users/manual`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(newUser)
+      });
+      if (res.ok) {
+        const createdUser = await res.json();
+        setUsers([createdUser, ...users]);
+        setShowAddModal(false);
+        setNewUser({ fullName: '', email: '', phone: '', password: '', registeredCourse: '' });
+        alert("User created successfully. Welcome email sent with credentials.");
+      } else {
+        let errMsg = "Failed to create user.";
+        try {
+          const errData = await res.json();
+          errMsg = errData.error || errMsg;
+        } catch (e) {}
+        alert(errMsg);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error creating user: " + err.message);
+    } finally {
+      setAddingUser(false);
+    }
+  };
+
   // Filter Logic
   const filteredUsers = users.filter(user => {
     const matchesSearch = 
@@ -147,26 +188,31 @@ const AdminUsers = () => {
         <h2 className="mb-4 fw-bold" style={{ color: 'var(--color-primary)' }}>Users Management</h2>
 
         {/* Toolbar */}
-        <div className="d-flex justify-content-between mb-4 gap-3 bg-white p-3 rounded-4 shadow-sm border text-dark">
-          <input 
-            type="text" 
-            className="form-control" 
-            placeholder="Search name, phone, or email..." 
-            style={{ maxWidth: '400px' }}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <select 
-            className="form-select" 
-            style={{ maxWidth: '200px' }}
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-          >
-            <option value="">All Statuses</option>
-            <option value="active">Active</option>
-            <option value="inactive">Inactive</option>
-            <option value="banned">Banned</option>
-          </select>
+        <div className="d-flex justify-content-between flex-wrap align-items-center mb-4 gap-3 bg-white p-3 rounded-4 shadow-sm border text-dark">
+          <div className="d-flex gap-3 flex-wrap flex-grow-1">
+            <input 
+              type="text" 
+              className="form-control" 
+              placeholder="Search name, phone, or email..." 
+              style={{ maxWidth: '400px' }}
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <select 
+              className="form-select" 
+              style={{ maxWidth: '200px' }}
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+            >
+              <option value="">All Statuses</option>
+              <option value="active">Active</option>
+              <option value="inactive">Inactive</option>
+              <option value="banned">Banned</option>
+            </select>
+          </div>
+          <button className="btn btn-primary fw-bold" onClick={() => setShowAddModal(true)}>
+            <i className="fa fa-plus me-2"></i> Add New User
+          </button>
         </div>
 
         {/* Users Table */}
@@ -260,7 +306,7 @@ const AdminUsers = () => {
             <label className="fw-bold mb-2">Registration Status</label>
             <div className="d-flex align-items-center justify-content-between mb-2">
               <span className={`badge ${selectedUser.registrationFeePaid ? 'bg-success' : 'bg-warning text-dark'}`}>
-                {selectedUser.registrationFeePaid ? 'PAID / BYPASSED' : 'PENDING 500 INR'}
+                {selectedUser.registrationFeePaid ? 'PAID / BYPASSED' : 'PENDING 10,000 INR'}
               </span>
               {!selectedUser.registrationFeePaid && (
                 <button 
@@ -304,6 +350,87 @@ const AdminUsers = () => {
             </button>
           </div>
 
+        </div>
+      )}
+
+      {/* Add User Modal */}
+      {showAddModal && (
+        <div className="modal fade show" style={{ display: 'block', backgroundColor: 'rgba(0,0,0,0.5)' }} tabIndex="-1">
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
+              <div className="modal-header bg-light border-bottom-0 pb-0">
+                <h5 className="modal-title fw-bold">Manually Add User</h5>
+                <button type="button" className="btn-close" onClick={() => setShowAddModal(false)}></button>
+              </div>
+              <div className="modal-body p-4">
+                <form onSubmit={handleAddUser}>
+                  <div className="mb-3">
+                    <label className="form-label fw-bold text-muted small">Full Name</label>
+                    <input 
+                      type="text" 
+                      className="form-control bg-light" 
+                      required
+                      value={newUser.fullName}
+                      onChange={e => setNewUser({...newUser, fullName: e.target.value})}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label fw-bold text-muted small">Email Address</label>
+                    <input 
+                      type="email" 
+                      className="form-control bg-light" 
+                      required
+                      value={newUser.email}
+                      onChange={e => setNewUser({...newUser, email: e.target.value})}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label fw-bold text-muted small">Phone Number</label>
+                    <input 
+                      type="text" 
+                      className="form-control bg-light" 
+                      required
+                      value={newUser.phone}
+                      onChange={e => setNewUser({...newUser, phone: e.target.value})}
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label fw-bold text-muted small">Registered Course</label>
+                    <select 
+                      className="form-select bg-light"
+                      value={newUser.registeredCourse}
+                      onChange={e => setNewUser({...newUser, registeredCourse: e.target.value})}
+                    >
+                      <option value="">No Course (Optional)</option>
+                      <option value="Clinical Research & Pharmacovigilance">Clinical Research & Pharmacovigilance</option>
+                      <option value="Clinical Research & Data Management">Clinical Research & Data Management</option>
+                      <option value="Clinical Research, Pharmacovigilance & Data Management">Clinical Research, Pharmacovigilance & Data Management</option>
+                      <option value="Clinical Research & Regulatory Affairs">Clinical Research & Regulatory Affairs</option>
+                      <option value="Clinical Research & Medical Writing">Clinical Research & Medical Writing</option>
+                      <option value="Clinical Research and Medical Coding">Clinical Research and Medical Coding</option>
+                    </select>
+                  </div>
+                  <div className="mb-4">
+                    <label className="form-label fw-bold text-muted small">Temporary Password</label>
+                    <input 
+                      type="password" 
+                      className="form-control bg-light" 
+                      required
+                      value={newUser.password}
+                      onChange={e => setNewUser({...newUser, password: e.target.value})}
+                    />
+                    <small className="text-muted">An email will be sent to the user with these credentials.</small>
+                  </div>
+                  <div className="d-flex justify-content-end gap-2">
+                    <button type="button" className="btn btn-light fw-bold" onClick={() => setShowAddModal(false)}>Cancel</button>
+                    <button type="submit" className="btn btn-primary fw-bold" disabled={addingUser}>
+                      {addingUser ? 'Creating...' : 'Create User'}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>

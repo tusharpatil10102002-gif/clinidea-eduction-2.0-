@@ -212,7 +212,7 @@ const AdminTestimonials = () => {
                       {filteredTestimonials.map(t => (
                         <tr key={t.id}>
                           <td className="px-4 fw-bold">
-                            {t.imageUrl && <img loading="lazy" src={`${BASE_URL}${t.imageUrl}`} alt="avatar" className="rounded-circle me-2" style={{width:'32px', height:'32px', objectFit:'cover'}}/>}
+                            {t.imageUrl && <img loading="lazy" src={t.imageUrl.startsWith('http') ? t.imageUrl : `${BASE_URL}/${t.imageUrl.replace(/^\/+/, '')}`} alt="avatar" className="rounded-circle me-2" style={{width:'32px', height:'32px', objectFit:'cover'}}/>}
                             {t.studentName}
                           </td>
                           <td>
