@@ -369,6 +369,23 @@ const About = () => {
         </div>
       </section>
 
+      {/* MSME Registration Section */}
+      <section className="msme-section py-5" style={{ background: 'var(--color-bg-light)', borderTop: '1px solid var(--color-border)' }}>
+        <div className="container">
+          <div className="row align-items-center justify-content-center">
+            <div className="col-lg-8 text-center text-lg-start d-flex flex-column flex-lg-row align-items-center bg-white p-4 rounded-4 shadow-sm border" style={{ gap: '2rem' }}>
+              <img src="/images/msme_qr.png" alt="MSME QR Code" style={{ width: '150px', height: '150px', objectFit: 'contain' }} className="rounded-3 shadow-sm" />
+              <div>
+                <h3 className="mb-3" style={{ color: 'var(--color-primary)', fontWeight: 800 }}>Govt. Recognised MSME</h3>
+                <p className="mb-1" style={{ fontSize: '1.1rem', color: 'var(--color-text-dark)' }}><strong>Name of Enterprise:</strong> CLINIDEA EDUCATION</p>
+                <p className="mb-1" style={{ fontSize: '1.1rem', color: 'var(--color-text-dark)' }}><strong>Udyam Registration Number:</strong> UDYAM-MH-14-0169362</p>
+                <p className="mb-0" style={{ fontSize: '1.1rem', color: 'var(--color-text-dark)' }}><strong>Date of Registration:</strong> 05/11/2025</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Student Slider Section */}
       {studentImages.length > 0 && (
         <section className="ftco-section bg-dark py-5">
