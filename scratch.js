@@ -1,18 +1,13 @@
-const { PrismaClient } = require('./backend/node_modules/@prisma/client');
-const prisma = new PrismaClient();
+const url1 = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+const url2 = "https://youtu.be/dQw4w9WgXcQ";
+const url3 = "https://www.youtube.com/shorts/dQw4w9WgXcQ";
 
-async function check() {
-  const users = await prisma.user.findMany({ include: { enrollments: true } });
-  console.log("Users:", JSON.stringify(users, null, 2));
-  
-  const contents = await prisma.lMSContent.findMany();
-  console.log("Contents:", JSON.stringify(contents, null, 2));
-  
-  const mentors = await prisma.admin.findMany({ where: { role: 'mentor' }});
-  console.log("Mentors:", JSON.stringify(mentors, null, 2));
+const getYoutubeVideoId = (url) => {
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?]*).*/;
+  const match = url.match(regExp);
+  return (match && match[2].length === 11) ? match[2] : null;
+};
 
-  const batchMentors = await prisma.batchMentor.findMany();
-  console.log("Batch Mentors:", JSON.stringify(batchMentors, null, 2));
-}
-
-check().catch(console.error).finally(() => prisma.$disconnect());
+console.log(getYoutubeVideoId(url1));
+console.log(getYoutubeVideoId(url2));
+console.log(getYoutubeVideoId(url3));
