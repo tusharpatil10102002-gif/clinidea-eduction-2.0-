@@ -27,6 +27,7 @@ const AdminFinance = lazy(() => import('./pages/AdminFinance'));
 const AdminBlogs = lazy(() => import('./pages/AdminBlogs'));
 const AdminTestimonials = lazy(() => import('./pages/AdminTestimonials'));
 const AdminPlacements = lazy(() => import('./pages/AdminPlacements'));
+const AdminReviewVideos = lazy(() => import('./pages/AdminReviewVideos'));
 const AdminCMS = lazy(() => import('./pages/AdminCMS'));
 const AdminHREmailAccounts = lazy(() => import('./pages/AdminHREmailAccounts'));
 const AdminHRDatabase = lazy(() => import('./pages/AdminHRDatabase'));
@@ -97,6 +98,7 @@ function App() {
           <Route path="/admin/blogs" element={<AdminRoute><AdminBlogs /></AdminRoute>} />
           <Route path="/admin/testimonials" element={<AdminRoute><AdminTestimonials /></AdminRoute>} />
           <Route path="/admin/placements" element={<AdminRoute><AdminPlacements /></AdminRoute>} />
+          <Route path="/admin/review-videos" element={<AdminRoute><AdminReviewVideos /></AdminRoute>} />
           <Route path="/admin/cms" element={<AdminRoute><AdminCMS /></AdminRoute>} />
           <Route path="/admin/hr-email-accounts" element={<AdminRoute><AdminHREmailAccounts /></AdminRoute>} />
           <Route path="/admin/hr-database" element={<AdminRoute><AdminHRDatabase /></AdminRoute>} />

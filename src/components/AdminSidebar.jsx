@@ -115,6 +115,11 @@ const AdminSidebar = ({ mobileOpen, setMobileOpen }) => {
               </Link>
             </li>
             <li className="nav-item">
+              <Link to="/admin/review-videos" className={`nav-link p-3 rounded-3 fw-bold ${isActive('/admin/review-videos')}`}>
+                <span className="fa fa-video me-2 text-danger"></span> Review Videos
+              </Link>
+            </li>
+            <li className="nav-item">
               <Link to="/admin/testimonials" className={`nav-link p-3 rounded-3 fw-bold ${isActive('/admin/testimonials')}`}>
                 <span className="fa fa-star me-2 text-warning"></span> Student Reviews
               </Link>

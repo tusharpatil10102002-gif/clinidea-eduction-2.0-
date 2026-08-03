@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { BASE_URL } from '../config';
+import StudentReviewVideos from '../components/StudentReviewVideos';
 
 const PlacementsPage = () => {
   const [placements, setPlacements] = useState([]);
@@ -165,6 +166,8 @@ const PlacementsPage = () => {
           )}
         </div>
       </section>
+
+      <StudentReviewVideos />
 
       {/* Lightbox Modal */}
       <div style={lightboxStyle} onClick={() => setLightboxImage(null)}>

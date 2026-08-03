@@ -11,6 +11,7 @@ import CourseCTAs from '../components/CourseCTAs';
 import FAQSection from '../components/FAQSection';
 import TestimonialsSection from '../components/TestimonialsSection';
 import PlacementsSection from '../components/PlacementsSection';
+import StudentReviewVideos from '../components/StudentReviewVideos';
 import SharedCourseGrid from '../components/SharedCourseGrid';
 
 const HomePage = () => {
@@ -428,7 +429,6 @@ const HomePage = () => {
                       alt={`${logo.name} logo`}
                       style={{ height: 'auto', maxHeight: '45px', width: 'auto', maxWidth: '140px', objectFit: 'contain', filter: 'grayscale(100%)', opacity: 0.7, mixBlendMode: 'multiply', marginBottom: '8px' }}
                     />
-                    <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--color-text-muted)' }}>{logo.alumni} alumni</span>
                   </div>
                 ))}
 
@@ -449,7 +449,6 @@ const HomePage = () => {
                       alt={`${logo.name} logo`}
                       style={{ height: 'auto', maxHeight: '45px', width: 'auto', maxWidth: '140px', objectFit: 'contain', filter: 'grayscale(100%)', opacity: 0.7, mixBlendMode: 'multiply', marginBottom: '8px' }}
                     />
-                    <span style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--color-text-muted)' }}>{logo.alumni} alumni</span>
                   </div>
                 ))}
               </div>
@@ -459,6 +458,7 @@ const HomePage = () => {
       </>
 
       <div className="lazy-section"><PlacementsSection /></div>
+      <div className="lazy-section"><StudentReviewVideos /></div>
 
       <div className="lazy-section"><FAQSection /></div>
 
