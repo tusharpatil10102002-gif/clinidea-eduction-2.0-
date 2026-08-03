@@ -374,7 +374,7 @@ const About = () => {
         <div className="container">
           <div className="row align-items-center justify-content-center">
             <div className="col-lg-8 text-center text-lg-start d-flex flex-column flex-lg-row align-items-center bg-white p-4 rounded-4 shadow-sm border" style={{ gap: '2rem' }}>
-              <img src="/images/msme_qr.png" alt="MSME QR Code" style={{ width: '150px', height: '150px', objectFit: 'contain' }} className="rounded-3 shadow-sm" />
+              <img src="https://upload.wikimedia.org/wikipedia/en/thumb/8/87/Ministry_of_Micro%2C_Small_and_Medium_Enterprises_Logo.svg/512px-Ministry_of_Micro%2C_Small_and_Medium_Enterprises_Logo.svg.png" alt="MSME Logo" style={{ width: '150px', height: '150px', objectFit: 'contain' }} className="rounded-3 shadow-sm" />
               <div>
                 <h3 className="mb-3" style={{ color: 'var(--color-primary)', fontWeight: 800 }}>Govt. Recognised MSME</h3>
                 <p className="mb-1" style={{ fontSize: '1.1rem', color: 'var(--color-text-dark)' }}><strong>Name of Enterprise:</strong> CLINIDEA EDUCATION</p>
