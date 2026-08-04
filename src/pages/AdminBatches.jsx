@@ -112,9 +112,9 @@ const AdminBatches = () => {
     if (!courseName) return mentors;
     const cName = courseName.toLowerCase();
     const allowedPrefixes = [];
-    if (cName.includes('clinical research')) allowedPrefixes.push('cr');
-    if (cName.includes('pharmacovigilance')) allowedPrefixes.push('pv');
-    if (cName.includes('data management')) allowedPrefixes.push('cdm');
+    if (cName.includes('clinical research') || cName.includes('pharmacovigilance') || cName.includes('data management')) {
+      allowedPrefixes.push('cr', 'pv', 'cdm');
+    }
     if (cName.includes('regulatory')) allowedPrefixes.push('ra');
     if (cName.includes('writing')) allowedPrefixes.push('mw');
     if (cName.includes('coding')) allowedPrefixes.push('mc');
@@ -221,6 +221,42 @@ const AdminBatches = () => {
     }
   };
 
+  const handleUpdateBatchDates = async (batchId, actionType) => {
+    try {
+      const token = localStorage.getItem('adminToken');
+      const payload = {};
+      const today = new Date().toISOString();
+      if (actionType === 'start') {
+        payload.startDate = today;
+      } else if (actionType === 'end') {
+        payload.endDate = today;
+      }
+      
+      const res = await fetch(`${BASE_URL}/api/admin/batches/${batchId}/dates`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        alert(`Batch ${actionType === 'start' ? 'started' : 'ended'} successfully!`);
+        fetchCoreData();
+        const updatedBatchRes = await fetch(`${BASE_URL}/api/admin/batches`, { headers: { 'Authorization': `Bearer ${token}` } });
+        if (updatedBatchRes.ok) {
+           const updatedBatches = await updatedBatchRes.json();
+           const newActive = updatedBatches.find(b => b.id === batchId);
+           if (newActive) setActiveBatch(newActive);
+        }
+      } else {
+        alert('Failed to update batch status');
+      }
+    } catch (err) {
+      console.error('Failed to update batch dates', err);
+    }
+  };
+
   const handleUpdateStudentCredentials = async (userId, currentEmail) => {
     const newEmail = window.prompt("Enter new Login ID (Email) for this student:", currentEmail);
     if (newEmail === null) return;
@@ -295,6 +331,41 @@ const AdminBatches = () => {
                     <h5 className="fw-bold mb-0">Module Mentors & Drive</h5>
                   </div>
                   <div className="card-body">
+                    {/* Batch Lifecycle Management */}
+                    <div className="mb-4 p-3 bg-light rounded-3 border">
+                      <h6 className="fw-bold mb-2">Batch Lifecycle Management</h6>
+                      {!activeBatch.startDate ? (
+                        <button 
+                          className="btn btn-primary btn-sm fw-bold w-100" 
+                          onClick={() => handleUpdateBatchDates(activeBatch.id, 'start')}
+                        >
+                          <i className="fa fa-play me-2"></i> Start Batch
+                        </button>
+                      ) : (
+                        <div>
+                          <p className="mb-2 text-success fw-bold">
+                            <i className="fa fa-clock me-2"></i> Started on: {new Date(activeBatch.startDate).toLocaleDateString()}
+                          </p>
+                          {new Date() >= new Date(new Date(activeBatch.startDate).setMonth(new Date(activeBatch.startDate).getMonth() + 6)) ? (
+                            !activeBatch.endDate ? (
+                              <button 
+                                className="btn btn-danger btn-sm fw-bold w-100" 
+                                onClick={() => handleUpdateBatchDates(activeBatch.id, 'end')}
+                              >
+                                <i className="fa fa-stop me-2"></i> End Batch
+                              </button>
+                            ) : (
+                              <p className="mb-0 text-danger fw-bold">
+                                <i className="fa fa-check-double me-2"></i> Ended on: {new Date(activeBatch.endDate).toLocaleDateString()}
+                              </p>
+                            )
+                          ) : (
+                            <p className="small text-muted mb-0"><i className="fa fa-lock me-1"></i> End option unlocks 6 months post-start.</p>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
                     {/* Drive Initialization */}
                     <div className="mb-4 p-3 bg-light rounded-3 border">
                       <h6 className="fw-bold mb-2">Google Drive Integration</h6>
@@ -403,15 +474,34 @@ const AdminBatches = () => {
                               <div className="d-flex gap-2">
                                 <select className="form-select form-select-sm" id="newStudentSelect" style={{ maxWidth: '350px' }}>
                                   <option value="">-- Add Student to Batch --</option>
-                                  {enrollments.filter(e => e.batchId === null && e.courseName === activeBatch.course?.name).map(enr => (
+                                  {enrollments.filter(e => {
+                                    if (e.batchId !== null) return false;
+                                    const activeCName = activeBatch.course?.name || '';
+                                    const studentCName = e.courseName || '';
+                                    const isMixed = (name) => {
+                                      const l = name.toLowerCase();
+                                      return l.includes('clinical research') || l.includes('pharmacovigilance') || l.includes('data management');
+                                    };
+                                    if (isMixed(activeCName) && isMixed(studentCName)) return true;
+                                    return studentCName === activeCName;
+                                  }).map(enr => (
                                     <option key={enr.id} value={enr.id}>
                                       {enr.user?.fullName} (Enrolled)
                                     </option>
                                   ))}
-                                  {users.filter(u => 
-                                    u.registeredCourse === activeBatch.course?.name && 
-                                    !enrollments.some(e => e.userId === u.id && e.courseName === activeBatch.course?.name)
-                                  ).map(u => (
+                                  {users.filter(u => {
+                                    const activeCName = activeBatch.course?.name || '';
+                                    const userCName = u.registeredCourse || '';
+                                    const isMixed = (name) => {
+                                      const l = name.toLowerCase();
+                                      return l.includes('clinical research') || l.includes('pharmacovigilance') || l.includes('data management');
+                                    };
+                                    
+                                    const matchesCourse = isMixed(activeCName) && isMixed(userCName) ? true : userCName === activeCName;
+                                    const alreadyEnrolled = enrollments.some(e => e.userId === u.id && e.courseName === userCName);
+                                    
+                                    return matchesCourse && !alreadyEnrolled;
+                                  }).map(u => (
                                     <option key={`user_${u.id}`} value={`user_${u.id}`}>
                                       {u.fullName} (Registered - Pending Fee)
                                     </option>
