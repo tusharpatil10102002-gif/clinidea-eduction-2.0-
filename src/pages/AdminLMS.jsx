@@ -249,11 +249,6 @@ function AdminLMS() {
     e.preventDefault();
     if (!file || !selectedBatch) return;
 
-    if (!selectedBatch.driveFolderId) {
-      alert("Google Drive Folder is not initialized for this batch. Contact Admin.");
-      return;
-    }
-
     setUploading(true);
     const formData = new FormData();
     formData.append('title', title);
@@ -381,9 +376,6 @@ function AdminLMS() {
                           <small className={selectedBatch?.id === batch.id ? 'text-white-50' : 'text-muted'}>
                             {batch.course?.name}
                           </small>
-                          {!batch.driveFolderId && (
-                            <div className="mt-2 badge bg-warning text-dark"><i className="fa fa-exclamation-triangle me-1"></i> Drive Pending</div>
-                          )}
                         </button>
                       ))}
                     </div>
