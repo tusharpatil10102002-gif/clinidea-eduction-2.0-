@@ -40,6 +40,8 @@ const Login = lazy(() => import('./pages/Login'));
 const StudentDashboard = lazy(() => import('./pages/StudentDashboard'));
 const ContentPlayer = lazy(() => import('./pages/ContentPlayer'));
 const EnrollmentForm = lazy(() => import('./pages/EnrollmentForm'));
+const MentorLogin = lazy(() => import('./pages/MentorLogin'));
+const MentorDashboard = lazy(() => import('./pages/MentorDashboard'));
 
 const Events = lazy(() => import('./pages/Events'));
 const TakeQuiz = lazy(() => import('./pages/TakeQuiz'));
@@ -53,6 +55,7 @@ import ScrollToTop from './components/ScrollToTop';
 
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
+import MentorRoute from './components/MentorRoute';
 import GlobalPopups from './components/GlobalPopups';
 import Layout from './components/Layout';
 
@@ -105,6 +108,10 @@ function App() {
           <Route path="/admin/hr-campaigns" element={<AdminRoute><AdminHRCampaigns /></AdminRoute>} />
           <Route path="/admin/hr-campaigns/:id" element={<AdminRoute><AdminHRCampaignDetail /></AdminRoute>} />
           <Route path="/admin/lms" element={<AdminRoute><AdminLMS /></AdminRoute>} />
+          <Route path="/mentor/login" element={<MentorLogin />} />
+          <Route path="/mentor/dashboard" element={<MentorRoute><MentorDashboard /></MentorRoute>} />
+          
+          {/* Student LMS (Requires Paid Access) */}
           <Route path="/student/lms" element={<ProtectedRoute><Navigate to="/dashboard" replace /></ProtectedRoute>} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />

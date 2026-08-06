@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { BASE_URL } from '../config';
+import StudentAssignments from '../components/student/StudentAssignments';
+import StudentExams from '../components/student/StudentExams';
 
 const StudentDashboard = () => {
   const navigate = useNavigate();
@@ -36,10 +38,16 @@ const StudentDashboard = () => {
   const [uploadType, setUploadType] = useState('photo');
   const [selectedFile, setSelectedFile] = useState(null);
 
+  // Advanced Academic Data
+  const [assignments, setAssignments] = useState([]);
+  const [exams, setExams] = useState([]);
+  const [pendingAbsence, setPendingAbsence] = useState(null);
+  const [absenceReasonText, setAbsenceReasonText] = useState('');
+
   // UI State
   const [showProfilePanel, setShowProfilePanel] = useState(false);
-  const [activeTab, setActiveTab] = useState('lms'); // 'lms', 'live', 'vault'
-  const [activeLMSCategory, setActiveLMSCategory] = useState('Recorded Sessions');
+  const [activeTab, setActiveTab] = useState('dashboard'); // 'dashboard', 'lms', 'live', 'vault'
+  const [activeLMSCategory, setActiveLMSCategory] = useState('Recordings');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const fetchDashboardData = React.useCallback(async () => {
@@ -103,6 +111,23 @@ const StudentDashboard = () => {
       // 7. Fetch Live Sessions
       const liveRes = await fetch(`${BASE_URL}/api/student/live-sessions`, { headers: { 'Authorization': `Bearer ${token}` } });
       if (liveRes.ok) setLiveSessions(await liveRes.json());
+
+      // 8. Fetch Pending Absences
+      const absRes = await fetch(`${BASE_URL}/api/student/pending-absences`, { headers: { 'Authorization': `Bearer ${token}` } });
+      if (absRes.ok) {
+        const absData = await absRes.json();
+        if (absData.absences && absData.absences.length > 0) {
+          setPendingAbsence(absData.absences[0]); // Show popup for the first pending absence
+        }
+      }
+
+      // 9. Fetch Assignments
+      const assignRes = await fetch(`${BASE_URL}/api/student/assignments`, { headers: { 'Authorization': `Bearer ${token}` } });
+      if (assignRes.ok) setAssignments((await assignRes.json()).assignments || []);
+
+      // 10. Fetch Exams
+      const examsRes = await fetch(`${BASE_URL}/api/student/exams`, { headers: { 'Authorization': `Bearer ${token}` } });
+      if (examsRes.ok) setExams((await examsRes.json()).exams || []);
 
       setLoading(false);
     } catch (_err) {
@@ -254,34 +279,62 @@ const StudentDashboard = () => {
     setUploading(false);
   };
 
+  const handleAbsenceSubmit = async (e) => {
+    e.preventDefault();
+    if (!absenceReasonText.trim()) return showMessage('Reason is required', 'warning');
+    
+    try {
+      const token = localStorage.getItem('userToken');
+      const res = await fetch(`${BASE_URL}/api/student/submit-absence-reason`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ attendanceId: pendingAbsence.id, reason: absenceReasonText })
+      });
+      if (res.ok) {
+        showMessage('Reason submitted successfully', 'success');
+        setPendingAbsence(null);
+        setAbsenceReasonText('');
+      } else {
+        showMessage('Failed to submit reason', 'danger');
+      }
+    } catch (error) {
+      showMessage('Error submitting reason', 'danger');
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem('userToken');
     navigate('/login');
   };
 
   const categorizedContent = {
-    'Recorded Sessions': [],
-    'Presentations': [],
-    'Additional Study Material': []
+    'Recorded sessions': [],
+    'Presentations and files': [],
+    'Additional study material': [],
+    'Question Bank': []
   };
 
   contents.forEach(curr => {
     let cat = curr.category;
-    if (!cat || !categorizedContent[cat]) {
-      // Fallback for old content uploaded before this change
-      if (curr.contentType === 'video') cat = 'Recorded Sessions';
-      else if (curr.contentType === 'ppt') cat = 'Presentations';
-      else cat = 'Additional Study Material';
+    if (cat === 'Recorded sessions' || cat === 'Recordings' || curr.contentType === 'video') {
+      cat = 'Recorded sessions';
+    } else if (cat === 'Presentations and files' || cat === 'Presentations' || curr.contentType === 'ppt') {
+      cat = 'Presentations and files';
+    } else if (cat === 'Question Bank') {
+      cat = 'Question Bank';
+    } else {
+      cat = 'Additional study material'; // Default for PDFs, Docs, etc.
     }
+
     if (categorizedContent[cat]) {
       categorizedContent[cat].push(curr);
     }
   });
 
   const getCategoryIcon = (category) => {
-    if (category === 'Recorded Sessions') return 'fa-play-circle text-danger';
-    if (category === 'Presentations') return 'fa-file-powerpoint text-warning';
-    return 'fa-book text-info';
+    if (category === 'Recordings') return 'fa-play-circle text-danger';
+    if (category === 'Study Material') return 'fa-book text-info';
+    return 'fa-question-circle text-primary';
   };
 
   const getIcon = (type) => {
@@ -340,12 +393,46 @@ const StudentDashboard = () => {
         
         <div className="p-3 flex-grow-1 overflow-auto">
           <p className="text-muted small fw-bold text-uppercase px-3 mb-2 mt-2" style={{ letterSpacing: '1px', fontSize: '0.7rem' }}>Navigation</p>
-          <div className="list-group list-group-flush gap-2">
-            <button onClick={() => { setActiveTab('lms'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'lms' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
-              <i className="fa fa-laptop-code me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Course Content
+          <div className="list-group list-group-flush gap-2 pb-5">
+            <button onClick={() => { setActiveTab('dashboard'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'dashboard' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
+              <i className="fa fa-chart-pie me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Dashboard
             </button>
             <button onClick={() => { setActiveTab('live'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'live' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
-              <i className="fa fa-video me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Live Sessions
+              <i className="fa fa-calendar-alt me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Live session Schedules
+            </button>
+            <button onClick={() => { setActiveTab('lms'); setActiveLMSCategory('Recorded sessions'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'lms' && activeLMSCategory === 'Recorded sessions' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
+              <i className="fa fa-play-circle me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Recorded sessions
+            </button>
+            <button onClick={() => { setActiveTab('lms'); setActiveLMSCategory('Presentations and files'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'lms' && activeLMSCategory === 'Presentations and files' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
+              <i className="fa fa-file-powerpoint me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Presentations and files
+            </button>
+            <button onClick={() => { setActiveTab('lms'); setActiveLMSCategory('Additional study material'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'lms' && activeLMSCategory === 'Additional study material' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
+              <i className="fa fa-book me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Additional study material
+            </button>
+            <button onClick={() => { setActiveTab('assignments'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'assignments' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
+              <i className="fa fa-tasks me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Assignment
+            </button>
+
+            <a href="https://clinidea.in/vigithinksafety/login" target="_blank" rel="noreferrer" className="list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center text-dark hover-bg-light" style={{ transition: 'all 0.2s' }}>
+              <i className="fa fa-shield-alt me-3 fs-5" style={{ width: '24px', textAlign: 'center', color: '#10b981' }}></i> Vigithink Safety
+            </a>
+            <a href="https://clinidea.in/vigithinketmf/login" target="_blank" rel="noreferrer" className="list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center text-dark hover-bg-light" style={{ transition: 'all 0.2s' }}>
+              <i className="fa fa-folder-open me-3 fs-5" style={{ width: '24px', textAlign: 'center', color: '#f59e0b' }}></i> Vigithink eTMF
+            </a>
+            {enrolledBatches.some(e => e.courseName && e.courseName.toLowerCase().includes('clinical data management')) && (
+              <a href="https://clinidea.in/vigithinkcdms/login" target="_blank" rel="noreferrer" className="list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center text-dark hover-bg-light" style={{ transition: 'all 0.2s' }}>
+                <i className="fa fa-database me-3 fs-5" style={{ width: '24px', textAlign: 'center', color: '#3b82f6' }}></i> Vigithink CDMS
+              </a>
+            )}
+
+            <button onClick={() => { setActiveTab('lms'); setActiveLMSCategory('Question Bank'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'lms' && activeLMSCategory === 'Question Bank' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
+              <i className="fa fa-question-circle me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Question Bank
+            </button>
+            <button onClick={() => { setActiveTab('test-series'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'test-series' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
+              <i className="fa fa-list-alt me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Test Series
+            </button>
+            <button onClick={() => { setActiveTab('payments'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'payments' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
+              <i className="fa fa-receipt me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Payment Receipts
             </button>
             <button onClick={() => { setActiveTab('vault'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'vault' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
               <i className="fa fa-certificate me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Certificates
@@ -454,6 +541,47 @@ const StudentDashboard = () => {
         {/* Dynamic Content Area */}
         <div className="p-3 p-md-4 flex-grow-1 w-100 mx-auto" style={{ maxWidth: '1400px' }}>
 
+        {/* Tab Content: Dashboard */}
+        {activeTab === 'dashboard' && (
+          <div className="row g-4">
+            <div className="col-12">
+              <div className="card-premium h-100">
+                <div className="card-header bg-white border-0 p-4" style={{ borderBottom: '1px solid var(--color-border) !important' }}>
+                  <h4 className="heading-premium text-dark mb-0"><i className="fa fa-chart-line text-primary me-2"></i> Overall Course Progress</h4>
+                </div>
+                <div className="card-body p-4 bg-light">
+                  <div className="row g-4">
+                    <div className="col-md-4">
+                      <div className="p-4 bg-white rounded-3 shadow-sm text-center border">
+                        <i className="fa fa-user-check text-success fs-1 mb-3"></i>
+                        <h5 className="fw-bold mb-1">Attendance</h5>
+                        <p className="text-muted mb-0">85%</p>
+                      </div>
+                    </div>
+                    <div className="col-md-4">
+                      <div className="p-4 bg-white rounded-3 shadow-sm text-center border">
+                        <i className="fa fa-tasks text-info fs-1 mb-3"></i>
+                        <h5 className="fw-bold mb-1">Test Performance</h5>
+                        <p className="text-muted mb-0">Awaiting Scores</p>
+                      </div>
+                    </div>
+                    <div className="col-md-4">
+                      <div className="p-4 bg-white rounded-3 shadow-sm text-center border">
+                        <i className="fa fa-graduation-cap text-warning fs-1 mb-3"></i>
+                        <h5 className="fw-bold mb-1">Course Progress</h5>
+                        <p className="text-muted mb-0">In Progress</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mt-4 p-3 bg-white rounded shadow-sm border">
+                    <p className="text-muted mb-0 text-center"><i className="fa fa-info-circle me-2"></i> Detailed analytics will be available as you complete more modules and tests.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Tab Content: LMS */}
         {activeTab === 'lms' && (
           <div className="row g-4">
@@ -482,52 +610,7 @@ const StudentDashboard = () => {
             <div className="col-12">
               <div className="card-premium p-4 min-vh-50">
                 <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
-                  <h4 className="heading-premium text-dark mb-0"><i className="fa fa-folder-open text-primary me-2"></i> Course Content</h4>
-                  
-                  {/* Category Selector on Mobile (Premium Dropdown Menu) */}
-                  <div className="d-md-none w-100 mt-1">
-                    <div className="position-relative">
-                      <select 
-                        value={activeLMSCategory} 
-                        onChange={(e) => setActiveLMSCategory(e.target.value)}
-                        className="w-100 px-3 py-2 fw-semibold text-dark"
-                        style={{ 
-                          paddingRight: '40px', 
-                          fontSize: '0.85rem', 
-                          borderRadius: '10px', 
-                          border: '1.5px solid var(--color-border)', 
-                          height: '42px',
-                          cursor: 'pointer',
-                          backgroundColor: '#f8fafc',
-                          appearance: 'none',
-                          WebkitAppearance: 'none'
-                        }}
-                      >
-                        {Object.keys(categorizedContent).map((category, idx) => (
-                          <option key={idx} value={category}>
-                            📂 {category} ({categorizedContent[category].length})
-                          </option>
-                        ))}
-                      </select>
-                      <div className="position-absolute" style={{ right: '15px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }}>
-                        <i className="fa fa-chevron-down text-muted" style={{ fontSize: '0.8rem' }}></i>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Category Pills on Desktop */}
-                  <div className="d-none d-md-flex gap-2" style={{ overflowX: 'auto', flexWrap: 'nowrap', WebkitOverflowScrolling: 'touch', paddingBottom: '4px' }}>
-                    {Object.keys(categorizedContent).map((category, idx) => (
-                      <button
-                        key={idx}
-                        className={`btn rounded-pill px-3 py-1 fw-semibold border shadow-sm ${activeLMSCategory === category ? 'bg-theme-secondary text-white border-0' : 'bg-white text-muted hover-bg-light'}`}
-                        onClick={() => setActiveLMSCategory(category)}
-                        style={{ whiteSpace: 'nowrap', fontSize: '0.8rem', transition: 'all 0.2s' }}
-                      >
-                        {category} ({categorizedContent[category].length})
-                      </button>
-                    ))}
-                  </div>
+                  <h4 className="heading-premium text-dark mb-0"><i className={`fa ${getCategoryIcon(activeLMSCategory)} me-2`}></i> {activeLMSCategory}</h4>
                 </div>
                 
                 {currentItems.length === 0 ? (
@@ -545,8 +628,15 @@ const StudentDashboard = () => {
                           className="card-premium h-100" 
                           style={{ cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s' }}
                           onClick={() => {
-                            if (item.driveWebViewLink) {
-                              const url = `/watch?link=${encodeURIComponent(item.driveWebViewLink)}&title=${encodeURIComponent(item.title)}&type=${item.contentType}`;
+                            let contentUrl = null;
+                            if (item.localFileUrl) {
+                              contentUrl = `${BASE_URL}${item.localFileUrl}`;
+                            } else if (item.driveWebViewLink) {
+                              contentUrl = item.driveWebViewLink;
+                            }
+                            
+                            if (contentUrl) {
+                              const url = `/watch?link=${encodeURIComponent(contentUrl)}&title=${encodeURIComponent(item.title)}&type=${item.contentType}`;
                               navigate(url);
                             }
                           }}
@@ -675,7 +765,7 @@ const StudentDashboard = () => {
         {/* Tab Content: Vault */}
         {activeTab === 'vault' && (
           <div className="row g-4">
-            <div className="col-md-6">
+            <div className="col-12">
               <div className="card-premium h-100">
                 <div className="card-header bg-white border-0 p-4" style={{ borderBottom: '1px solid var(--color-border) !important' }}>
                   <h4 className="heading-premium text-dark mb-0"><i className="fa fa-certificate text-warning me-2"></i> My Certificates</h4>
@@ -698,8 +788,13 @@ const StudentDashboard = () => {
                 </div>
               </div>
             </div>
-            
-            <div className="col-md-6">
+          </div>
+        )}
+
+        {/* Tab Content: Payments */}
+        {activeTab === 'payments' && (
+          <div className="row g-4">
+            <div className="col-12">
               <div className="card-premium h-100">
                 <div className="card-header bg-white border-0 p-4" style={{ borderBottom: '1px solid var(--color-border) !important' }}>
                   <h4 className="heading-premium text-dark mb-0"><i className="fa fa-file-invoice-dollar text-success me-2"></i> Payment Receipts</h4>
@@ -718,6 +813,37 @@ const StudentDashboard = () => {
                       ))}
                     </div>
                   )}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Tab Content: Assignment */}
+        {activeTab === 'assignments' && (
+          <StudentAssignments assignments={assignments} showMessage={(t, ty) => setMessage({text: t, type: ty})} fetchDashboardData={fetchDashboardData} />
+        )}
+
+        {/* Tab Content: Test Series */}
+        {activeTab === 'test-series' && (
+          <StudentExams exams={exams} showMessage={(t, ty) => setMessage({text: t, type: ty})} fetchDashboardData={fetchDashboardData} />
+        )}
+
+        {/* Tab Content: Refer and Earn */}
+        {activeTab === 'refer-earn' && (
+          <div className="row g-4">
+            <div className="col-12">
+              <div className="card-premium h-100">
+                <div className="card-header bg-white border-0 p-4" style={{ borderBottom: '1px solid var(--color-border) !important' }}>
+                  <h4 className="heading-premium text-dark mb-0"><i className="fa fa-gift text-danger me-2"></i> Refer & Earn</h4>
+                </div>
+                <div className="card-body p-4 bg-light text-center">
+                  <div className="py-4">
+                    <i className="fa fa-users text-danger fs-1 mb-3"></i>
+                    <h5 className="fw-bold text-dark">Refer your friends & earn rewards!</h5>
+                    <p className="text-muted mx-auto" style={{ maxWidth: '500px' }}>Share your unique referral link with friends. When they enroll in a course, you both earn exciting rewards and discounts!</p>
+                    <button className="btn btn-primary mt-3 px-4 py-2 rounded-pill fw-bold shadow-sm"><i className="fa fa-share-alt me-2"></i> Share Link</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -820,6 +946,39 @@ const StudentDashboard = () => {
         </>
       )}
 
+      {/* Student Absence Reason Modal (Strict Popup) */}
+      {pendingAbsence && (
+        <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.85)', zIndex: 1060 }}>
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content border-0 rounded-4 shadow-lg">
+              <div className="modal-header bg-danger text-white border-bottom-0 rounded-top-4">
+                <h5 className="modal-title fw-bold"><i className="fas fa-exclamation-triangle me-2"></i> Action Required: Absence Recorded</h5>
+              </div>
+              <div className="modal-body p-4 text-center">
+                <p className="fs-5 mb-2">You were marked <strong>absent</strong> for the session on:</p>
+                <div className="bg-light p-3 rounded-3 mb-4 d-inline-block fw-bold text-dark shadow-sm">
+                  {new Date(pendingAbsence.session?.sessionDate).toLocaleDateString()} - {pendingAbsence.session?.title}
+                </div>
+                <p className="text-muted mb-4">Please provide a valid reason for your absence to continue using the portal.</p>
+                
+                <form onSubmit={handleAbsenceSubmit}>
+                  <textarea 
+                    className="form-control mb-4 bg-light" 
+                    rows="3" 
+                    required 
+                    placeholder="Enter your reason here..."
+                    value={absenceReasonText}
+                    onChange={(e) => setAbsenceReasonText(e.target.value)}
+                  ></textarea>
+                  <button type="submit" className="btn btn-danger fw-bold rounded-pill w-100 py-2 fs-5 shadow">
+                    Submit Reason & Continue
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

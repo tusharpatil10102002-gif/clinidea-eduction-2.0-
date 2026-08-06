@@ -318,9 +318,14 @@ const AdminBatches = () => {
           <div className="active-batch-view slide-in">
             <div className="d-flex justify-content-between align-items-center mb-4">
               <h3 className="fw-bold m-0"><i className="fa fa-layer-group me-2 text-primary"></i> {activeBatch.batchName} Control Center</h3>
-              <button className="btn btn-outline-dark fw-bold" onClick={() => setActiveBatch(null)}>
-                <i className="fa fa-arrow-left me-2"></i> Return to Registry
-              </button>
+              <div className="d-flex gap-2">
+                <a href={`${BASE_URL}/api/admin/batches/${activeBatch.id}/download-all`} target="_blank" rel="noopener noreferrer" className="btn btn-primary fw-bold shadow-sm d-flex align-items-center">
+                  <i className="fa fa-file-archive me-2"></i> Download All (ZIP)
+                </a>
+                <button className="btn btn-outline-dark fw-bold d-flex align-items-center" onClick={() => setActiveBatch(null)}>
+                  <i className="fa fa-arrow-left me-2"></i> Return to Registry
+                </button>
+              </div>
             </div>
 
             <div className="row g-4">
@@ -366,22 +371,7 @@ const AdminBatches = () => {
                       )}
                     </div>
 
-                    {/* Drive Initialization */}
-                    <div className="mb-4 p-3 bg-light rounded-3 border">
-                      <h6 className="fw-bold mb-2">Google Drive Integration</h6>
-                      {!activeBatch.driveFolderId ? (
-                        <div>
-                          <p className="small text-muted mb-2">Initialize a master folder on Google Drive for this batch to allow mentors to upload module content.</p>
-                          <button className="btn btn-success btn-sm fw-bold w-100" onClick={() => handleInitDrive(activeBatch.id)}>
-                            <i className="fab fa-google-drive me-2"></i> Initialize Drive Folder
-                          </button>
-                        </div>
-                      ) : (
-                        <div className="d-flex align-items-center text-success fw-bold">
-                          <i className="fa fa-check-circle fs-4 me-2"></i> Drive Initialized
-                        </div>
-                      )}
-                    </div>
+
 
                     {/* Mentor Assignment */}
                     <h6 className="fw-bold mb-3 border-bottom pb-2">Assign Mentors by Module</h6>
