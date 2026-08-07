@@ -5,6 +5,9 @@ import { BASE_URL } from '../config';
 const AdminRoleManagement = () => {
   const [users, setUsers] = useState([]);
   const [formData, setFormData] = useState({ email: '', password: '', role: 'superadmin' });
+  const [isEditing, setIsEditing] = useState(false);
+  const [editId, setEditId] = useState(null);
+  
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -32,28 +35,52 @@ const AdminRoleManagement = () => {
     setLoading(true);
     setError('');
     setSuccess('');
+    
     try {
       const token = localStorage.getItem('adminToken');
-      const res = await fetch(`${BASE_URL}/api/admin/users`, {
-        method: 'POST',
+      const url = isEditing 
+        ? `${BASE_URL}/api/admin/users/${editId}` 
+        : `${BASE_URL}/api/admin/users`;
+        
+      const res = await fetch(url, {
+        method: isEditing ? 'PUT' : 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(formData)
       });
+      
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.error || 'Failed to create user');
+        throw new Error(errorData.error || 'Failed to process request');
       }
-      setSuccess('User created successfully');
-      setFormData({ email: '', password: '', role: 'superadmin' });
+      
+      setSuccess(isEditing ? 'User updated successfully' : 'User created successfully');
+      handleCancelEdit();
       fetchUsers();
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleEditClick = (user) => {
+    setIsEditing(true);
+    setEditId(user.id);
+    setFormData({
+      email: user.email,
+      password: '', // Leave empty to not change password
+      role: user.role
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+  
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+    setEditId(null);
+    setFormData({ email: '', password: '', role: 'superadmin' });
   };
 
   const handleDelete = async (id) => {
@@ -92,7 +119,7 @@ const AdminRoleManagement = () => {
         <div className="col-lg-4">
           <div className="card shadow-sm border-0 rounded-4">
             <div className="card-body p-4">
-              <h5 className="fw-bold mb-4">Create New Account</h5>
+              <h5 className="fw-bold mb-4">{isEditing ? 'Edit Account' : 'Create New Account'}</h5>
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                   <label className="form-label fw-bold">Email</label>
@@ -105,14 +132,14 @@ const AdminRoleManagement = () => {
                   />
                 </div>
                 <div className="mb-3">
-                  <label className="form-label fw-bold">Password</label>
+                  <label className="form-label fw-bold">Password {isEditing && <span className="text-muted fw-normal" style={{fontSize: '0.8rem'}}>(Leave empty to keep current)</span>}</label>
                   <input
                     type="password"
                     className="form-control"
                     value={formData.password}
                     onChange={(e) => setFormData({...formData, password: e.target.value})}
-                    required
-                    minLength="6"
+                    required={!isEditing}
+                    minLength={formData.password ? "6" : undefined}
                   />
                 </div>
                 <div className="mb-4">
@@ -125,13 +152,19 @@ const AdminRoleManagement = () => {
                   >
                     <option value="superadmin">Super Admin</option>
                     <option value="mentor">Mentor</option>
-                    <option value="student_coordinator">Student Coordinator</option>
-                    <option value="lead_manager">Lead Manager</option>
+                    <option value="lead_manager">Student Coordinator / Lead Manager</option>
                   </select>
                 </div>
-                <button type="submit" className="btn btn-primary w-100 fw-bold" disabled={loading}>
-                  {loading ? 'Creating...' : 'Create Account'}
-                </button>
+                <div className="d-flex gap-2">
+                  <button type="submit" className="btn btn-primary flex-grow-1 fw-bold" disabled={loading}>
+                    {loading ? 'Processing...' : (isEditing ? 'Update Account' : 'Create Account')}
+                  </button>
+                  {isEditing && (
+                    <button type="button" className="btn btn-secondary fw-bold" onClick={handleCancelEdit}>
+                      Cancel
+                    </button>
+                  )}
+                </div>
               </form>
             </div>
           </div>
@@ -163,10 +196,16 @@ const AdminRoleManagement = () => {
                         </td>
                         <td className="text-end">
                           <button 
+                            className="btn btn-sm btn-outline-primary me-2"
+                            onClick={() => handleEditClick(user)}
+                          >
+                            <i className="fa fa-edit"></i> Edit
+                          </button>
+                          <button 
                             className="btn btn-sm btn-outline-danger"
                             onClick={() => handleDelete(user.id)}
                           >
-                            <i className="fa fa-trash"></i>
+                            <i className="fa fa-trash"></i> Delete
                           </button>
                         </td>
                       </tr>
