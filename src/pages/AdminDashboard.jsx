@@ -58,21 +58,7 @@ const AdminDashboard = () => {
           <h2 className="mb-0 fw-bold" style={{ color: 'var(--admin-primary)', letterSpacing: '-0.5px' }}>Dashboard Overview</h2>
         </div>
         
-        {adminRole === 'superadmin' && (
-          <div className="row mb-4">
-            <div className="col-12">
-              <div className="card border-0 p-4 shadow-sm" style={{ backgroundColor: '#fff', borderRadius: '16px', borderLeft: '5px solid var(--admin-primary)' }}>
-                <div className="d-flex justify-content-between align-items-center flex-wrap gap-3">
-                  <div>
-                    <h5 className="fw-bold mb-1" style={{ color: 'var(--admin-primary)' }}><i className="fa fa-users-cog me-2"></i> Students Management (Super Admin)</h5>
-                    <p className="text-muted mb-0 small">Manage batch life cycles, configure fee structures, track dues, and control student LMS access.</p>
-                  </div>
-                  <button className="btn btn-primary fw-bold rounded-pill px-4" onClick={() => navigate('/admin/students-management')}>Access Module</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+
 
         <div className="row mb-5">
           <div className="col-md-6 mb-4">
