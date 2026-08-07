@@ -93,7 +93,7 @@ function App() {
           <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
           <Route path="/admin/leads" element={<AdminRoute><AdminLeads /></AdminRoute>} />
           <Route path="/admin/users" element={<AdminRoute><AdminUsers /></AdminRoute>} />
-          <Route path="/admin/student-management" element={<AdminRoute><AdminStudentManagement /></AdminRoute>} />
+          <Route path="/admin/students-management" element={<AdminRoute><AdminStudentManagement /></AdminRoute>} />
           <Route path="/admin/students" element={<AdminRoute><AdminStudents /></AdminRoute>} />
           <Route path="/admin/courses" element={<AdminRoute><AdminCourses /></AdminRoute>} />
           <Route path="/admin/batches" element={<AdminRoute><AdminBatches /></AdminRoute>} />
