@@ -34,6 +34,7 @@ const AdminHRDatabase = lazy(() => import('./pages/AdminHRDatabase'));
 const AdminHRCampaigns = lazy(() => import('./pages/AdminHRCampaigns'));
 const AdminHRCampaignDetail = lazy(() => import('./pages/AdminHRCampaignDetail'));
 const AdminLMS = lazy(() => import('./pages/AdminLMS'));
+const AdminRoleManagement = lazy(() => import('./pages/AdminRoleManagement'));
 const StudentLMS = lazy(() => import('./pages/StudentLMS'));
 const Register = lazy(() => import('./pages/Register'));
 const Login = lazy(() => import('./pages/Login'));
@@ -108,6 +109,7 @@ function App() {
           <Route path="/admin/hr-campaigns" element={<AdminRoute><AdminHRCampaigns /></AdminRoute>} />
           <Route path="/admin/hr-campaigns/:id" element={<AdminRoute><AdminHRCampaignDetail /></AdminRoute>} />
           <Route path="/admin/lms" element={<AdminRoute><AdminLMS /></AdminRoute>} />
+          <Route path="/admin/roles" element={<AdminRoute><AdminRoleManagement /></AdminRoute>} />
           <Route path="/mentor/login" element={<MentorLogin />} />
           <Route path="/mentor/dashboard" element={<MentorRoute><MentorDashboard /></MentorRoute>} />
           

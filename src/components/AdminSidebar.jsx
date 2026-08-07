@@ -158,6 +158,17 @@ const AdminSidebar = ({ mobileOpen, setMobileOpen }) => {
             </li>
           </>
         )}
+        
+        {adminRole === 'superadmin' && (
+          <>
+            <h6 className="px-3 mt-3 text-white-50 fw-bold text-uppercase" style={{ fontSize: '0.70rem', letterSpacing: '1px' }}>5. Administration</h6>
+            <li className="nav-item">
+              <Link to="/admin/roles" className={`nav-link p-3 rounded-3 fw-bold ${isActive('/admin/roles')}`}>
+                <span className="fa fa-users-cog me-2"></span> Role Management
+              </Link>
+            </li>
+          </>
+        )}
       </ul>
       <hr className="border-light opacity-10" />
       <button onClick={handleLogout} className="btn btn-outline-light py-2 fw-bold w-100" style={{ borderRadius: '12px', border: '1px solid rgba(255,255,255,0.1)' }}>
