@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { BASE_URL } from '../config';
 import StudentAssignments from '../components/student/StudentAssignments';
 import StudentExams from '../components/student/StudentExams';
+import StudentPayments from '../components/student/StudentPayments';
 
 const StudentDashboard = () => {
   const navigate = useNavigate();
@@ -43,6 +44,10 @@ const StudentDashboard = () => {
   const [exams, setExams] = useState([]);
   const [pendingAbsence, setPendingAbsence] = useState(null);
   const [absenceReasonText, setAbsenceReasonText] = useState('');
+
+  // Fee Blocking State
+  const [isFeeBlocked, setIsFeeBlocked] = useState(false);
+  const [feeBlockMessage, setFeeBlockMessage] = useState('');
 
   // UI State
   const [showProfilePanel, setShowProfilePanel] = useState(false);
@@ -98,6 +103,13 @@ const StudentDashboard = () => {
 
       // 6. Fetch LMS Content
       const lmsRes = await fetch(`${BASE_URL}/api/student/content`, { headers: { 'Authorization': `Bearer ${token}` } });
+      if (lmsRes.status === 403) {
+        const lmsError = await lmsRes.json();
+        if (lmsError.isFeeBlock) {
+          setIsFeeBlocked(true);
+          setFeeBlockMessage(lmsError.error);
+        }
+      }
       if (lmsRes.ok) {
         const lmsData = await lmsRes.json();
         if (lmsData && Array.isArray(lmsData.contents)) {
@@ -540,6 +552,30 @@ const StudentDashboard = () => {
 
         {/* Dynamic Content Area */}
         <div className="p-3 p-md-4 flex-grow-1 w-100 mx-auto" style={{ maxWidth: '1400px' }}>
+          
+          {payments.some(p => p.paymentStatus === 'pending' && new Date(p.dueDate) < new Date()) && !isFeeBlocked && (
+            <div className="alert alert-danger shadow-sm border-2 fw-bold d-flex justify-content-between align-items-center mb-4">
+              <div>
+                <i className="fa fa-exclamation-triangle me-2"></i>
+                You have overdue fee installments! Please clear your dues immediately to avoid account blocking.
+              </div>
+              <button className="btn btn-danger btn-sm" onClick={() => setActiveTab('payments')}>Pay Now</button>
+            </div>
+          )}
+
+          {isFeeBlocked && activeTab !== 'payments' ? (
+             <div className="card-premium h-100 text-center py-5 mt-4">
+               <div className="card-body">
+                 <i className="fa fa-lock text-danger mb-3" style={{ fontSize: '4rem' }}></i>
+                 <h3 className="fw-bold text-danger">LMS Access Blocked</h3>
+                 <p className="text-muted fs-5">{feeBlockMessage || 'Your access has been temporarily revoked due to pending fee installments.'}</p>
+                 <button className="btn btn-danger btn-lg mt-3" onClick={() => setActiveTab('payments')}>
+                   <i className="fa fa-receipt me-2"></i> View Dues & Pay Online
+                 </button>
+               </div>
+             </div>
+          ) : (
+            <>
 
         {/* Tab Content: Dashboard */}
         {activeTab === 'dashboard' && (
@@ -793,30 +829,7 @@ const StudentDashboard = () => {
 
         {/* Tab Content: Payments */}
         {activeTab === 'payments' && (
-          <div className="row g-4">
-            <div className="col-12">
-              <div className="card-premium h-100">
-                <div className="card-header bg-white border-0 p-4" style={{ borderBottom: '1px solid var(--color-border) !important' }}>
-                  <h4 className="heading-premium text-dark mb-0"><i className="fa fa-file-invoice-dollar text-success me-2"></i> Payment Receipts</h4>
-                </div>
-                <div className="card-body p-4 bg-light">
-                  {payments.length === 0 ? <p className="text-muted text-center py-4">No payment history.</p> : (
-                    <div className="d-flex flex-column gap-3">
-                      {payments.map(pay => (
-                        <div key={pay.id} className="p-3 border rounded-3 d-flex justify-content-between align-items-center bg-white shadow-sm">
-                          <div>
-                            <h6 className="heading-premium text-dark mb-1">₹{pay.amount} <span className="text-muted fw-normal" style={{ fontSize: '0.9rem' }}>({pay.courseName})</span></h6>
-                            <div className="small text-muted">{new Date(pay.paymentDate).toLocaleDateString()} • {pay.paymentStatus}</div>
-                          </div>
-                          {pay.fileUrl && <a href={`${BASE_URL}${pay.fileUrl}`} target="_blank" rel="noreferrer" className="btn-premium px-4 py-2 fw-bold shadow-sm" style={{ backgroundColor: '#4f46e5', color: 'white', fontSize: '0.85rem', transition: 'all 0.2s' }}>Receipt</a>}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
+          <StudentPayments payments={payments} fetchDashboardData={fetchDashboardData} />
         )}
 
         {/* Tab Content: Assignment */}
@@ -848,6 +861,8 @@ const StudentDashboard = () => {
               </div>
             </div>
           </div>
+        )}
+        </>
         )}
       </div>
       {/* End Main Content Wrapper */}

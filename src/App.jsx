@@ -35,6 +35,7 @@ const AdminHRCampaigns = lazy(() => import('./pages/AdminHRCampaigns'));
 const AdminHRCampaignDetail = lazy(() => import('./pages/AdminHRCampaignDetail'));
 const AdminLMS = lazy(() => import('./pages/AdminLMS'));
 const AdminRoleManagement = lazy(() => import('./pages/AdminRoleManagement'));
+const AdminStudentManagement = lazy(() => import('./pages/AdminStudentManagement'));
 const StudentLMS = lazy(() => import('./pages/StudentLMS'));
 const Register = lazy(() => import('./pages/Register'));
 const Login = lazy(() => import('./pages/Login'));
@@ -92,6 +93,7 @@ function App() {
           <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
           <Route path="/admin/leads" element={<AdminRoute><AdminLeads /></AdminRoute>} />
           <Route path="/admin/users" element={<AdminRoute><AdminUsers /></AdminRoute>} />
+          <Route path="/admin/student-management" element={<AdminRoute><AdminStudentManagement /></AdminRoute>} />
           <Route path="/admin/students" element={<AdminRoute><AdminStudents /></AdminRoute>} />
           <Route path="/admin/courses" element={<AdminRoute><AdminCourses /></AdminRoute>} />
           <Route path="/admin/batches" element={<AdminRoute><AdminBatches /></AdminRoute>} />
