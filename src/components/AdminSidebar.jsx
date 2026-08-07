@@ -48,6 +48,13 @@ const AdminSidebar = ({ mobileOpen, setMobileOpen }) => {
                 </Link>
               </li>
             )}
+            {adminRole === 'superadmin' && (
+              <li className="nav-item">
+                <Link to="/admin/students-management" className={`nav-link p-3 rounded-3 fw-bold ${isActive('/admin/students-management')}`}>
+                  <span className="fa fa-users-cog me-2 text-warning"></span> Students Management
+                </Link>
+              </li>
+            )}
             {adminRole === 'lead_manager' && (
               <li className="nav-item">
                 <Link to="/admin/events" className={`nav-link p-3 rounded-3 fw-bold ${isActive('/admin/events')}`}>
