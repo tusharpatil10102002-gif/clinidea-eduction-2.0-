@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { BASE_URL } from '../config';
 
 const AdminRoleManagement = () => {
-  const [users, setUsers] = array => useState([]);
+  const [users, setUsers] = useState([]);
   const [formData, setFormData] = useState({ email: '', password: '', role: 'superadmin' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
