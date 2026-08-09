@@ -138,7 +138,6 @@ const PlacementsPage = () => {
                         <img loading="lazy" src={p.imageUrl.startsWith('http') ? p.imageUrl : `${BASE_URL}/${p.imageUrl.replace(/^\/+/, '')}`} 
                           alt={p.studentName} 
                           style={{ width: '100%', height: 'auto', display: 'block' }}
-                          loading="lazy"
                         />
                       </div>
                     </div>

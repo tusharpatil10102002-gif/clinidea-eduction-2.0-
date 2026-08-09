@@ -125,11 +125,6 @@ const ClinicalResearchMedicalCoding = () => {
       "answer": "Life science graduates (BSc, MSc), pharmacy graduates (B.Pharm, M.Pharm, PharmD), and medical practitioners (BDS, BHMS, BAMS, MBBS, nursing) are eligible to enroll."
     }
   ],
-  "details": {
-      "duration": "6 Months Intensive Training",
-      "mode": "Online (Live Interactive)",
-      "eligibility": "B.Pharm, M.Pharm, PharmD, BSc, MSc, BTech/MTech (Biotech), BDS, MDS, BHMS, BAMS, MBBS & Life Science Aspirants."
-  },
   "modules": [
       {
           "title": "Clinical Research",
