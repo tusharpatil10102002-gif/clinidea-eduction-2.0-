@@ -109,7 +109,6 @@ const Blogs = () => {
                   >
                     <div style={{ width: '100%', overflow: 'hidden', backgroundColor: '#f8f9fa', display: 'flex', justifyContent: 'center' }}>
                       <img loading="lazy" 
-                        loading="lazy" 
                         src={blog.featuredImage ? `${BASE_URL}${blog.featuredImage}` : 'https://via.placeholder.com/600x400?text=Clinidea+Blog'} 
                         alt={blog.title} 
                         style={{ width: '100%', height: '200px', objectFit: 'cover' }}
