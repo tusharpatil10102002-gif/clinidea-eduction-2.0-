@@ -165,8 +165,17 @@ const AdminStudentManagement = () => {
           </button>
           <div className="card shadow-sm border-0 rounded-4">
             <div className="card-body p-4">
-              <h5 className="fw-bold mb-4">Students in {selectedBatch.batchName}</h5>
-              
+              <div className="d-flex justify-content-between align-items-center mb-4">
+                <h5 className="fw-bold mb-0">Students in {selectedBatch.batchName}</h5>
+                <a 
+                  href={`/api/admin/batches/${selectedBatch.id}/download-all`} 
+                  className="btn btn-primary fw-bold px-4 rounded-pill shadow-sm"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <i className="fa fa-file-archive me-2"></i> Download LMS (ZIP)
+                </a>
+              </div>
               <div className="table-responsive">
                 <table className="table align-middle">
                   <thead className="table-light">

@@ -15,7 +15,7 @@ const AdminRoleManagement = () => {
   const fetchUsers = async () => {
     try {
       const token = localStorage.getItem('adminToken');
-      const res = await fetch(`${BASE_URL}/api/admin/users`, {
+      const res = await fetch(`${BASE_URL}/api/admin/admins`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (!res.ok) throw new Error('Failed to fetch users');
@@ -39,8 +39,8 @@ const AdminRoleManagement = () => {
     try {
       const token = localStorage.getItem('adminToken');
       const url = isEditing 
-        ? `${BASE_URL}/api/admin/users/${editId}` 
-        : `${BASE_URL}/api/admin/users`;
+        ? `${BASE_URL}/api/admin/admins/${editId}` 
+        : `${BASE_URL}/api/admin/admins`;
         
       const res = await fetch(url, {
         method: isEditing ? 'PUT' : 'POST',
@@ -87,7 +87,7 @@ const AdminRoleManagement = () => {
     if (!window.confirm('Are you sure you want to delete this user?')) return;
     try {
       const token = localStorage.getItem('adminToken');
-      const res = await fetch(`${BASE_URL}/api/admin/users/${id}`, {
+      const res = await fetch(`${BASE_URL}/api/admin/admins/${id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
