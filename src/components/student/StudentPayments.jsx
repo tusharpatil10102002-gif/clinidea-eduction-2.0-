@@ -92,8 +92,28 @@ const StudentPayments = ({ payments, fetchDashboardData }) => {
       document.body.appendChild(a);
       a.click();
       a.remove();
+      window.URL.revokeObjectURL(url);
     } catch (err) {
       setMessage({ text: err.message, type: 'danger' });
+    }
+  };
+
+  const handleDownloadFileUrl = async (fileUrl, payment) => {
+    try {
+      const res = await fetch(`${BASE_URL}${fileUrl}`);
+      if (!res.ok) throw new Error('Failed to download receipt');
+      
+      const blob = await res.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Receipt_${payment.transactionId || payment.id}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      setMessage({ text: "Could not download file. Please try again.", type: 'danger' });
     }
   };
 
@@ -151,9 +171,9 @@ const StudentPayments = ({ payments, fetchDashboardData }) => {
                           <>
                             {/* If there's an uploaded fileUrl from old system, use it. Otherwise use new receipt logic */}
                             {pay.fileUrl ? (
-                              <a href={`${BASE_URL}${pay.fileUrl}`} target="_blank" rel="noreferrer" className="btn btn-outline-secondary btn-sm fw-bold w-100 w-md-auto">
-                                <i className="fa fa-download me-1"></i> View Receipt
-                              </a>
+                              <button onClick={() => handleDownloadFileUrl(pay.fileUrl, pay)} className="btn btn-outline-secondary btn-sm fw-bold w-100 w-md-auto">
+                                <i className="fa fa-download me-1"></i> Download Receipt
+                              </button>
                             ) : (
                               <button onClick={() => handleDownloadReceipt(pay)} className="btn btn-outline-success btn-sm fw-bold w-100 w-md-auto">
                                 <i className="fa fa-download me-1"></i> Download Receipt
