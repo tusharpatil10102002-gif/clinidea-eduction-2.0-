@@ -425,7 +425,7 @@ const StudentDashboard = () => {
               <i className="fa fa-tasks me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Assignment
             </button>
 
-            <a href="https://clinidea.in/vigithinksafety/login" target="_blank" rel="noreferrer" className="list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center text-dark hover-bg-light" style={{ transition: 'all 0.2s' }}>
+            <a href="https://clinidea.in/vigithink/login" target="_blank" rel="noreferrer" className="list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center text-dark hover-bg-light" style={{ transition: 'all 0.2s' }}>
               <i className="fa fa-shield-alt me-3 fs-5" style={{ width: '24px', textAlign: 'center', color: '#10b981' }}></i> Vigithink Safety
             </a>
             <a href="https://clinidea.in/vigithinketmf/login" target="_blank" rel="noreferrer" className="list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center text-dark hover-bg-light" style={{ transition: 'all 0.2s' }}>
