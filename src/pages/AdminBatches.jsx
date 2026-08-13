@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import AdminSidebar from '../components/AdminSidebar';
 import { BASE_URL } from '../config';
+import * as XLSX from 'xlsx';
 
 const AdminBatches = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -293,6 +294,42 @@ const AdminBatches = () => {
     }
   };
 
+  const exportToExcel = () => {
+    if (!activeBatch) return;
+
+    const batchStudents = enrollments.filter(e => e.batchId === activeBatch.id);
+    if (batchStudents.length === 0) {
+      alert("No students are enrolled in this batch yet.");
+      return;
+    }
+
+    const dataToExport = batchStudents.map((enr, index) => ({
+      'Sr. No.': index + 1,
+      'Student Name': enr.user?.fullName || 'N/A',
+      'Email ID': enr.user?.email || 'N/A',
+      'Phone Number': enr.user?.phone || 'N/A',
+      'Enrolled Course': enr.courseName || 'N/A',
+      'Batch Name': activeBatch.batchName || 'N/A',
+      'Enrolled Date': enr.createdAt ? new Date(enr.createdAt).toLocaleDateString() : 'N/A'
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Batch Students");
+    
+    // Auto-adjust column widths
+    const maxWidths = dataToExport.reduce((acc, row) => {
+      Object.keys(row).forEach(key => {
+        const val = row[key] ? row[key].toString() : '';
+        acc[key] = Math.max(acc[key] || key.length, val.length);
+      });
+      return acc;
+    }, {});
+    worksheet['!cols'] = Object.keys(maxWidths).map(key => ({ wch: maxWidths[key] + 2 }));
+
+    XLSX.writeFile(workbook, `${activeBatch.batchName.replace(/[^a-z0-9]/gi, '_')}_Students.xlsx`);
+  };
+
   return (
     <div className="admin-layout">
       <AdminSidebar mobileOpen={mobileOpen} setMobileOpen={setMobileOpen} />
@@ -319,6 +356,9 @@ const AdminBatches = () => {
             <div className="d-flex justify-content-between align-items-center mb-4">
               <h3 className="fw-bold m-0"><i className="fa fa-layer-group me-2 text-primary"></i> {activeBatch.batchName} Control Center</h3>
               <div className="d-flex gap-2">
+                <button onClick={exportToExcel} className="btn btn-success fw-bold shadow-sm d-flex align-items-center">
+                  <i className="fa fa-file-excel me-2"></i> Export Excel
+                </button>
                 <a href={`${BASE_URL}/api/admin/batches/${activeBatch.id}/download-all`} target="_blank" rel="noopener noreferrer" className="btn btn-primary fw-bold shadow-sm d-flex align-items-center">
                   <i className="fa fa-file-archive me-2"></i> Download All (ZIP)
                 </a>
