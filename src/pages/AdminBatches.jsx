@@ -308,7 +308,7 @@ const AdminBatches = () => {
       'Student Name': enr.user?.fullName || 'N/A',
       'Email ID': enr.user?.email || 'N/A',
       'Phone Number': enr.user?.phone || 'N/A',
-      'Enrolled Course': enr.courseName || 'N/A',
+      'Registered Course': enr.user?.registeredCourse || enr.courseName || 'N/A',
       'Batch Name': activeBatch.batchName || 'N/A',
       'Enrolled Date': enr.createdAt ? new Date(enr.createdAt).toLocaleDateString() : 'N/A'
     }));
