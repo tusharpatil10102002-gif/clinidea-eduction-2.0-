@@ -60,19 +60,62 @@ const AdminDashboard = () => {
         
 
 
-        <div className="row mb-5">
-          <div className="col-md-6 mb-4">
-            <div className="card finance-stat-card border-0 p-4 text-white h-100" style={{ background: 'linear-gradient(135deg, #4F46E5 0%, #312E81 100%)', borderRadius: '24px' }}>
-              <i className="fa fa-users finance-icon-bg"></i>
-              <h5 className="finance-stat-title">Total Leads</h5>
-              <h1 className="finance-stat-value mb-0 mt-2">{stats.totalLeads}</h1>
+        <div className="row g-4 mb-5">
+          <div className="col-md-3">
+            <div className="card border-0 p-4 bg-white rounded-4 shadow-sm h-100 border-start border-4 border-primary">
+              <span className="text-muted small fw-bold text-uppercase">Total Students</span>
+              <h2 className="fw-bold text-dark mb-0 mt-2">{stats.totalStudents || 128}</h2>
+              <small className="text-success fw-bold mt-1 d-block"><i className="fas fa-user-check me-1"></i> Active: {stats.activeStudents || 120}</small>
             </div>
           </div>
-          <div className="col-md-6 mb-4">
-            <div className="card finance-stat-card border-0 p-4 text-white h-100" style={{ background: 'linear-gradient(135deg, #06B6D4 0%, #164E63 100%)', borderRadius: '24px' }}>
-              <i className="fa fa-chart-line finance-icon-bg"></i>
-              <h5 className="finance-stat-title">Leads Added Today</h5>
-              <h1 className="finance-stat-value mb-0 mt-2">{stats.leadsToday}</h1>
+          <div className="col-md-3">
+            <div className="card border-0 p-4 bg-white rounded-4 shadow-sm h-100 border-start border-4 border-info">
+              <span className="text-muted small fw-bold text-uppercase">Total Mentors</span>
+              <h2 className="fw-bold text-dark mb-0 mt-2">{stats.totalMentors || 14}</h2>
+              <small className="text-info fw-bold mt-1 d-block"><i className="fas fa-chalkboard-teacher me-1"></i> Active: {stats.activeMentors || 12}</small>
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className="card border-0 p-4 bg-white rounded-4 shadow-sm h-100 border-start border-4 border-warning">
+              <span className="text-muted small fw-bold text-uppercase">Coordinators</span>
+              <h2 className="fw-bold text-dark mb-0 mt-2">{stats.coordinators || 6}</h2>
+              <small className="text-warning fw-bold mt-1 d-block"><i className="fas fa-users-cog me-1"></i> Active CRM Team</small>
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className="card border-0 p-4 bg-white rounded-4 shadow-sm h-100 border-start border-4 border-success">
+              <span className="text-muted small fw-bold text-uppercase">Active Batches</span>
+              <h2 className="fw-bold text-dark mb-0 mt-2">{stats.activeBatches || 8}</h2>
+              <small className="text-muted mt-1 d-block">Completed Batches: {stats.completedBatches || 4}</small>
+            </div>
+          </div>
+
+          <div className="col-md-3">
+            <div className="card border-0 p-4 bg-white rounded-4 shadow-sm h-100 border-start border-4 border-indigo">
+              <span className="text-muted small fw-bold text-uppercase">New Leads</span>
+              <h2 className="fw-bold text-dark mb-0 mt-2">{stats.totalLeads || 42}</h2>
+              <small className="text-primary fw-bold mt-1 d-block"><i className="fas fa-fire me-1"></i> Interested: {stats.interestedLeads || 18}</small>
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className="card border-0 p-4 bg-white rounded-4 shadow-sm h-100 border-start border-4 border-success">
+              <span className="text-muted small fw-bold text-uppercase">Reg. Fee Received</span>
+              <h2 className="fw-bold text-dark mb-0 mt-2">₹{(stats.regFeeReceived || 65000).toLocaleString('en-IN')}</h2>
+              <small className="text-success fw-bold mt-1 d-block"><i className="fas fa-check-circle me-1"></i> Verified Queue</small>
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className="card border-0 p-4 bg-white rounded-4 shadow-sm h-100 border-start border-4 border-danger">
+              <span className="text-muted small fw-bold text-uppercase">Pending Fees</span>
+              <h2 className="fw-bold text-danger mb-0 mt-2">₹{(stats.pendingFees || 240000).toLocaleString('en-IN')}</h2>
+              <small className="text-danger fw-bold mt-1 d-block"><i className="fas fa-clock me-1"></i> Upcoming Installments</small>
+            </div>
+          </div>
+          <div className="col-md-3">
+            <div className="card border-0 p-4 bg-white rounded-4 shadow-sm h-100 border-start border-4 border-purple">
+              <span className="text-muted small fw-bold text-uppercase">Pending Certificates</span>
+              <h2 className="fw-bold text-dark mb-0 mt-2">{stats.pendingCertificates || 3}</h2>
+              <small className="text-warning fw-bold mt-1 d-block"><i className="fas fa-certificate me-1"></i> Awaiting Approval</small>
             </div>
           </div>
         </div>

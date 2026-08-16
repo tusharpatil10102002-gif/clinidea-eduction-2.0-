@@ -36,6 +36,10 @@ const AdminHRCampaignDetail = lazy(() => import('./pages/AdminHRCampaignDetail')
 const AdminLMS = lazy(() => import('./pages/AdminLMS'));
 const AdminRoleManagement = lazy(() => import('./pages/AdminRoleManagement'));
 const AdminStudentManagement = lazy(() => import('./pages/AdminStudentManagement'));
+const AdminMentorManagement = lazy(() => import('./pages/AdminMentorManagement'));
+const AdminCoordinatorManagement = lazy(() => import('./pages/AdminCoordinatorManagement'));
+const AdminReports = lazy(() => import('./pages/AdminReports'));
+const AdminCertificates = lazy(() => import('./pages/AdminCertificates'));
 const StudentLMS = lazy(() => import('./pages/StudentLMS'));
 const Register = lazy(() => import('./pages/Register'));
 const Login = lazy(() => import('./pages/Login'));
@@ -44,6 +48,12 @@ const ContentPlayer = lazy(() => import('./pages/ContentPlayer'));
 const EnrollmentForm = lazy(() => import('./pages/EnrollmentForm'));
 const MentorLogin = lazy(() => import('./pages/MentorLogin'));
 const MentorDashboard = lazy(() => import('./pages/MentorDashboard'));
+const CoordinatorLogin = lazy(() => import('./pages/CoordinatorLogin'));
+const CoordinatorDashboard = lazy(() => import('./pages/CoordinatorDashboard'));
+const Unauthorized = lazy(() => import('./pages/Unauthorized'));
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
+const ResetPassword = lazy(() => import('./pages/ResetPassword'));
+const CertificateVerification = lazy(() => import('./pages/CertificateVerification'));
 
 const Events = lazy(() => import('./pages/Events'));
 const TakeQuiz = lazy(() => import('./pages/TakeQuiz'));
@@ -58,6 +68,7 @@ import ScrollToTop from './components/ScrollToTop';
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';
 import MentorRoute from './components/MentorRoute';
+import CoordinatorRoute from './components/CoordinatorRoute';
 import GlobalPopups from './components/GlobalPopups';
 import Layout from './components/Layout';
 
@@ -90,6 +101,7 @@ function App() {
           <Route path="/blogs/:slug" element={<BlogDetail />} />
           <Route path="/placements" element={<PlacementsPage />} />
           <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/Login" element={<AdminLogin />} />
           <Route path="/admin/dashboard" element={<AdminRoute><AdminDashboard /></AdminRoute>} />
           <Route path="/admin/leads" element={<AdminRoute><AdminLeads /></AdminRoute>} />
           <Route path="/admin/users" element={<AdminRoute><AdminUsers /></AdminRoute>} />
@@ -112,13 +124,28 @@ function App() {
           <Route path="/admin/hr-campaigns/:id" element={<AdminRoute><AdminHRCampaignDetail /></AdminRoute>} />
           <Route path="/admin/lms" element={<AdminRoute><AdminLMS /></AdminRoute>} />
           <Route path="/admin/roles" element={<AdminRoute><AdminRoleManagement /></AdminRoute>} />
+          <Route path="/admin/mentor-management" element={<AdminRoute><AdminMentorManagement /></AdminRoute>} />
+          <Route path="/admin/coordinator-management" element={<AdminRoute><AdminCoordinatorManagement /></AdminRoute>} />
+          <Route path="/admin/reports" element={<AdminRoute><AdminReports /></AdminRoute>} />
+          <Route path="/admin/certificates" element={<AdminRoute><AdminCertificates /></AdminRoute>} />
+          
           <Route path="/mentor/login" element={<MentorLogin />} />
+          <Route path="/mentor/Login" element={<MentorLogin />} />
           <Route path="/mentor/dashboard" element={<MentorRoute><MentorDashboard /></MentorRoute>} />
           
-          {/* Student LMS (Requires Paid Access) */}
+          <Route path="/studentcoordinator/login" element={<CoordinatorLogin />} />
+          <Route path="/studentcoordinator/Login" element={<CoordinatorLogin />} />
+          <Route path="/studentcoordinator/dashboard" element={<CoordinatorRoute><CoordinatorDashboard /></CoordinatorRoute>} />
+
+          <Route path="/certificate/verify/:certificateId" element={<CertificateVerification />} />
+          <Route path="/unauthorized" element={<Unauthorized />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/student/lms" element={<ProtectedRoute><Navigate to="/dashboard" replace /></ProtectedRoute>} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/student/Login" element={<Login />} />
+          <Route path="/student/login" element={<Login />} />
           <Route path="/register-instructions" element={<ProtectedRoute><RegisterInstructions /></ProtectedRoute>} />
           <Route path="/enroll" element={<ProtectedRoute><EnrollmentForm /></ProtectedRoute>} />
           <Route path="/dashboard" element={<ProtectedRoute><StudentDashboard /></ProtectedRoute>} />

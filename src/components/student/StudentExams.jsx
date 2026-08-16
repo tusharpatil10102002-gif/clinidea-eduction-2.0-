@@ -190,11 +190,32 @@ const StudentExams = ({ exams, showMessage, fetchDashboardData }) => {
                       </div>
 
                       {submission ? (
-                        <div className="border border-success rounded-3 p-3 bg-success bg-opacity-10">
+                        <div className="border border-success rounded-3 p-3 bg-success bg-opacity-10 text-center">
                           {isGraded ? (
-                            <div className="fw-bold text-success fs-5">Score: {submission.totalScore} / {exam.totalMarks}</div>
+                            <>
+                              <div className="fw-bold text-success fs-5">Score: {submission.totalScore} / {exam.totalMarks}</div>
+                              <small className="text-muted d-block mb-2">Percentage: {Math.round((submission.totalScore / exam.totalMarks) * 100)}%</small>
+                              <a 
+                                href={`${BASE_URL}/api/student/exams/result-pdf/${submission.id}`} 
+                                target="_blank" 
+                                rel="noreferrer" 
+                                className="btn btn-sm btn-outline-success rounded-pill fw-bold w-100"
+                              >
+                                <i className="fas fa-file-pdf me-2"></i> Download Result PDF
+                              </a>
+                            </>
                           ) : (
-                            <div className="fw-bold text-primary"><i className="fas fa-clock me-2"></i> Pending Review</div>
+                            <>
+                              <div className="fw-bold text-primary mb-2"><i className="fas fa-check-circle me-2"></i> Exam Completed</div>
+                              <a 
+                                href={`${BASE_URL}/api/student/exams/result-pdf/${submission.id}`} 
+                                target="_blank" 
+                                rel="noreferrer" 
+                                className="btn btn-sm btn-outline-primary rounded-pill fw-bold w-100"
+                              >
+                                <i className="fas fa-file-pdf me-2"></i> Download Result PDF
+                              </a>
+                            </>
                           )}
                         </div>
                       ) : (

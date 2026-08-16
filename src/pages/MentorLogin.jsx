@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { BASE_URL } from '../config';
+import AuthLayout from '../components/shared/AuthLayout';
 
 const MentorLogin = () => {
   const navigate = useNavigate();
@@ -45,19 +46,18 @@ const MentorLogin = () => {
   };
 
   return (
-    <div className="d-flex align-items-center justify-content-center py-5 mt-5" style={{ minHeight: '100vh', background: 'var(--color-bg-light)' }}>
+    <>
       <Helmet>
         <title>Mentor Login | Clinidea Education</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
-      <div className="p-4 p-md-5 bg-white rounded-4 shadow-lg mx-3" style={{ maxWidth: '400px', width: '100%' }}>
-        <div className="text-center mb-4">
-          <h2 style={{ fontWeight: '800', color: 'var(--color-primary)' }}>Mentor Portal</h2>
-          <p className="text-muted">Sign in to manage your batches</p>
-        </div>
-        
+      <AuthLayout 
+        title="Mentor Portal" 
+        subtitle="Sign in to manage your batches and content" 
+        role="mentor" 
+        accentColor="success"
+      >
         {error && <div className="alert alert-danger p-3 text-center fw-bold">{error}</div>}
-        
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label className="form-label fw-bold">Email</label>
@@ -85,15 +85,15 @@ const MentorLogin = () => {
           </div>
           <button 
             type="submit" 
-            className="btn w-100 py-3 fw-bold fs-5 text-white shadow-sm" 
-            style={{ borderRadius: '12px', background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', border: 'none' }} 
+            className="btn text-white w-100 py-3 fw-bold fs-5 shadow-sm" 
+            style={{ borderRadius: '12px', background: 'linear-gradient(135deg, #4f46e5 0%, #3730a3 100%)', border: 'none' }} 
             disabled={loading}
           >
             {loading ? 'Authenticating...' : 'Secure Login'}
           </button>
         </form>
-      </div>
-    </div>
+      </AuthLayout>
+    </>
   );
 };
 

@@ -4,6 +4,7 @@ import { BASE_URL } from '../config';
 import StudentAssignments from '../components/student/StudentAssignments';
 import StudentExams from '../components/student/StudentExams';
 import StudentPayments from '../components/student/StudentPayments';
+import StudentAITutor from '../components/student/StudentAITutor';
 
 const StudentDashboard = () => {
   const navigate = useNavigate();
@@ -406,48 +407,75 @@ const StudentDashboard = () => {
         <div className="p-3 flex-grow-1 overflow-auto">
           <p className="text-muted small fw-bold text-uppercase px-3 mb-2 mt-2" style={{ letterSpacing: '1px', fontSize: '0.7rem' }}>Navigation</p>
           <div className="list-group list-group-flush gap-2 pb-5">
+            {/* 1. Dashboard */}
             <button onClick={() => { setActiveTab('dashboard'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'dashboard' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
               <i className="fa fa-chart-pie me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Dashboard
             </button>
+
+            {/* 2. Live Session */}
             <button onClick={() => { setActiveTab('live'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'live' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
-              <i className="fa fa-calendar-alt me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Live session Schedules
+              <i className="fa fa-video me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Live Session
             </button>
+
+            {/* 3. Recorded Sessions */}
             <button onClick={() => { setActiveTab('lms'); setActiveLMSCategory('Recorded sessions'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'lms' && activeLMSCategory === 'Recorded sessions' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
-              <i className="fa fa-play-circle me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Recorded sessions
+              <i className="fa fa-play-circle me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Recorded Sessions
             </button>
-            <button onClick={() => { setActiveTab('lms'); setActiveLMSCategory('Presentations and files'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'lms' && activeLMSCategory === 'Presentations and files' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
-              <i className="fa fa-file-powerpoint me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Presentations and files
+
+            {/* 4. Study Material */}
+            <button onClick={() => { setActiveTab('lms'); setActiveLMSCategory('Study Material'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'lms' && activeLMSCategory === 'Study Material' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
+              <i className="fa fa-book me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Study Material
             </button>
-            <button onClick={() => { setActiveTab('lms'); setActiveLMSCategory('Additional study material'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'lms' && activeLMSCategory === 'Additional study material' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
-              <i className="fa fa-book me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Additional study material
+
+            {/* 5. Question Bank */}
+            <button onClick={() => { setActiveTab('lms'); setActiveLMSCategory('Question Bank'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'lms' && activeLMSCategory === 'Question Bank' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
+              <i className="fa fa-question-circle me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Question Bank
             </button>
+
+            {/* 6. Test and Exam */}
+            <button onClick={() => { setActiveTab('test-series'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'test-series' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
+              <i className="fa fa-edit me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Test and Exam
+            </button>
+
+            {/* 7. Assignment */}
             <button onClick={() => { setActiveTab('assignments'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'assignments' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
               <i className="fa fa-tasks me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Assignment
             </button>
 
-            <a href="https://clinidea.in/vigithink/login" target="_blank" rel="noreferrer" className="list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center text-dark hover-bg-light" style={{ transition: 'all 0.2s' }}>
-              <i className="fa fa-shield-alt me-3 fs-5" style={{ width: '24px', textAlign: 'center', color: '#10b981' }}></i> Vigithink Safety
-            </a>
-            <a href="https://clinidea.in/vigithinketmf/login" target="_blank" rel="noreferrer" className="list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center text-dark hover-bg-light" style={{ transition: 'all 0.2s' }}>
-              <i className="fa fa-folder-open me-3 fs-5" style={{ width: '24px', textAlign: 'center', color: '#f59e0b' }}></i> Vigithink eTMF
-            </a>
-            {enrolledBatches.some(e => e.courseName && e.courseName.toLowerCase().includes('clinical data management')) && (
-              <a href="https://clinidea.in/vigithinkcdms/login" target="_blank" rel="noreferrer" className="list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center text-dark hover-bg-light" style={{ transition: 'all 0.2s' }}>
-                <i className="fa fa-database me-3 fs-5" style={{ width: '24px', textAlign: 'center', color: '#3b82f6' }}></i> Vigithink CDMS
+            {/* 8. Tools Gating (Vigithink Safety, Vigithink eTMF, Vigithink CDMS) */}
+            <div className="my-1 p-2 rounded-3 border bg-light">
+              <small className="fw-bold text-muted px-2 d-block mb-1 text-uppercase" style={{ fontSize: '0.65rem' }}>Vigithink Tools</small>
+              <a href="https://clinidea.in/vigithink/login" target="_blank" rel="noreferrer" className="d-flex align-items-center gap-2 p-2 rounded text-dark text-decoration-none hover-bg-white mb-1" style={{ fontSize: '0.85rem' }}>
+                <i className="fa fa-shield-alt text-success"></i> Vigithink Safety
               </a>
-            )}
+              <a href="https://clinidea.in/vigithinketmf/login" target="_blank" rel="noreferrer" className="d-flex align-items-center gap-2 p-2 rounded text-dark text-decoration-none hover-bg-white mb-1" style={{ fontSize: '0.85rem' }}>
+                <i className="fa fa-folder-open text-warning"></i> Vigithink eTMF
+              </a>
+              {enrolledBatches.some(e => e.courseName && e.courseName.toLowerCase().includes('data management')) && (
+                <a href="https://clinidea.in/vigithinkcdms/login" target="_blank" rel="noreferrer" className="d-flex align-items-center gap-2 p-2 rounded text-dark text-decoration-none hover-bg-white" style={{ fontSize: '0.85rem' }}>
+                  <i className="fa fa-database text-primary"></i> Vigithink CDMS
+                </a>
+              )}
+            </div>
 
-            <button onClick={() => { setActiveTab('lms'); setActiveLMSCategory('Question Bank'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'lms' && activeLMSCategory === 'Question Bank' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
-              <i className="fa fa-question-circle me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Question Bank
-            </button>
-            <button onClick={() => { setActiveTab('test-series'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'test-series' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
-              <i className="fa fa-list-alt me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Test Series
-            </button>
+            {/* 9. Fees Receipt */}
             <button onClick={() => { setActiveTab('payments'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'payments' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
-              <i className="fa fa-receipt me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Payment Receipts
+              <i className="fa fa-receipt me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Fees Receipt
             </button>
+
+            {/* 10. Certificates */}
             <button onClick={() => { setActiveTab('vault'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'vault' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
               <i className="fa fa-certificate me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Certificates
+            </button>
+
+            {/* 11. Refer and Earn */}
+            <button onClick={() => { setActiveTab('refer-earn'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'refer-earn' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
+              <i className="fa fa-gift me-3 fs-5" style={{ width: '24px', textAlign: 'center', color: '#e11d48' }}></i> Refer and Earn
+            </button>
+
+            {/* 12. 24/7 AI Doubt Solver */}
+            <button onClick={() => { setActiveTab('ai-tutor'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'ai-tutor' ? 'bg-primary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
+              <i className="fa fa-robot me-3 fs-5 text-primary" style={{ width: '24px', textAlign: 'center' }}></i> 24/7 AI Doubt Solver
             </button>
           </div>
 
@@ -958,6 +986,13 @@ const StudentDashboard = () => {
               </div>
             </div>
           </div>
+        {activeTab === 'ai-tutor' && (
+          <div className="row g-4">
+            <div className="col-12">
+              <StudentAITutor />
+            </div>
+          </div>
+        )}
         </>
       )}
 

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { BASE_URL } from '../config';
+import AuthLayout from '../components/shared/AuthLayout';
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -45,16 +46,17 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh', background: 'var(--color-bg-light)' }}>
+    <>
       <Helmet>
         <title>Admin Login | Clinidea Education</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
-      <div className="p-5 bg-white rounded-4 shadow-lg" style={{ maxWidth: '400px', width: '100%' }}>
-        <div className="text-center mb-4">
-          <h2 style={{ fontWeight: '800', color: 'var(--color-primary)' }}>Admin Login</h2>
-          <p className="text-muted">Enter credentials to access the panel</p>
-        </div>
+      <AuthLayout 
+        title="Admin Portal" 
+        subtitle="Sign in to access the administrator panel" 
+        role="admin" 
+        accentColor="danger"
+      >
         {error && <div className="alert alert-danger p-2 text-center">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
@@ -77,12 +79,12 @@ const AdminLogin = () => {
               required 
             />
           </div>
-          <button type="submit" className="btn btn-primary w-100 py-3 fw-bold fs-5" style={{ borderRadius: '12px', background: 'linear-gradient(135deg, var(--color-secondary) 0%, var(--color-primary) 100%)', border: 'none' }} disabled={loading}>
+          <button type="submit" className="btn text-white w-100 py-3 fw-bold fs-5 shadow-sm" style={{ borderRadius: '12px', background: 'linear-gradient(135deg, #4f46e5 0%, #3730a3 100%)', border: 'none' }} disabled={loading}>
             {loading ? 'Authenticating...' : 'Secure Login'}
           </button>
         </form>
-      </div>
-    </div>
+      </AuthLayout>
+    </>
   );
 };
 

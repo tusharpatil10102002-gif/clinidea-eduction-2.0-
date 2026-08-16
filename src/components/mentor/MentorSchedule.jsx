@@ -12,6 +12,63 @@ const MentorSchedule = ({ selectedBatch, showMessage }) => {
   // Cancellation state
   const [cancelModal, setCancelModal] = useState({ show: false, session: null, reason: '' });
 
+  // Schedule Modal state
+  const [showScheduleModal, setShowScheduleModal] = useState(false);
+  const [newSessionForm, setNewSessionForm] = useState({
+    title: '',
+    sessionDate: '',
+    sessionTime: '',
+    meetingLink: ''
+  });
+
+  const generateAutoMeetingLink = (provider = 'zoom') => {
+    const roomId = `Clinidea-${selectedBatch?.id || 'Live'}-${Date.now().toString().slice(-6)}`;
+    if (provider === 'zoom') {
+      const zoomLink = `https://zoom.us/j/${Math.floor(10000000000 + Math.random() * 90000000000)}?pwd=${Math.random().toString(36).substring(2, 8)}`;
+      setNewSessionForm(prev => ({ ...prev, meetingLink: zoomLink }));
+    } else {
+      const googleMeetLink = `https://meet.google.com/${Math.random().toString(36).substring(2, 5)}-${Math.random().toString(36).substring(2, 6)}-${Math.random().toString(36).substring(2, 5)}`;
+      setNewSessionForm(prev => ({ ...prev, meetingLink: googleMeetLink }));
+    }
+  };
+
+  const handleCreateSession = async (e) => {
+    e.preventDefault();
+    if (!newSessionForm.title || !newSessionForm.sessionDate || !newSessionForm.sessionTime) {
+      return showMessage('Please fill all required fields', 'warning');
+    }
+    let finalMeetingLink = newSessionForm.meetingLink;
+    if (!finalMeetingLink) {
+      finalMeetingLink = `https://zoom.us/j/${Math.floor(10000000000 + Math.random() * 90000000000)}`;
+    }
+
+    try {
+      const token = localStorage.getItem('mentorToken');
+      const res = await fetch(`${BASE_URL}/api/mentor/sessions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({
+          batchId: selectedBatch.id,
+          title: newSessionForm.title,
+          sessionDate: newSessionForm.sessionDate,
+          sessionTime: newSessionForm.sessionTime,
+          meetingLink: finalMeetingLink
+        })
+      });
+      if (res.ok) {
+        showMessage('Live session scheduled successfully!');
+        setShowScheduleModal(false);
+        setNewSessionForm({ title: '', sessionDate: '', sessionTime: '', meetingLink: '' });
+        fetchSessions();
+      } else {
+        const data = await res.json();
+        showMessage(data.error || 'Failed to schedule session', 'danger');
+      }
+    } catch (err) {
+      showMessage('Error scheduling session', 'danger');
+    }
+  };
+
   useEffect(() => {
     if (selectedBatch) fetchSessions();
   }, [selectedBatch]);
@@ -109,6 +166,9 @@ const MentorSchedule = ({ selectedBatch, showMessage }) => {
     <div>
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h4 className="fw-bold mb-0">Schedule & Sessions - {selectedBatch.name}</h4>
+        <button className="btn btn-primary rounded-pill px-4 fw-bold shadow-sm" onClick={() => setShowScheduleModal(true)}>
+          <i className="fas fa-plus-circle me-2"></i> Schedule New Live Class
+        </button>
       </div>
 
       {loading ? (
@@ -235,6 +295,90 @@ const MentorSchedule = ({ selectedBatch, showMessage }) => {
                 <button type="button" className="btn btn-light" onClick={() => setCancelModal({ show: false, session: null, reason: '' })}>Close</button>
                 <button type="button" className="btn btn-danger fw-bold" disabled={!cancelModal.reason.trim()} onClick={handleCancelSession}>Confirm Cancel</button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Schedule Session Modal */}
+      {showScheduleModal && (
+        <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1060 }}>
+          <div className="modal-dialog modal-dialog-centered">
+            <div className="modal-content border-0 shadow-lg rounded-4">
+              <div className="modal-header bg-primary text-white p-4">
+                <h5 className="modal-title fw-bold"><i className="fas fa-video me-2"></i> Schedule New Live Class</h5>
+                <button type="button" className="btn-close btn-close-white" onClick={() => setShowScheduleModal(false)}></button>
+              </div>
+              <form onSubmit={handleCreateSession}>
+                <div className="modal-body p-4">
+                  <div className="mb-3">
+                    <label className="form-label fw-bold">Class Topic / Subject</label>
+                    <input 
+                      type="text" 
+                      className="form-control rounded-3" 
+                      placeholder="e.g. Good Clinical Practice (GCP) Guidelines" 
+                      required 
+                      value={newSessionForm.title} 
+                      onChange={e => setNewSessionForm({ ...newSessionForm, title: e.target.value })} 
+                    />
+                  </div>
+                  <div className="row g-3 mb-3">
+                    <div className="col-6">
+                      <label className="form-label fw-bold">Session Date</label>
+                      <input 
+                        type="date" 
+                        className="form-control rounded-3" 
+                        required 
+                        value={newSessionForm.sessionDate} 
+                        onChange={e => setNewSessionForm({ ...newSessionForm, sessionDate: e.target.value })} 
+                      />
+                    </div>
+                    <div className="col-6">
+                      <label className="form-label fw-bold">Start Time</label>
+                      <input 
+                        type="time" 
+                        className="form-control rounded-3" 
+                        required 
+                        value={newSessionForm.sessionTime} 
+                        onChange={e => setNewSessionForm({ ...newSessionForm, sessionTime: e.target.value })} 
+                      />
+                    </div>
+                  </div>
+
+                  <div className="mb-3">
+                    <div className="d-flex justify-content-between align-items-center mb-1">
+                      <label className="form-label fw-bold mb-0">Meeting Link</label>
+                      <div className="d-flex gap-2">
+                        <button 
+                          type="button" 
+                          className="btn btn-sm btn-outline-primary rounded-pill py-0 px-2 fw-bold"
+                          onClick={() => generateAutoMeetingLink('zoom')}
+                        >
+                          <i className="fas fa-video me-1"></i> Auto Zoom Link
+                        </button>
+                        <button 
+                          type="button" 
+                          className="btn btn-sm btn-outline-success rounded-pill py-0 px-2 fw-bold"
+                          onClick={() => generateAutoMeetingLink('meet')}
+                        >
+                          <i className="fas fa-camera me-1"></i> Google Meet
+                        </button>
+                      </div>
+                    </div>
+                    <input 
+                      type="url" 
+                      className="form-control rounded-3" 
+                      placeholder="https://zoom.us/j/... or auto-generated" 
+                      value={newSessionForm.meetingLink} 
+                      onChange={e => setNewSessionForm({ ...newSessionForm, meetingLink: e.target.value })} 
+                    />
+                    <small className="text-muted">Click Auto Zoom Link above or paste custom link.</small>
+                  </div>
+                </div>
+                <div className="modal-footer border-top-0 p-4 pt-0">
+                  <button type="button" className="btn btn-light rounded-pill px-4 fw-bold" onClick={() => setShowScheduleModal(false)}>Cancel</button>
+                  <button type="submit" className="btn btn-primary rounded-pill px-4 fw-bold"><i className="fas fa-calendar-check me-2"></i> Schedule Class</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>

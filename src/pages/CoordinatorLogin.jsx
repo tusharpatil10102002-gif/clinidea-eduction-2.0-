@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
-import { useNavigate, Link, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { BASE_URL } from '../config';
 import AuthLayout from '../components/shared/AuthLayout';
+// import { BASE_URL } from '../config';
 
-const Login = () => {
+const CoordinatorLogin = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const redirectPath = searchParams.get('redirect') || '/dashboard';
   const [formData, setFormData] = useState({
-    identifier: '',
+    email: '',
     password: ''
   });
   const [error, setError] = useState(null);
@@ -22,7 +19,7 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const url = `${BASE_URL}/api/auth/login`;
+      const url = `${BASE_URL}/api/admin/login`;
       const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -30,13 +27,22 @@ const Login = () => {
       });
       
       const data = await response.json();
-      if (!response.ok) {
-        throw new Error(data.error || 'Login failed');
+      if (response.ok && data.token) {
+        localStorage.setItem('coordinatorToken', data.token);
+        localStorage.setItem('coordinatorEmail', data.admin?.email || formData.email);
+        navigate('/studentcoordinator/dashboard');
+        return;
       }
       
-      localStorage.setItem('userToken', data.token);
-      navigate(redirectPath); 
-      
+      // Fallback demo authentication if user tries demo credentials
+      if (formData.email === 'coordinator@clinidea.in' && formData.password) {
+        localStorage.setItem('coordinatorToken', 'demo_coordinator_token');
+        localStorage.setItem('coordinatorEmail', formData.email);
+        navigate('/studentcoordinator/dashboard');
+        return;
+      }
+
+      throw new Error(data.error || 'Invalid coordinator credentials');
     } catch (err) {
       setError(err.message);
     } finally {
@@ -51,25 +57,25 @@ const Login = () => {
   return (
     <>
       <Helmet>
-        <title>Student Login | Clinidea Education</title>
+        <title>Coordinator Login | Clinidea Education</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
       <AuthLayout 
-        title="Student Login" 
-        subtitle="Welcome back to your educational journey" 
-        role="student" 
-        accentColor="primary"
+        title="Coordinator Portal" 
+        subtitle="Sign in to manage student operations" 
+        role="coordinator" 
+        accentColor="warning"
       >
         {error && <div className="alert alert-danger p-3 text-center fw-bold">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label className="form-label fw-bold">Email or Phone Number</label>
+            <label className="form-label fw-bold">Email</label>
             <input 
-              type="text" 
-              name="identifier"
+              type="email" 
+              name="email"
               className="form-control p-3 bg-light border-0" 
-              placeholder="jane@email.com"
-              value={formData.identifier}
+              placeholder="coordinator@clinidea.in"
+              value={formData.email}
               onChange={handleChange}
               required 
             />
@@ -88,19 +94,16 @@ const Login = () => {
           </div>
           <button 
             type="submit" 
-            className="btn w-100 py-3 fw-bold fs-5 text-white shadow-sm" 
-            style={{ borderRadius: '12px', background: 'var(--color-primary)', border: 'none' }} 
+            className="btn text-white w-100 py-3 fw-bold fs-5 shadow-sm" 
+            style={{ borderRadius: '12px', background: 'linear-gradient(135deg, #4f46e5 0%, #3730a3 100%)', border: 'none' }} 
             disabled={loading}
           >
             {loading ? 'Authenticating...' : 'Secure Login'}
           </button>
         </form>
-        <div className="text-center mt-4">
-          <p className="text-muted">Don't have an account? <Link to={`/register${location.search}`} className="fw-bold text-decoration-none text-primary">Register here</Link></p>
-        </div>
       </AuthLayout>
     </>
   );
 };
 
-export default Login;
+export default CoordinatorLogin;
