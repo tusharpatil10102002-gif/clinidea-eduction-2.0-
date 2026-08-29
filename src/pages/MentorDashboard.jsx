@@ -49,14 +49,20 @@ const MentorDashboard = () => {
   };
 
   // Upload State
-  const [uploadData, setUploadData] = useState({ title: '', description: '', moduleName: 'General' });
+  const [uploadData, setUploadData] = useState({ title: '', description: '', moduleName: 'General', youtubeUrl: '' });
   const [uploadFile, setUploadFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
 
   const handleUpload = async (e) => {
     e.preventDefault();
     if (!selectedBatch) return showMessage('Please select a batch first', 'warning');
-    if (!uploadFile) return showMessage('Please select a file to upload', 'warning');
+    
+    if (activeTab === 'upload_recording' && !uploadData.youtubeUrl && !uploadFile) {
+      return showMessage('Please enter a YouTube link or select a video file', 'warning');
+    }
+    if (activeTab !== 'upload_recording' && !uploadFile) {
+      return showMessage('Please select a PPT, PDF, or study material file to upload', 'warning');
+    }
 
     let category = 'Study Material';
     if (activeTab === 'upload_recording') category = 'Recorded sessions';
@@ -69,7 +75,8 @@ const MentorDashboard = () => {
     formData.append('description', uploadData.description);
     formData.append('category', category);
     formData.append('moduleName', uploadData.moduleName);
-    formData.append('file', uploadFile);
+    if (uploadData.youtubeUrl) formData.append('youtubeUrl', uploadData.youtubeUrl);
+    if (uploadFile) formData.append('file', uploadFile);
 
     setIsUploading(true);
     try {
@@ -80,8 +87,8 @@ const MentorDashboard = () => {
         body: formData
       });
       if (res.ok) {
-        showMessage('File uploaded successfully!');
-        setUploadData({ title: '', description: '', moduleName: 'General' });
+        showMessage('Content published successfully!');
+        setUploadData({ title: '', description: '', moduleName: 'General', youtubeUrl: '' });
         setUploadFile(null);
         if (document.getElementById('fileInput')) {
            document.getElementById('fileInput').value = '';
@@ -464,18 +471,45 @@ const MentorDashboard = () => {
                                placeholder="e.g. Module 1"
                                value={uploadData.moduleName} onChange={e => setUploadData({...uploadData, moduleName: e.target.value})} />
                       </div>
-                      <div className="col-md-12">
-                        <label className="form-label fw-bold text-dark">Select File</label>
-                        <div className="border border-2 border-dashed rounded-4 p-4 text-center" style={{ cursor: 'pointer', background: '#f8fafc', borderColor: '#cbd5e1' }} onClick={() => document.getElementById('fileInput').click()}>
-                           <i className="fas fa-cloud-upload-alt fs-1 text-primary opacity-50 mb-3"></i>
-                           <p className="fw-bold text-dark mb-1">Click to browse or drag and drop</p>
-                           <small className="text-muted">Videos, PDFs, PPTs allowed (Max 500MB)</small>
-                           <input type="file" id="fileInput" className="d-none" required onChange={e => {
-                              setUploadFile(e.target.files[0]);
-                              if(e.target.files[0]) showMessage(`File selected: ${e.target.files[0].name}`, 'success');
-                           }} />
+                      {activeTab === 'upload_recording' ? (
+                        <div className="col-md-12">
+                          <label className="form-label fw-bold text-dark d-flex align-items-center gap-2">
+                            <i className="fab fa-youtube text-danger fs-5"></i> YouTube Video Link / URL
+                          </label>
+                          <input 
+                            type="url" 
+                            className="form-control form-control-lg bg-white border mb-3" 
+                            style={{ borderColor: '#cbd5e1' }}
+                            placeholder="e.g. https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+                            value={uploadData.youtubeUrl} 
+                            onChange={e => setUploadData({...uploadData, youtubeUrl: e.target.value})} 
+                          />
+                          <div className="text-center text-muted fw-bold small my-2">OR Upload Video File Directly</div>
+                          <div className="border border-2 border-dashed rounded-4 p-3 text-center" style={{ cursor: 'pointer', background: '#f8fafc', borderColor: '#cbd5e1' }} onClick={() => document.getElementById('fileInput').click()}>
+                             <i className="fas fa-video fs-2 text-danger opacity-50 mb-2"></i>
+                             <p className="fw-bold text-dark mb-0">Click to select video file</p>
+                             <input type="file" id="fileInput" accept="video/*" className="d-none" onChange={e => {
+                                setUploadFile(e.target.files[0]);
+                                if(e.target.files[0]) showMessage(`Video selected: ${e.target.files[0].name}`, 'success');
+                             }} />
+                          </div>
                         </div>
-                      </div>
+                      ) : (
+                        <div className="col-md-12">
+                          <label className="form-label fw-bold text-dark d-flex align-items-center gap-2">
+                            <i className="fas fa-cloud-upload-alt text-primary fs-5"></i> Select File (Cloudinary Storage)
+                          </label>
+                          <div className="border border-2 border-dashed rounded-4 p-4 text-center" style={{ cursor: 'pointer', background: '#f8fafc', borderColor: '#cbd5e1' }} onClick={() => document.getElementById('fileInput').click()}>
+                             <i className="fas fa-file-pdf fs-1 text-primary opacity-50 mb-3"></i>
+                             <p className="fw-bold text-dark mb-1">Click to browse PPT, PDF, or Study Material</p>
+                             <small className="text-muted">PPTs, PDFs, Word Docs, ZIPs automatically saved to Cloudinary</small>
+                             <input type="file" id="fileInput" className="d-none" required={!uploadFile} onChange={e => {
+                                setUploadFile(e.target.files[0]);
+                                if(e.target.files[0]) showMessage(`File selected: ${e.target.files[0].name}`, 'success');
+                             }} />
+                          </div>
+                        </div>
+                      )}
                       <div className="col-12">
                         <label className="form-label fw-bold text-dark">Description (Optional)</label>
                         <textarea className="form-control bg-white border" style={{ borderColor: '#cbd5e1' }} rows="4" placeholder="Add any details about this material..."

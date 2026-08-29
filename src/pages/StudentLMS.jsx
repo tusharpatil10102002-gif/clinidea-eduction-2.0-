@@ -2,6 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { BASE_URL } from '../config';
 
+function getYouTubeEmbedUrl(url) {
+  if (!url) return '';
+  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+  if (match && match[1]) {
+    return `https://www.youtube.com/embed/${match[1]}?autoplay=1&rel=0&modestbranding=1`;
+  }
+  return url;
+}
+
 function StudentLMS() {
   const [contents, setContents] = useState([]);
   const [enrolledBatches, setEnrolledBatches] = useState([]);
@@ -173,9 +182,25 @@ function StudentLMS() {
                   {activeVideo.driveWebViewLink ? (
                     (() => {
                       const link = activeVideo.driveWebViewLink;
+                      const isYouTube = link.includes('youtube.com') || link.includes('youtu.be');
                       const isDirectVideo = link.endsWith('.mp4') || link.endsWith('.webm') || link.endsWith('.ogg') || link.includes('/uploads/');
                       
-                      if (activeVideo.contentType === 'video') {
+                      if (activeVideo.contentType === 'video' || isYouTube) {
+                        if (isYouTube) {
+                          const ytEmbed = getYouTubeEmbedUrl(link);
+                          return (
+                            <iframe 
+                              src={ytEmbed} 
+                              width="100%" 
+                              height="100%" 
+                              frameBorder="0"
+                              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                              allowFullScreen
+                              style={{ border: 'none', backgroundColor: '#000' }}
+                              title={activeVideo.title}
+                            ></iframe>
+                          );
+                        }
                         return isDirectVideo ? (
                           <video 
                             src={link.startsWith('http') || link.startsWith('/') ? link : `/${link}`} 
@@ -186,35 +211,38 @@ function StudentLMS() {
                             Your browser does not support the video tag.
                           </video>
                         ) : (
-                          <div className="w-100 h-100 d-flex flex-column justify-content-center align-items-center" style={{ backgroundColor: '#0f172a', color: '#fff', position: 'absolute', inset: 0 }}>
-                            {activeVideo.driveFileId && (
-                              <img src={`https://drive.google.com/thumbnail?id=${activeVideo.driveFileId}&sz=w800`} style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', opacity: 0.3 }} alt="thumbnail" />
-                            )}
-                            <div style={{ position: 'relative', zIndex: 10, textAlign: 'center', padding: '20px' }}>
-                              <i className="fa fa-play-circle mb-3" style={{ fontSize: '5rem', color: '#fff', cursor: 'pointer', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.5))' }} onClick={() => window.open(link, '_blank')}></i>
-                              <h4 className="fw-bold mb-3">{activeVideo.title}</h4>
-                              <button className="btn btn-danger btn-lg px-4 rounded-pill fw-bold shadow-lg d-flex align-items-center mx-auto" onClick={() => window.open(link, '_blank')} style={{ gap: '8px' }}>
-                                <i className="fa fa-external-link-alt"></i> Play Video Natively
-                              </button>
-                              <p className="text-white-50 mt-3 small max-w-sm mx-auto">Click to open directly in Google Drive player for the best fullscreen experience and perfect controls.</p>
-                            </div>
-                          </div>
-                        );
-                      } else {
-                        // For PDFs, PPTs, etc. use the iframe
-                        return (
                           <iframe 
-                            src={link.replace('/view', '/preview')} 
+                            src={link} 
                             width="100%" 
                             height="100%" 
                             frameBorder="0"
                             allow="autoplay; fullscreen"
                             allowFullScreen
-                            webkitallowfullscreen="true"
-                            mozallowfullscreen="true"
                             style={{ border: 'none', backgroundColor: '#000' }}
                             title={activeVideo.title}
                           ></iframe>
+                        );
+                      } else {
+                        // For PDFs, PPTs, Cloudinary Materials
+                        const isPdf = link.toLowerCase().includes('.pdf') || activeVideo.contentType === 'pdf';
+                        return (
+                          <div className="w-100 h-100 d-flex flex-column" style={{ backgroundColor: '#0f172a' }}>
+                            <iframe 
+                              src={isPdf ? `https://docs.google.com/viewer?url=${encodeURIComponent(link)}&embedded=true` : link} 
+                              width="100%" 
+                              height="100%" 
+                              frameBorder="0"
+                              allowFullScreen
+                              style={{ border: 'none', flex: 1 }}
+                              title={activeVideo.title}
+                            ></iframe>
+                            <div className="p-3 bg-dark text-white d-flex justify-content-between align-items-center">
+                              <span className="small text-white-50"><i className="fas fa-file-alt me-2"></i>{activeVideo.title}</span>
+                              <a href={link} target="_blank" rel="noopener noreferrer" className="btn btn-primary btn-sm rounded-pill px-3 fw-bold">
+                                <i className="fas fa-download me-1"></i> Open / Download File
+                              </a>
+                            </div>
+                          </div>
                         );
                       }
                     })()
@@ -223,10 +251,6 @@ function StudentLMS() {
                       <i className="fa fa-exclamation-circle mb-2" style={{ fontSize: '2rem' }}></i>
                       <p>Content link unavailable</p>
                     </div>
-                  )}
-                  {/* Transparent overlay over the top right to block any remaining click targets */}
-                  {!(activeVideo.driveWebViewLink && (activeVideo.driveWebViewLink.endsWith('.mp4') || activeVideo.driveWebViewLink.endsWith('.webm') || activeVideo.driveWebViewLink.endsWith('.ogg') || activeVideo.driveWebViewLink.includes('/uploads/'))) && (
-                    <div style={{ position: 'absolute', top: 0, right: 0, width: '80px', height: '60px', zIndex: 10 }}></div>
                   )}
                 </div>
 

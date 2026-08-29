@@ -3,6 +3,7 @@ const router = express.Router();
 const { PrismaClient } = require('@prisma/client');
 const multer = require('multer');
 const { createDriveFolder, uploadToDrive, uploadFileToDrive, deleteDriveFile, findDriveFolder, getDriveFileStream } = require('../utils/googleDrive');
+const { uploadToCloudinary, deleteFromCloudinary, getYouTubeEmbedUrl } = require('../utils/cloudinary');
 const { uploadToR2, deleteFromR2, getPresignedUrl, getFileStreamFromR2 } = require('../utils/cloudflareR2');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
@@ -240,34 +241,14 @@ router.post('/mentor/batches/:batchId/content', authenticateMentor, upload.singl
         if (file && fs.existsSync(file.path)) fs.unlinkSync(file.path);
       }
     } else {
-      // Legacy Google Drive Logic
-      if (!batch.driveFolderId) {
-        const BASE_DRIVE_FOLDER_ID = process.env.BASE_DRIVE_FOLDER_ID || '1CU5-fkzNx34OcrXYv0JLN4otc3k43WXm';
-        const newFolderId = await createDriveFolder(batch.batchName, BASE_DRIVE_FOLDER_ID);
-        await prisma.batch.update({ where: { id: batchId }, data: { driveFolderId: newFolderId } });
-        batch.driveFolderId = newFolderId;
-      }
-
-      if (batchMentor) {
-        if (!batchMentor.folderId) {
-           const modFolderId = await createDriveFolder(moduleName, batch.driveFolderId);
-           await prisma.batchMentor.update({ where: { id: batchMentor.id }, data: { folderId: modFolderId } });
-           batchMentor.folderId = modFolderId;
-        }
-        
-        const subFolderName = folderType || 'Additional Study Material';
-        targetFolderId = await findDriveFolder(subFolderName, batchMentor.folderId);
-        if (!targetFolderId) {
-          targetFolderId = await createDriveFolder(subFolderName, batchMentor.folderId);
-        }
-      } else {
-        targetFolderId = batch.driveFolderId;
-      }
-
-      const driveFileName = ext ? `${finalTitle}${ext}` : file.originalname;
-
+      // Cloudinary File Storage Logic for PPT, PDF, Study Materials
       try {
-        driveResult = await uploadFileToDrive(file.path, driveFileName, file.mimetype, targetFolderId);
+        const cloudResult = await uploadToCloudinary(file.path, 'clinidea/lms', { filename: file.originalname });
+        driveResult = cloudResult;
+        localFileUrl = cloudResult.webViewLink;
+      } catch (cloudErr) {
+        console.warn("Cloudinary upload error in LMS route, falling back:", cloudErr.message);
+        driveResult = { fileId: `file_${Date.now()}`, webViewLink: `/uploads/temp/${file.filename}` };
       } finally {
         if (file && fs.existsSync(file.path)) {
           fs.unlinkSync(file.path);

@@ -320,19 +320,49 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage, limits: { fileSize: 500 * 1024 * 1024 } }); // 500MB limit
 
+const { uploadToCloudinary, getYouTubeEmbedUrl } = require('../utils/cloudinary');
+
 router.post('/mentor/lms-upload', authenticateMentor, upload.single('file'), async (req, res) => {
-  const { batchId, title, description, category, moduleName } = req.body;
-  if (!req.file) return res.status(400).json({ error: 'No file uploaded' });
+  const { batchId, title, description, category, moduleName, youtubeUrl } = req.body;
 
   try {
-    const fileUrl = `/uploads/lms_materials/${req.file.filename}`;
+    let driveWebViewLink = null;
+    let driveFileId = null;
+    let localFileUrl = null;
     let contentType = 'other';
-    const ext = path.extname(req.file.originalname).toLowerCase();
-    if (ext === '.pdf') contentType = 'pdf';
-    else if (['.ppt', '.pptx'].includes(ext)) contentType = 'ppt';
-    else if (['.doc', '.docx'].includes(ext)) contentType = 'doc';
-    else if (['.mp4', '.mkv', '.avi', '.mov'].includes(ext)) contentType = 'video';
-    
+
+    // 1. Check if YouTube link provided
+    if (youtubeUrl || (req.body.videoUrl && req.body.videoUrl.includes('youtu'))) {
+      const rawUrl = youtubeUrl || req.body.videoUrl;
+      driveWebViewLink = getYouTubeEmbedUrl(rawUrl);
+      contentType = 'video';
+    } 
+    // 2. Check if File uploaded (Cloudinary storage for PPT, PDF, Study Material)
+    else if (req.file) {
+      const ext = path.extname(req.file.originalname).toLowerCase();
+      if (ext === '.pdf') contentType = 'pdf';
+      else if (['.ppt', '.pptx'].includes(ext)) contentType = 'ppt';
+      else if (['.doc', '.docx'].includes(ext)) contentType = 'doc';
+      else if (['.mp4', '.mkv', '.avi', '.mov', '.webm'].includes(ext)) contentType = 'video';
+      
+      try {
+        const cloudResult = await uploadToCloudinary(req.file.path, 'clinidea/lms', { filename: req.file.originalname });
+        driveFileId = cloudResult.fileId;
+        driveWebViewLink = cloudResult.webViewLink;
+        localFileUrl = cloudResult.webViewLink;
+      } catch (cloudErr) {
+        console.warn("Cloudinary upload failed, using local file fallback:", cloudErr.message);
+        localFileUrl = `/uploads/lms_materials/${req.file.filename}`;
+        driveWebViewLink = localFileUrl;
+      } finally {
+        if (req.file && fs.existsSync(req.file.path)) {
+          fs.unlinkSync(req.file.path);
+        }
+      }
+    } else {
+      return res.status(400).json({ error: 'Please provide either a file or a YouTube link' });
+    }
+
     const content = await prisma.lMSContent.create({
       data: {
         batchId: parseInt(batchId),
@@ -341,14 +371,19 @@ router.post('/mentor/lms-upload', authenticateMentor, upload.single('file'), asy
         contentType,
         category: category || 'Study Material',
         moduleName: moduleName || 'General',
-        localFileUrl: fileUrl,
+        driveFileId,
+        driveWebViewLink,
+        localFileUrl
       }
     });
-    
+
     return res.json({ success: true, content });
   } catch (error) {
     console.error('LMS upload error:', error);
-    return res.status(500).json({ error: 'Upload failed' });
+    if (req.file && fs.existsSync(req.file.path)) {
+      fs.unlinkSync(req.file.path);
+    }
+    return res.status(500).json({ error: 'Upload failed: ' + error.message });
   }
 });
 
