@@ -1,9 +1,10 @@
-// Dynamically resolve backend URL. If running on localhost, use localhost:5000. 
-// If running on a local network IP (e.g. 192.168.x.x), use that IP to allow mobile testing.
-const currentHostname = window.location.hostname;
-const currentProtocol = window.location.protocol; // 'http:' or 'https:'
+// Dynamically resolve backend URL.
+const currentHostname = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
+const currentProtocol = typeof window !== 'undefined' ? window.location.protocol : 'http:';
 
 export const BASE_URL = import.meta.env.VITE_API_URL || 
-  (currentHostname === 'localhost' 
-    ? 'http://localhost:5000' 
+  (currentHostname === 'localhost' || currentHostname === '127.0.0.1'
+    ? 'http://localhost:5000'
+    : (currentHostname.startsWith('192.168.') || currentHostname.startsWith('10.') || currentHostname.startsWith('172.'))
+    ? `${currentProtocol}//${currentHostname}:5000`
     : `${currentProtocol}//${currentHostname}${currentProtocol === 'https:' ? '' : ':5000'}`);

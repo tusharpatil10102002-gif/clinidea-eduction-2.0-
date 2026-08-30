@@ -50,6 +50,23 @@ window.fetch = async function (...args) {
   }
 };
 
+// Automatically remove initial HTML loader overlay to prevent blank screen
+if (typeof document !== 'undefined') {
+  const removeLoader = () => {
+    const loader = document.getElementById('ftco-loader');
+    if (loader) {
+      loader.classList.remove('show');
+      loader.style.display = 'none';
+    }
+  };
+  if (document.readyState === 'complete') {
+    removeLoader();
+  } else {
+    window.addEventListener('load', removeLoader);
+    setTimeout(removeLoader, 100);
+  }
+}
+
 createRoot(document.getElementById('root')).render(
   <App />
 )

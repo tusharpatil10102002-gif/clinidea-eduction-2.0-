@@ -72,14 +72,45 @@ import CoordinatorRoute from './components/CoordinatorRoute';
 import GlobalPopups from './components/GlobalPopups';
 import Layout from './components/Layout';
 
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error("Uncaught UI Error:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ padding: '40px', textAlign: 'center', fontFamily: 'sans-serif' }}>
+          <h2 style={{ color: '#e11d48' }}>Something went wrong while loading this page.</h2>
+          <p style={{ color: '#64748b' }}>{this.state.error?.message || 'Please refresh the page.'}</p>
+          <button onClick={() => window.location.reload()} style={{ padding: '10px 20px', borderRadius: '20px', backgroundColor: '#4f46e5', color: '#fff', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}>
+            Reload Page
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 function App() {
   return (
     <HelmetProvider>
       <Router>
         <ScrollToTop />
-      <Suspense fallback={<div style={{display:'flex',justifyContent:'center',alignItems:'center',height:'100vh',fontSize:'1.5rem',color:'#667eea',fontFamily:'sans-serif'}}>Loading Clinical Programs...</div>}>
-        <GlobalPopups />
-        <Layout>
+        <ErrorBoundary>
+          <Suspense fallback={<div style={{display:'flex',justifyContent:'center',alignItems:'center',height:'100vh',fontSize:'1.5rem',color:'#667eea',fontFamily:'sans-serif'}}>Loading Clinical Programs...</div>}>
+            <GlobalPopups />
+            <Layout>
           <Routes>
           <Route path="/about" element={<About />} />
           <Route path="/clinical-research-cr-pv-dm-course" element={<ClinicalResearchCrPvDm />} />
@@ -153,6 +184,7 @@ function App() {
         </Routes>
         </Layout>
       </Suspense>
+      </ErrorBoundary>
       </Router>
     </HelmetProvider>
   );
