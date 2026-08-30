@@ -8,7 +8,11 @@ const StudentReviewVideos = () => {
   useEffect(() => {
     fetch(`${BASE_URL}/api/review-videos`)
       .then(res => res.json())
-      .then(data => setVideos(data))
+      .then(data => {
+        if (Array.isArray(data)) setVideos(data);
+        else if (data && Array.isArray(data.videos)) setVideos(data.videos);
+        else setVideos([]);
+      })
       .catch(err => console.error("Error fetching review videos:", err));
   }, []);
 
