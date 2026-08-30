@@ -341,8 +341,49 @@ async function seedFullDemo() {
       { name: 'Pooja Kulkarni', phone: '9876500002', email: 'pooja.k@gmail.com', courseInterest: 'Pharmacovigilance', source: 'Meta Ads', stage: 'CONTACTED', webinarStage: 'CONTACTED_WEBINAR', assignedCoordinatorId: coordinator.id },
       { name: 'Siddharth Varma', phone: '9876500003', email: 'siddharth.v@gmail.com', courseInterest: 'Clinical Data Management', source: 'Website', stage: 'INTERESTED', webinarStage: 'INTERESTED_COURSE', assignedCoordinatorId: coordinator.id },
       { name: 'Neha Sharma', phone: '9876500004', email: 'neha.s@gmail.com', courseInterest: 'Medical Writing', source: 'Social Media', stage: 'NOT_INTERESTED', notInterestedReason: 'Looking for distance course only', webinarStage: 'NOT_INTERESTED', assignedCoordinatorId: coordinator.id },
-      { name: 'Vikram Joshi', phone: '9876500005', email: 'vikram.j@gmail.com', courseInterest: 'CR PV CDM Combo', source: 'Webinar', stage: 'REG_FEE_RECEIVED', webinarStage: 'REG_FEE_RECEIVED', assignedCoordinatorId: coordinator.id }
     ]
+  });
+
+  // 11. Seed Testimonials, Placements, Events & Review Videos
+  console.log('11. Seeding Testimonials, Placements, Events & Review Videos...');
+  await prisma.testimonial.deleteMany({});
+  await prisma.testimonial.createMany({
+    data: [
+      { studentName: 'Ananya Roy', reviewText: 'Clinidea Education helped me crack my Pharmacovigilance interview at IQVIA! The Argus Safety training was top-notch.', rating: 5, imageUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150' },
+      { studentName: 'Rohan Mehta', reviewText: 'The Clinical Data Management (CDM) curriculum and live mock interviews gave me complete confidence.', rating: 5, imageUrl: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150' },
+      { studentName: 'Priya Nair', reviewText: 'Best institute for freshers! 100% placement support and real-world case studies.', rating: 5, imageUrl: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=150' }
+    ]
+  });
+
+  await prisma.placement.deleteMany({});
+  await prisma.placement.createMany({
+    data: [
+      { studentName: 'Kavya Sharma - Placed at Parexel', imageUrl: 'https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=500', isActive: true },
+      { studentName: 'Aditya Patil - Placed at IQVIA', imageUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=500', isActive: true },
+      { studentName: 'Simran Kaur - Placed at TCS Lifesciences', imageUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=500', isActive: true }
+    ]
+  });
+
+  await prisma.studentReviewVideo.deleteMany({});
+  await prisma.studentReviewVideo.createMany({
+    data: [
+      { studentName: 'Aarav Patel - Clinical Research Review', youtubeUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', isActive: true },
+      { studentName: 'Sneha Deshmukh - PV Placement Feedback', youtubeUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', isActive: true }
+    ]
+  });
+
+  await prisma.event.deleteMany({});
+  await prisma.event.create({
+    data: {
+      slug: 'masterclass-gcp-2026',
+      title: 'Free Webinar: How to Start a Career in Pharmacovigilance & Clinical Research',
+      eventType: 'Webinar',
+      eventDate: new Date(Date.now() + 86400000 * 5),
+      eventTime: '11:00 AM IST',
+      description: 'Join our live career guidance masterclass with industry experts from top CROs.',
+      meetingLink: 'https://meet.google.com/abc-defg-hij',
+      imageUrl: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600'
+    }
   });
 
   console.log('--- ✅ FULL DEMO DATA SEEDED SUCCESSFULLY! ---');
