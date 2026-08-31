@@ -116,7 +116,7 @@ const MentorDashboard = () => {
       });
       if (res.ok) {
         const data = await res.json();
-        setBatches(data.batches || []);
+        setBatches(Array.isArray(data) ? data : (data.batches || []));
       }
     } catch (error) {
       console.error('Fetch error:', error);
@@ -474,20 +474,30 @@ const MentorDashboard = () => {
                       {activeTab === 'upload_recording' ? (
                         <div className="col-md-12">
                           <label className="form-label fw-bold text-dark d-flex align-items-center gap-2">
-                            <i className="fab fa-youtube text-danger fs-5"></i> YouTube Video Link / URL
+                            <i className="fab fa-youtube text-danger fs-4"></i> YouTube Video URL (Public / Unlisted / Private Embed) <span className="text-danger">*</span>
                           </label>
-                          <input 
-                            type="url" 
-                            className="form-control form-control-lg bg-white border mb-3" 
-                            style={{ borderColor: '#cbd5e1' }}
-                            placeholder="e.g. https://www.youtube.com/watch?v=dQw4w9WgXcQ"
-                            value={uploadData.youtubeUrl} 
-                            onChange={e => setUploadData({...uploadData, youtubeUrl: e.target.value})} 
-                          />
-                          <div className="text-center text-muted fw-bold small my-2">OR Upload Video File Directly</div>
+                          <div className="input-group input-group-lg mb-2">
+                            <span className="input-group-text bg-danger bg-opacity-10 text-danger border-end-0" style={{ borderColor: '#cbd5e1' }}>
+                              <i className="fab fa-youtube fs-4"></i>
+                            </span>
+                            <input 
+                              type="url" 
+                              className="form-control form-control-lg bg-white border-start-0" 
+                              style={{ borderColor: '#cbd5e1' }}
+                              placeholder="Paste YouTube Link (e.g. https://www.youtube.com/watch?v=...) or YouTube Video ID"
+                              required={!uploadFile}
+                              value={uploadData.youtubeUrl} 
+                              onChange={e => setUploadData({...uploadData, youtubeUrl: e.target.value})} 
+                            />
+                          </div>
+                          <small className="text-muted d-block mb-3">
+                            <i className="fas fa-info-circle me-1 text-primary"></i> Paste any YouTube watch or share link. It will automatically play as a high-definition embed for students in their LMS dashboard.
+                          </small>
+
+                          <div className="text-center text-muted fw-bold small my-2">OR Upload Local Video File</div>
                           <div className="border border-2 border-dashed rounded-4 p-3 text-center" style={{ cursor: 'pointer', background: '#f8fafc', borderColor: '#cbd5e1' }} onClick={() => document.getElementById('fileInput').click()}>
                              <i className="fas fa-video fs-2 text-danger opacity-50 mb-2"></i>
-                             <p className="fw-bold text-dark mb-0">Click to select video file</p>
+                             <p className="fw-bold text-dark mb-0">{uploadFile ? `Selected: ${uploadFile.name}` : 'Click to select video file'}</p>
                              <input type="file" id="fileInput" accept="video/*" className="d-none" onChange={e => {
                                 setUploadFile(e.target.files[0]);
                                 if(e.target.files[0]) showMessage(`Video selected: ${e.target.files[0].name}`, 'success');

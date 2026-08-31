@@ -110,22 +110,7 @@ const AdminBatches = () => {
   };
 
   const getRelevantMentors = (courseName) => {
-    if (!courseName) return mentors;
-    const cName = courseName.toLowerCase();
-    const allowedPrefixes = [];
-    if (cName.includes('clinical research') || cName.includes('pharmacovigilance') || cName.includes('data management')) {
-      allowedPrefixes.push('cr', 'pv', 'cdm');
-    }
-    if (cName.includes('regulatory')) allowedPrefixes.push('ra');
-    if (cName.includes('writing')) allowedPrefixes.push('mw');
-    if (cName.includes('coding')) allowedPrefixes.push('mc');
-    
-    if (allowedPrefixes.length === 0) return mentors;
-    
-    return mentors.filter(m => {
-      const prefix = m.email.split('@')[0].toLowerCase();
-      return allowedPrefixes.includes(prefix);
-    });
+    return mentors;
   };
 
   const handleAssignMentor = async (batchId, mentorId, moduleName) => {
@@ -140,7 +125,7 @@ const AdminBatches = () => {
         body: JSON.stringify({ mentorId, moduleName })
       });
       if (res.ok) {
-        alert("Mentor assigned and Drive folders created successfully!");
+        alert("Mentor assigned to batch successfully!");
         fetchCoreData();
         // Update active batch to reflect new mentors
         const updatedBatchRes = await fetch(`${BASE_URL}/api/admin/batches`, { headers: { 'Authorization': `Bearer ${token}` } });

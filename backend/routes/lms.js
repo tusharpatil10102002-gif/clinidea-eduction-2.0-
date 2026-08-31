@@ -47,7 +47,7 @@ router.get('/admin/mentors', async (req, res) => {
   }
 });
 
-// Assign mentor to a module within a batch
+// Assign mentor to a module within a batch (No Google Drive Folders)
 router.post('/admin/batches/:batchId/mentors', async (req, res) => {
   try {
     const batchId = parseInt(req.params.batchId);
@@ -57,33 +57,27 @@ router.post('/admin/batches/:batchId/mentors', async (req, res) => {
 
     const batch = await prisma.batch.findUnique({ where: { id: batchId }, include: { course: true } });
     if (!batch) return res.status(404).json({ error: 'Batch not found' });
-    
-    let batchFolderId = batch.driveFolderId;
-    if (!batchFolderId) {
-      const folderName = batch.batchName; // Changed to exactly match the Batch Name as requested
-      batchFolderId = await createDriveFolder(folderName, BASE_DRIVE_FOLDER_ID);
-      await prisma.batch.update({ where: { id: batchId }, data: { driveFolderId: batchFolderId } });
-    }
-    
-    const moduleFolderId = await createDriveFolder(moduleName, batchFolderId);
-    
-    await createDriveFolder('Presentations', moduleFolderId);
-    await createDriveFolder('Recorded Sessions', moduleFolderId);
-    await createDriveFolder('Additional Study Material', moduleFolderId);
 
-    const batchMentor = await prisma.batchMentor.create({
-      data: {
+    const batchMentor = await prisma.batchMentor.upsert({
+      where: {
+        batchId_mentorId_moduleName: {
+          batchId,
+          mentorId: parseInt(mentorId),
+          moduleName
+        }
+      },
+      update: {},
+      create: {
         batchId,
         mentorId: parseInt(mentorId),
-        moduleName,
-        folderId: moduleFolderId
+        moduleName
       }
     });
 
     res.json(batchMentor);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Failed to assign mentor and setup Drive folders. ' + err.message });
+    res.status(500).json({ error: 'Failed to assign mentor: ' + err.message });
   }
 });
 
@@ -531,7 +525,7 @@ router.get('/student/content', authenticateStudent, async (req, res) => {
   try {
     // 1. Find all active enrollments for this student
     const enrollments = await prisma.enrollment.findMany({
-      where: { userId: req.user.id, enrollmentStatus: { in: ['enrolled', 'active', 'completed', 'confirmed', 'registered'] } },
+      where: { userId: req.user.id, enrollmentStatus: { in: ['enrolled', 'active', 'completed', 'confirmed', 'registered', 'approved', 'pending'] } },
       select: { batchId: true, courseName: true, batch: { select: { batchName: true } } }
     });
 

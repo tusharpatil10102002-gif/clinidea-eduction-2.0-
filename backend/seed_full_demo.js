@@ -235,11 +235,12 @@ async function seedFullDemo() {
   await prisma.lMSContent.create({
     data: {
       batchId: batch.id,
-      title: 'Pharmacovigilance Signal Detection Recording',
-      description: 'Lecture video on ICSR reporting and signal evaluation',
+      title: 'Pharmacovigilance Signal Detection & ICSR Reporting Video Session',
+      description: 'Recorded lecture video on ICSR reporting and signal evaluation',
       contentType: 'video',
-      category: 'Recordings',
-      localFileUrl: 'https://youtube.com/embed/demo-video-pv'
+      category: 'Recorded sessions',
+      driveWebViewLink: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+      localFileUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
     }
   });
 

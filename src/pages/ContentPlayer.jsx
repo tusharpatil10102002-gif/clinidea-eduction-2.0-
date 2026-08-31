@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { BASE_URL } from '../config';
 
 function getYouTubeEmbedUrl(url) {
   if (!url) return '';
@@ -59,6 +60,21 @@ const ContentPlayer = () => {
   const isDirectVideo = link.endsWith('.mp4') || link.endsWith('.webm') || link.endsWith('.ogg') || link.includes('/uploads/');
   const isYouTube = link.includes('youtube.com') || link.includes('youtu.be');
 
+  let resolvedVideoSrc = link;
+  if (isDirectVideo) {
+    if (link.startsWith('http://localhost:5000') || link.startsWith('http://127.0.0.1:5000')) {
+      resolvedVideoSrc = link;
+    } else if (link.startsWith('http://') || link.startsWith('https://')) {
+      resolvedVideoSrc = link;
+    } else if (link.startsWith('/uploads/')) {
+      resolvedVideoSrc = `${BASE_URL}${link}`;
+    } else if (link.startsWith('uploads/')) {
+      resolvedVideoSrc = `${BASE_URL}/${link}`;
+    } else {
+      resolvedVideoSrc = `${BASE_URL}/${link}`;
+    }
+  }
+
   return (
     <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: `${windowHeight}px`, backgroundColor: '#000', zIndex: 9999, display: 'flex', flexDirection: 'column' }}>
       
@@ -88,10 +104,10 @@ const ContentPlayer = () => {
       <div style={{ flex: 1, position: 'relative', width: '100%', height: '100%', backgroundColor: '#000', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         {isDirectVideo ? (
           <video 
-            src={link.startsWith('http') || link.startsWith('/') ? link : `/${link}`} 
+            src={resolvedVideoSrc} 
             controls 
             autoPlay 
-            style={{ width: '100%', height: '100%', outline: 'none' }}
+            style={{ width: '100%', height: '100%', outline: 'none', objectFit: 'contain' }}
           >
             Your browser does not support the video tag.
           </video>
