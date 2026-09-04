@@ -327,6 +327,21 @@ router.post('/mentor/lms-upload', authenticateMentor, upload.single('file'), asy
   const { batchId, title, description, category, moduleName, youtubeUrl } = req.body;
 
   try {
+    const targetBatchId = parseInt(batchId);
+    const batch = await prisma.batch.findUnique({ where: { id: targetBatchId } });
+    if (!batch) return res.status(404).json({ error: 'Batch not found' });
+
+    // Strict Mentor Scoping: Verify that mentor is assigned to this batch or is superadmin
+    if (req.role !== 'superadmin') {
+      const isAssigned = await prisma.batchMentor.findFirst({
+        where: { batchId: targetBatchId, mentorId: req.mentorId }
+      });
+      if (!isAssigned) {
+        if (req.file && fs.existsSync(req.file.path)) fs.unlinkSync(req.file.path);
+        return res.status(403).json({ error: 'Access denied: You are not assigned as a mentor to this batch' });
+      }
+    }
+
     let driveWebViewLink = null;
     let driveFileId = null;
     let localFileUrl = null;
@@ -344,14 +359,14 @@ router.post('/mentor/lms-upload', authenticateMentor, upload.single('file'), asy
 
       let uploadedToYouTube = false;
 
-      // For video files, upload directly to YouTube Channel (@ClinideaEducation-i7q)
+      // For video files, upload directly to YouTube Channel (@ClinideaEducation-i7q) into Batch Playlist
       if (isVideo) {
         try {
-          const ytResult = await uploadToYouTubeChannel(req.file.path, title, description, 'unlisted');
+          const ytResult = await uploadToYouTubeChannel(req.file.path, title, description, 'unlisted', batch.batchName);
           driveWebViewLink = ytResult.embedUrl;
           localFileUrl = ytResult.videoUrl;
           uploadedToYouTube = true;
-          console.log("✅ Video successfully uploaded to YouTube Channel (@ClinideaEducation-i7q):", ytResult.videoUrl);
+          console.log(`✅ Video successfully uploaded to YouTube Channel & Playlist [${batch.batchName}]:`, ytResult.videoUrl);
         } catch (ytErr) {
           console.error("YouTube Direct Upload error:", ytErr);
         }
