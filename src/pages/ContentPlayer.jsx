@@ -81,7 +81,7 @@ const ContentPlayer = () => {
       {/* Top Header Bar */}
       <div style={{ padding: '12px 20px', backgroundColor: '#0F172A', display: 'flex', justifyContent: 'space-between', alignItems: 'center', zIndex: 20, borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
         <h5 style={{ color: '#fff', margin: 0, fontSize: '0.95rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', fontWeight: '600', display: 'flex', alignItems: 'center', gap: '8px', maxWidth: '80%' }}>
-          <i className="fab fa-youtube" style={{ color: '#FF0000', fontSize: '1.2rem' }}></i> {title}
+          <span>{title}</span>
         </h5>
         <button 
           onClick={handleClose} 

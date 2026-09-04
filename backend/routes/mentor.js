@@ -386,7 +386,8 @@ router.post('/mentor/lms-upload', authenticateMentor, upload.single('file'), asy
         }
       }
 
-      if (req.file && fs.existsSync(req.file.path)) {
+      // Only unlink if uploaded to YouTube or Cloudinary; if using local fallback, keep the file!
+      if (uploadedToYouTube && req.file && fs.existsSync(req.file.path)) {
         fs.unlinkSync(req.file.path);
       }
     } 
