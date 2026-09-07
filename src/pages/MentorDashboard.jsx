@@ -53,6 +53,49 @@ const MentorDashboard = () => {
   const [uploadFile, setUploadFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
 
+  // Batch Contents State
+  const [batchContents, setBatchContents] = useState([]);
+  const [loadingContents, setLoadingContents] = useState(false);
+  const [previewModalContent, setPreviewModalContent] = useState(null);
+
+  const fetchBatchContents = async (batchId) => {
+    if (!batchId) return;
+    setLoadingContents(true);
+    try {
+      const token = localStorage.getItem('mentorToken');
+      const res = await fetch(`${BASE_URL}/api/mentor/batches/${batchId}/content`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setBatchContents(Array.isArray(data) ? data : []);
+      }
+    } catch (err) {
+      console.error('Fetch contents error:', err);
+    } finally {
+      setLoadingContents(false);
+    }
+  };
+
+  const handleDeleteContent = async (contentId) => {
+    if (!window.confirm("Are you sure you want to delete this content? It will be removed from LMS.")) return;
+    try {
+      const token = localStorage.getItem('mentorToken');
+      const res = await fetch(`${BASE_URL}/api/mentor/content/${contentId}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        showMessage('Content deleted successfully');
+        if (selectedBatch) fetchBatchContents(selectedBatch.id);
+      } else {
+        showMessage('Failed to delete content', 'danger');
+      }
+    } catch (err) {
+      showMessage('Delete error', 'danger');
+    }
+  };
+
   const handleUpload = async (e) => {
     e.preventDefault();
     if (!selectedBatch) return showMessage('Please select a batch first', 'warning');
@@ -93,6 +136,7 @@ const MentorDashboard = () => {
         if (document.getElementById('fileInput')) {
            document.getElementById('fileInput').value = '';
         }
+        if (selectedBatch) fetchBatchContents(selectedBatch.id);
       } else {
         const data = await res.json();
         showMessage(data.error || 'Upload failed', 'danger');
@@ -129,6 +173,12 @@ const MentorDashboard = () => {
     fetchMentorData();
   }, [navigate]);
 
+  useEffect(() => {
+    if (selectedBatch) {
+      fetchBatchContents(selectedBatch.id);
+    }
+  }, [selectedBatch]);
+
   const handleLogout = () => {
     localStorage.removeItem('mentorToken');
     navigate('/mentor/login');
@@ -141,6 +191,7 @@ const MentorDashboard = () => {
 
   const navItems = [
     { id: 'dashboard', icon: 'fa-home', label: 'Dashboard' },
+    { id: 'view_materials', icon: 'fa-folder-open', label: 'Uploaded Materials & Recordings' },
     { id: 'schedule', icon: 'fa-calendar-alt', label: 'Session schedule' },
     { id: 'upload_recording', icon: 'fa-video', label: 'Upload recordings' },
     { id: 'upload_study_material', icon: 'fa-book', label: 'Upload Study Material' },
@@ -434,6 +485,98 @@ const MentorDashboard = () => {
         {/* Dynamic Content */}
         <div className="container-fluid px-3 px-md-4 py-4 overflow-auto flex-grow-1 custom-scrollbar">
 
+          {activeTab === 'view_materials' && (
+            <div className="card border rounded-4 bg-white overflow-hidden shadow-sm" style={{ borderColor: '#e2e8f0' }}>
+              <div className="p-4 px-5 border-bottom bg-light d-flex justify-content-between align-items-center">
+                <div className="d-flex align-items-center gap-3">
+                  <div className="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center" style={{ width: '50px', height: '50px' }}>
+                    <i className="fa fa-folder-open fs-4"></i>
+                  </div>
+                  <div>
+                    <h4 className="fw-bold mb-0 text-dark">Uploaded Materials & Recordings</h4>
+                    <p className="text-muted small mb-0">Active Batch: <strong className="text-primary">{selectedBatch.name}</strong> ({batchContents.length} items)</p>
+                  </div>
+                </div>
+                <button 
+                  className="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold"
+                  onClick={() => fetchBatchContents(selectedBatch.id)}
+                >
+                  <i className="fas fa-sync-alt me-1"></i> Refresh
+                </button>
+              </div>
+              <div className="card-body p-0">
+                {loadingContents ? (
+                  <div className="text-center py-5">
+                    <div className="spinner-border spinner-border-sm text-primary me-2"></div>
+                    <span className="text-muted">Loading batch materials...</span>
+                  </div>
+                ) : batchContents.length === 0 ? (
+                  <div className="text-center py-5">
+                    <i className="fa fa-box-open fs-1 text-muted opacity-25 mb-3 d-block"></i>
+                    <p className="text-muted fs-5 mb-3">No materials uploaded for this batch yet.</p>
+                    <button className="btn btn-primary rounded-pill px-4 fw-bold" onClick={() => setActiveTab('upload_recording')}>
+                      <i className="fas fa-upload me-1"></i> Upload First Recording / Material
+                    </button>
+                  </div>
+                ) : (
+                  <div className="table-responsive">
+                    <table className="table table-hover align-middle mb-0">
+                      <thead className="bg-light">
+                        <tr>
+                          <th className="px-4 py-3">Module</th>
+                          <th className="py-3">Title & Description</th>
+                          <th className="py-3">Type</th>
+                          <th className="py-3">Date Added</th>
+                          <th className="text-end px-4 py-3">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {batchContents.map(mat => (
+                          <tr key={mat.id}>
+                            <td className="px-4">
+                              <span className="badge bg-secondary rounded-pill px-3 py-2">{mat.moduleName || 'General'}</span>
+                            </td>
+                            <td className="fw-bold">
+                              <span className="text-dark d-block">{mat.title}</span>
+                              {mat.description && <small className="text-muted fw-normal d-block">{mat.description}</small>}
+                            </td>
+                            <td>
+                              <span className="badge bg-light text-dark border px-2 py-1 text-capitalize">
+                                <i className={`fa ${mat.contentType === 'video' ? 'fa-video text-danger' : 'fa-file text-primary'} me-1`}></i>
+                                {mat.category || mat.contentType}
+                              </span>
+                            </td>
+                            <td className="text-muted small">{new Date(mat.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
+                            <td className="text-end px-4">
+                              <div className="d-flex justify-content-end gap-2">
+                                <button 
+                                  className="btn btn-sm btn-primary rounded-pill px-3 shadow-sm"
+                                  onClick={() => setPreviewModalContent(mat)}
+                                  title={mat.contentType === 'video' ? "Watch Recording" : "View Document"}
+                                >
+                                  <i className={`fa ${mat.contentType === 'video' ? 'fa-play' : 'fa-eye'} me-1`}></i>
+                                  <span>{mat.contentType === 'video' ? 'Watch' : 'View'}</span>
+                                </button>
+                                <button 
+                                  className="btn btn-sm btn-outline-danger rounded-circle"
+                                  style={{ width: '34px', height: '34px' }}
+                                  onClick={() => handleDeleteContent(mat.id)}
+                                  title="Delete Material"
+                                >
+                                  <i className="fa fa-trash"></i>
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
           {activeTab === 'schedule' && (
             <div className="card border rounded-4 p-4 bg-white" style={{ borderColor: '#e2e8f0', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
                <MentorSchedule selectedBatch={selectedBatch} showMessage={showMessage} />
@@ -587,6 +730,71 @@ const MentorDashboard = () => {
                      </div>
                   </div>
                </div>
+            </div>
+          )}
+
+          {/* In-Dashboard Preview Modal */}
+          {previewModalContent && (
+            <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.75)', zIndex: 1060 }} tabIndex="-1">
+              <div className="modal-dialog modal-lg modal-dialog-centered">
+                <div className="modal-content rounded-4 border-0 shadow-lg overflow-hidden">
+                  <div className="modal-header bg-dark text-white border-0 py-3 px-4">
+                    <div className="d-flex align-items-center gap-2">
+                      <i className={`fa ${previewModalContent.contentType === 'video' ? 'fa-play-circle text-danger' : 'fa-file-text text-info'} fs-4`}></i>
+                      <h5 className="modal-title fw-bold mb-0 text-white">{previewModalContent.title}</h5>
+                    </div>
+                    <button type="button" className="btn-close btn-close-white" onClick={() => setPreviewModalContent(null)}></button>
+                  </div>
+                  <div className="modal-body p-0 bg-black text-center" style={{ minHeight: '400px' }}>
+                    {previewModalContent.contentType === 'video' ? (
+                      <div className="ratio ratio-16x9">
+                        {previewModalContent.driveWebViewLink && (previewModalContent.driveWebViewLink.includes('youtube.com') || previewModalContent.driveWebViewLink.includes('youtu.be')) ? (
+                          <iframe 
+                            src={previewModalContent.driveWebViewLink} 
+                            title={previewModalContent.title}
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowFullScreen
+                            style={{ border: 0 }}
+                          />
+                        ) : (
+                          <video 
+                            src={previewModalContent.localFileUrl || previewModalContent.driveWebViewLink} 
+                            controls 
+                            controlsList="nodownload"
+                            className="w-100 h-100"
+                          />
+                        )}
+                      </div>
+                    ) : (
+                      <div className="p-5 text-white bg-dark">
+                        <i className="fa fa-file-text fs-1 text-primary opacity-50 mb-3 d-block"></i>
+                        <h5>{previewModalContent.title}</h5>
+                        <p className="text-white-50">{previewModalContent.description || 'Uploaded study document.'}</p>
+                        {previewModalContent.driveWebViewLink || previewModalContent.localFileUrl ? (
+                          <a 
+                            href={previewModalContent.driveWebViewLink || previewModalContent.localFileUrl} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="btn btn-primary px-4 py-2 rounded-pill fw-bold"
+                          >
+                            <i className="fa fa-external-link-alt me-2"></i> Open File in New Tab
+                          </a>
+                        ) : (
+                          <p className="text-warning">No file link available for preview.</p>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  <div className="modal-footer bg-light border-0 py-2 px-4 d-flex justify-content-between">
+                    <span className="small text-muted">
+                      Module: <strong>{previewModalContent.moduleName || 'General'}</strong>
+                    </span>
+                    <button type="button" className="btn btn-secondary rounded-pill px-4" onClick={() => setPreviewModalContent(null)}>
+                      Close
+                    </button>
+                  </div>
+                </div>
+              </div>
             </div>
           )}
 

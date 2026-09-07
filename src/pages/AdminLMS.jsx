@@ -29,7 +29,13 @@ function AdminLMS() {
   const [description, setDescription] = useState('');
   const [moduleName, setModuleName] = useState('');
   const [folderType, setFolderType] = useState('Additional Study Material');
+  const [youtubeUrl, setYoutubeUrl] = useState('');
   const [file, setFile] = useState(null);
+
+  // Filter & Preview State
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterCategory, setFilterCategory] = useState('all');
+  const [previewModalContent, setPreviewModalContent] = useState(null);
 
   // Edit State
   const [editingId, setEditingId] = useState(null);
@@ -247,41 +253,53 @@ function AdminLMS() {
   // --- Content Actions ---
   const handleUpload = async (e) => {
     e.preventDefault();
-    if (!file || !selectedBatch) return;
+    if (!selectedBatch) return;
+
+    if (folderType === 'Recorded Sessions' && !file && !youtubeUrl) {
+      alert("Please enter a YouTube video link or select a video file.");
+      return;
+    }
+    if (folderType !== 'Recorded Sessions' && !file) {
+      alert("Please select a file to upload.");
+      return;
+    }
 
     setUploading(true);
     const formData = new FormData();
+    formData.append('batchId', selectedBatch.id);
     formData.append('title', title);
-    formData.append('description', description);
+    formData.append('description', description || '');
     formData.append('moduleName', moduleName || 'General');
-    formData.append('folderType', folderType);
-    formData.append('file', file);
+    formData.append('category', folderType);
+    if (youtubeUrl) formData.append('youtubeUrl', youtubeUrl);
+    if (file) formData.append('file', file);
 
     try {
       const token = localStorage.getItem('adminToken');
-      const res = await fetch(`${BASE_URL}/api/mentor/batches/${selectedBatch.id}/content`, {
+      const res = await fetch(`${BASE_URL}/api/mentor/lms-upload`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
         body: formData
       });
 
       if (res.ok) {
-        alert('File uploaded to Google Drive successfully!');
+        alert('Material published and saved to LMS successfully!');
         setTitle('');
         setDescription('');
         setModuleName('');
-        setFolderType('Additional Study Material');
+        setYoutubeUrl('');
         setFile(null);
         e.target.reset();
         fetchContent(selectedBatch.id);
-        document.getElementById('uploadFormSection').style.display = 'none';
+        const formSec = document.getElementById('uploadFormSection');
+        if (formSec) formSec.style.display = 'none';
       } else {
         const errData = await res.json();
         alert(errData.error || 'Failed to upload');
       }
     } catch (err) {
       console.error(err);
-      alert('Upload failed');
+      alert('Upload failed: ' + err.message);
     }
     setUploading(false);
   };
@@ -409,6 +427,43 @@ function AdminLMS() {
 
                   {activeTab === 'content' ? (
                     <>
+                      {/* Batch Summary Stats */}
+                      <div className="row g-3 mb-4">
+                        <div className="col-sm-4">
+                          <div className="card-premium p-3 bg-white border d-flex align-items-center gap-3">
+                            <div className="rounded-circle d-flex align-items-center justify-content-center bg-primary bg-opacity-10 text-primary" style={{ width: '48px', height: '48px' }}>
+                              <i className="fa fa-folder-open fs-5"></i>
+                            </div>
+                            <div>
+                              <small className="text-muted text-uppercase fw-bold" style={{ fontSize: '11px' }}>Total Materials</small>
+                              <h4 className="fw-bold mb-0 text-dark">{contents.length}</h4>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-sm-4">
+                          <div className="card-premium p-3 bg-white border d-flex align-items-center gap-3">
+                            <div className="rounded-circle d-flex align-items-center justify-content-center bg-danger bg-opacity-10 text-danger" style={{ width: '48px', height: '48px' }}>
+                              <i className="fa fa-video fs-5"></i>
+                            </div>
+                            <div>
+                              <small className="text-muted text-uppercase fw-bold" style={{ fontSize: '11px' }}>Video Recordings</small>
+                              <h4 className="fw-bold mb-0 text-dark">{contents.filter(c => c.contentType === 'video').length}</h4>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="col-sm-4">
+                          <div className="card-premium p-3 bg-white border d-flex align-items-center gap-3">
+                            <div className="rounded-circle d-flex align-items-center justify-content-center bg-success bg-opacity-10 text-success" style={{ width: '48px', height: '48px' }}>
+                              <i className="fa fa-file-alt fs-5"></i>
+                            </div>
+                            <div>
+                              <small className="text-muted text-uppercase fw-bold" style={{ fontSize: '11px' }}>PPTs & Documents</small>
+                              <h4 className="fw-bold mb-0 text-dark">{contents.filter(c => c.contentType !== 'video').length}</h4>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
                       {/* Main Action Buttons */}
                       <div className="card-premium mb-4 bg-light">
                         <div className="card-body p-4 text-center">
@@ -418,16 +473,18 @@ function AdminLMS() {
                               className="btn-premium px-4 py-3" style={{ backgroundColor: '#ef4444', color: 'white' }}
                               onClick={() => {
                                 setFolderType('Recorded Sessions');
-                                document.getElementById('uploadFormSection').style.display = 'block';
+                                const sec = document.getElementById('uploadFormSection');
+                                if (sec) sec.style.display = 'block';
                               }}
                             >
-                              <i className="fa fa-upload me-2 fs-5"></i> <span className="fs-6">Upload Recorded Session</span>
+                              <i className="fa fa-video me-2 fs-5"></i> <span className="fs-6">Upload Video Recording</span>
                             </button>
                             <button 
                               className="btn-premium btn-primary-theme px-4 py-3"
                               onClick={() => {
                                 setFolderType('Presentations');
-                                document.getElementById('uploadFormSection').style.display = 'block';
+                                const sec = document.getElementById('uploadFormSection');
+                                if (sec) sec.style.display = 'block';
                               }}
                             >
                               <i className="fa fa-file-powerpoint me-2 fs-5"></i> <span className="fs-6">Upload Presentation</span>
@@ -436,7 +493,8 @@ function AdminLMS() {
                               className="btn-premium btn-accent-theme px-4 py-3"
                               onClick={() => {
                                 setFolderType('Additional Study Material');
-                                document.getElementById('uploadFormSection').style.display = 'block';
+                                const sec = document.getElementById('uploadFormSection');
+                                if (sec) sec.style.display = 'block';
                               }}
                             >
                               <i className="fa fa-book me-2 fs-5"></i> <span className="fs-6">Upload Study Material</span>
@@ -448,34 +506,106 @@ function AdminLMS() {
                       {/* Upload Form (Hidden by default) */}
                       <div id="uploadFormSection" className="card-premium mb-4" style={{ display: 'none' }}>
                         <div className="card-header bg-white border-0 pt-4 pb-0 d-flex justify-content-between align-items-center">
-                          <h5 className="heading-premium mb-0 text-primary"><i className="fa fa-upload me-2"></i>Upload File to {selectedBatch.batchName}</h5>
-                          <button className="btn-close" onClick={() => document.getElementById('uploadFormSection').style.display = 'none'}></button>
+                          <h5 className="heading-premium mb-0 text-primary">
+                            <i className="fa fa-upload me-2"></i>Publish Material to {selectedBatch.batchName}
+                          </h5>
+                          <button className="btn-close" onClick={() => {
+                            const sec = document.getElementById('uploadFormSection');
+                            if (sec) sec.style.display = 'none';
+                          }}></button>
                         </div>
                         <div className="card-body p-4">
                           <form onSubmit={handleUpload}>
-                            <div className="row g-4 align-items-end">
-                              <div className="col-md-3">
-                                <label className="form-label fw-bold text-muted" style={{ fontSize: '0.9rem' }}>Content Title <span className="text-danger">*</span></label>
-                                <input type="text" className="input-premium bg-light" required value={title} onChange={(e)=>setTitle(e.target.value)} placeholder="e.g. Session 1" />
+                            <div className="row g-3">
+                              <div className="col-md-4">
+                                <label className="form-label fw-bold text-muted small">Content Title <span className="text-danger">*</span></label>
+                                <input 
+                                  type="text" 
+                                  className="input-premium bg-light" 
+                                  required 
+                                  value={title} 
+                                  onChange={(e)=>setTitle(e.target.value)} 
+                                  placeholder="e.g. Session 1 - Orientation" 
+                                />
                               </div>
-                              <div className="col-md-3">
-                                <label className="form-label fw-bold text-muted" style={{ fontSize: '0.9rem' }}>Module Name</label>
-                                <input type="text" className="input-premium bg-white shadow-none text-muted" value={moduleName || 'General'} readOnly style={{ border: '1px solid #e2e8f0' }} />
+                              <div className="col-md-4">
+                                <label className="form-label fw-bold text-muted small">Module Name</label>
+                                <input 
+                                  type="text" 
+                                  className="input-premium bg-white" 
+                                  value={moduleName} 
+                                  onChange={(e)=>setModuleName(e.target.value)}
+                                  placeholder="e.g. Clinical Research / General" 
+                                />
                               </div>
-                              <div className="col-md-3">
-                                <label className="form-label fw-bold text-muted" style={{ fontSize: '0.9rem' }}>Content Type</label>
-                                <input type="text" className="input-premium bg-white shadow-none text-primary" value={folderType} readOnly style={{ border: '1px solid #e2e8f0' }} />
+                              <div className="col-md-4">
+                                <label className="form-label fw-bold text-muted small">Content Category</label>
+                                <select 
+                                  className="form-select input-premium bg-white"
+                                  value={folderType}
+                                  onChange={(e) => setFolderType(e.target.value)}
+                                >
+                                  <option value="Recorded Sessions">Recorded Sessions (Video)</option>
+                                  <option value="Presentations">Presentations (PPT/PDF)</option>
+                                  <option value="Additional Study Material">Additional Study Material</option>
+                                  <option value="Question Bank">Question Bank</option>
+                                </select>
                               </div>
-                              <div className="col-md-3">
-                                <label className="form-label fw-bold text-muted" style={{ fontSize: '0.9rem' }}>Select File <span className="text-danger">*</span></label>
-                                <input type="file" className="input-premium" style={{ padding: '10px 14px' }} required onChange={(e)=>setFile(e.target.files[0])} accept={folderType === 'Recorded Sessions' ? 'video/*' : folderType === 'Presentations' ? '.pdf,.ppt,.pptx' : '*/*'} />
+
+                              {/* YouTube or File Upload Selector for Video Recordings */}
+                              {folderType === 'Recorded Sessions' ? (
+                                <div className="col-12">
+                                  <div className="p-3 bg-light rounded-3 border">
+                                    <label className="form-label fw-bold text-dark d-flex align-items-center gap-2 mb-2">
+                                      <i className="fa fa-youtube text-danger fs-5"></i>
+                                      <span>YouTube Video URL (Public, Unlisted, or Private Embed)</span>
+                                    </label>
+                                    <input 
+                                      type="url" 
+                                      className="input-premium bg-white mb-2" 
+                                      placeholder="https://www.youtube.com/watch?v=... or https://youtu.be/..."
+                                      value={youtubeUrl}
+                                      onChange={(e) => setYoutubeUrl(e.target.value)}
+                                    />
+                                    <div className="text-center text-muted fw-bold small my-2">-- OR Select Video File --</div>
+                                    <input 
+                                      type="file" 
+                                      className="input-premium bg-white" 
+                                      accept="video/*" 
+                                      onChange={(e)=>setFile(e.target.files[0])} 
+                                    />
+                                  </div>
+                                </div>
+                              ) : (
+                                <div className="col-12">
+                                  <label className="form-label fw-bold text-muted small">Select File (PDF, PPT, Word Doc) <span className="text-danger">*</span></label>
+                                  <input 
+                                    type="file" 
+                                    className="input-premium bg-white" 
+                                    required={!file} 
+                                    onChange={(e)=>setFile(e.target.files[0])} 
+                                    accept=".pdf,.ppt,.pptx,.doc,.docx,.xls,.xlsx" 
+                                  />
+                                </div>
+                              )}
+
+                              <div className="col-12">
+                                <label className="form-label fw-bold text-muted small">Description (Optional)</label>
+                                <textarea 
+                                  className="input-premium bg-light" 
+                                  rows="2" 
+                                  value={description} 
+                                  onChange={(e)=>setDescription(e.target.value)}
+                                  placeholder="Brief overview or notes for students..."
+                                />
                               </div>
-                              <div className="col-md-12 mt-4 text-end border-top pt-4">
+
+                              <div className="col-12 mt-3 text-end border-top pt-3">
                                 <button type="submit" className="btn-premium btn-primary-theme px-5" disabled={uploading}>
                                   {uploading ? (
-                                    <><span className="spinner-border spinner-border-sm me-2"></span> Uploading...</>
+                                    <><span className="spinner-border spinner-border-sm me-2"></span> Publishing...</>
                                   ) : (
-                                    <><i className="fa fa-upload me-2"></i> Upload to LMS</>
+                                    <><i className="fa fa-upload me-2"></i> Publish to LMS</>
                                   )}
                                 </button>
                               </div>
@@ -484,10 +614,62 @@ function AdminLMS() {
                         </div>
                       </div>
 
+                      {/* Search & Category Filter Controls */}
+                      <div className="card-premium mb-4 bg-white border p-3">
+                        <div className="row g-2 align-items-center">
+                          <div className="col-md-6">
+                            <div className="input-group">
+                              <span className="input-group-text bg-light border-end-0"><i className="fa fa-search text-muted"></i></span>
+                              <input 
+                                type="text" 
+                                className="form-control border-start-0 bg-light" 
+                                placeholder="Search materials by title or module..." 
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                              />
+                              {searchQuery && (
+                                <button className="btn btn-light border border-start-0" onClick={() => setSearchQuery('')}>
+                                  <i className="fa fa-times text-muted"></i>
+                                </button>
+                              )}
+                            </div>
+                          </div>
+                          <div className="col-md-6">
+                            <div className="d-flex flex-wrap gap-1 justify-content-md-end">
+                              <button 
+                                className={`btn btn-sm rounded-pill px-3 fw-bold ${filterCategory === 'all' ? 'btn-primary' : 'btn-light border text-muted'}`}
+                                onClick={() => setFilterCategory('all')}
+                              >
+                                All ({contents.length})
+                              </button>
+                              <button 
+                                className={`btn btn-sm rounded-pill px-3 fw-bold ${filterCategory === 'video' ? 'btn-danger' : 'btn-light border text-muted'}`}
+                                onClick={() => setFilterCategory('video')}
+                              >
+                                Videos ({contents.filter(c => c.contentType === 'video').length})
+                              </button>
+                              <button 
+                                className={`btn btn-sm rounded-pill px-3 fw-bold ${filterCategory === 'doc' ? 'btn-success' : 'btn-light border text-muted'}`}
+                                onClick={() => setFilterCategory('doc')}
+                              >
+                                Documents ({contents.filter(c => c.contentType !== 'video').length})
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
                       {/* Uploaded Content List */}
                       <div className="card-premium">
-                        <div className="card-header bg-white border-0 pt-4 pb-3" style={{ borderBottom: '1px solid var(--color-border) !important' }}>
+                        <div className="card-header bg-white border-0 pt-4 pb-3 d-flex justify-content-between align-items-center" style={{ borderBottom: '1px solid var(--color-border) !important' }}>
                           <h5 className="heading-premium mb-0"><i className="fa fa-folder-open text-warning me-2"></i>Batch Materials & Recordings</h5>
+                          <span className="badge bg-light text-dark border px-3 py-2 rounded-pill">
+                            Showing {contents.filter(c => {
+                              const matchSearch = (c.title?.toLowerCase() || '').includes(searchQuery.toLowerCase()) || (c.moduleName?.toLowerCase() || '').includes(searchQuery.toLowerCase());
+                              const matchType = filterCategory === 'all' ? true : filterCategory === 'video' ? c.contentType === 'video' : c.contentType !== 'video';
+                              return matchSearch && matchType;
+                            }).length} items
+                          </span>
                         </div>
                         <div className="card-body p-0">
                           {contents.length === 0 ? (
@@ -508,7 +690,13 @@ function AdminLMS() {
                                   </tr>
                                 </thead>
                                 <tbody>
-                                  {contents.map(content => (
+                                  {contents
+                                    .filter(content => {
+                                      const matchSearch = (content.title?.toLowerCase() || '').includes(searchQuery.toLowerCase()) || (content.moduleName?.toLowerCase() || '').includes(searchQuery.toLowerCase());
+                                      const matchType = filterCategory === 'all' ? true : filterCategory === 'video' ? content.contentType === 'video' : content.contentType !== 'video';
+                                      return matchSearch && matchType;
+                                    })
+                                    .map(content => (
                                     <tr key={content.id}>
                                       <td className="ps-4">
                                         {editingId === content.id ? (
@@ -521,15 +709,19 @@ function AdminLMS() {
                                         {editingId === content.id ? (
                                           <input type="text" className="form-control form-control-sm" value={editTitle} onChange={e => setEditTitle(e.target.value)} />
                                         ) : (
-                                          content.driveWebViewLink ? (
-                                            <a href={content.driveWebViewLink} target="_blank" rel="noreferrer" className="text-decoration-none text-primary">
-                                              {content.title}
-                                            </a>
-                                          ) : content.title
+                                          <div>
+                                            <span className="text-dark d-block">{content.title}</span>
+                                            {content.description && <small className="text-muted fw-normal d-block">{content.description}</small>}
+                                          </div>
                                         )}
                                       </td>
-                                      <td><i className={`fa ${getIcon(content.contentType)} fs-4`}></i></td>
-                                      <td className="text-muted">{new Date(content.createdAt).toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'numeric'})}</td>
+                                      <td>
+                                        <div className="d-flex align-items-center gap-2">
+                                          <i className={`fa ${getIcon(content.contentType)} fs-5`}></i>
+                                          <span className="small text-muted text-capitalize">{content.category || content.contentType}</span>
+                                        </div>
+                                      </td>
+                                      <td className="text-muted small">{new Date(content.createdAt).toLocaleDateString('en-IN', {day:'numeric', month:'short', year:'numeric'})}</td>
                                       <td className="text-end pe-4">
                                         {editingId === content.id ? (
                                           <div className="d-flex justify-content-end gap-1">
@@ -542,7 +734,17 @@ function AdminLMS() {
                                           </div>
                                         ) : (
                                           <div className="d-flex justify-content-end gap-1">
-                                            <button className="btn btn-sm btn-outline-primary rounded-circle" style={{ width: '35px', height: '35px' }} onClick={() => { setEditingId(content.id); setEditTitle(content.title); setEditModule(content.moduleName); }} title="Edit Name">
+                                            {/* Watch / Preview Button */}
+                                            <button 
+                                              className="btn btn-sm btn-primary rounded-pill px-3 d-flex align-items-center gap-1 shadow-sm"
+                                              onClick={() => setPreviewModalContent(content)}
+                                              title={content.contentType === 'video' ? "Watch Recording" : "Preview Material"}
+                                            >
+                                              <i className={`fa ${content.contentType === 'video' ? 'fa-play' : 'fa-eye'}`}></i>
+                                              <span>{content.contentType === 'video' ? 'Watch' : 'View'}</span>
+                                            </button>
+
+                                            <button className="btn btn-sm btn-outline-secondary rounded-circle" style={{ width: '35px', height: '35px' }} onClick={() => { setEditingId(content.id); setEditTitle(content.title); setEditModule(content.moduleName); }} title="Edit Name">
                                               <i className="fa fa-pen"></i>
                                             </button>
                                             <button className="btn btn-sm btn-outline-danger rounded-circle" style={{ width: '35px', height: '35px' }} onClick={() => handleDelete(content.id)} title="Delete File">
@@ -559,6 +761,71 @@ function AdminLMS() {
                           )}
                         </div>
                       </div>
+
+                      {/* Modal for In-Page Video Playback / Preview */}
+                      {previewModalContent && (
+                        <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.75)', zIndex: 1060 }} tabIndex="-1">
+                          <div className="modal-dialog modal-lg modal-dialog-centered">
+                            <div className="modal-content rounded-4 border-0 shadow-lg overflow-hidden">
+                              <div className="modal-header bg-dark text-white border-0 py-3 px-4">
+                                <div className="d-flex align-items-center gap-2">
+                                  <i className={`fa ${previewModalContent.contentType === 'video' ? 'fa-play-circle text-danger' : 'fa-file-text text-info'} fs-4`}></i>
+                                  <h5 className="modal-title fw-bold mb-0 text-white">{previewModalContent.title}</h5>
+                                </div>
+                                <button type="button" className="btn-close btn-close-white" onClick={() => setPreviewModalContent(null)}></button>
+                              </div>
+                              <div className="modal-body p-0 bg-black text-center" style={{ minHeight: '400px' }}>
+                                {previewModalContent.contentType === 'video' ? (
+                                  <div className="ratio ratio-16x9">
+                                    {previewModalContent.driveWebViewLink && (previewModalContent.driveWebViewLink.includes('youtube.com') || previewModalContent.driveWebViewLink.includes('youtu.be')) ? (
+                                      <iframe 
+                                        src={previewModalContent.driveWebViewLink} 
+                                        title={previewModalContent.title}
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                        allowFullScreen
+                                        style={{ border: 0 }}
+                                      />
+                                    ) : (
+                                      <video 
+                                        src={previewModalContent.localFileUrl || previewModalContent.driveWebViewLink} 
+                                        controls 
+                                        controlsList="nodownload"
+                                        className="w-100 h-100"
+                                      />
+                                    )}
+                                  </div>
+                                ) : (
+                                  <div className="p-5 text-white bg-dark">
+                                    <i className="fa fa-file-text fs-1 text-primary opacity-50 mb-3 d-block"></i>
+                                    <h5>{previewModalContent.title}</h5>
+                                    <p className="text-white-50">{previewModalContent.description || 'Uploaded study document.'}</p>
+                                    {previewModalContent.driveWebViewLink || previewModalContent.localFileUrl ? (
+                                      <a 
+                                        href={previewModalContent.driveWebViewLink || previewModalContent.localFileUrl} 
+                                        target="_blank" 
+                                        rel="noopener noreferrer" 
+                                        className="btn btn-primary px-4 py-2 rounded-pill fw-bold"
+                                      >
+                                        <i className="fa fa-external-link-alt me-2"></i> Open File in New Tab
+                                      </a>
+                                    ) : (
+                                      <p className="text-warning">No file link available for preview.</p>
+                                    )}
+                                  </div>
+                                )}
+                              </div>
+                              <div className="modal-footer bg-light border-0 py-2 px-4 d-flex justify-content-between">
+                                <span className="small text-muted">
+                                  Module: <strong>{previewModalContent.moduleName}</strong>
+                                </span>
+                                <button type="button" className="btn btn-secondary rounded-pill px-4" onClick={() => setPreviewModalContent(null)}>
+                                  Close
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </>
                   ) : (
                     <>

@@ -13,6 +13,7 @@ const Login = () => {
     identifier: '',
     password: ''
   });
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -31,7 +32,7 @@ const Login = () => {
       
       const data = await response.json();
       if (!response.ok) {
-        throw new Error(data.error || 'Login failed');
+        throw new Error(data.error || 'Login failed. Please check your credentials.');
       }
       
       localStorage.setItem('userToken', data.token);
@@ -51,52 +52,101 @@ const Login = () => {
   return (
     <>
       <Helmet>
-        <title>Student Login | Clinidea Education</title>
+        <title>Student Login | Clinidea Education LMS</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
       <AuthLayout 
-        title="Student Login" 
-        subtitle="Welcome back to your educational journey" 
-        role="student" 
-        accentColor="primary"
+        title="Student Sign In" 
+        subtitle="Access your clinical research courses, live sessions, and study materials" 
+        role="student"
       >
-        {error && <div className="alert alert-danger p-3 text-center fw-bold">{error}</div>}
+        {error && (
+          <div className="alert alert-danger p-3 rounded-3 text-start small mb-4 d-flex align-items-center gap-2" role="alert">
+            <i className="fa fa-exclamation-circle fs-5 flex-shrink-0"></i>
+            <span>{error}</span>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit}>
+          {/* Identifier Input */}
           <div className="mb-3">
-            <label className="form-label fw-bold">Email or Phone Number</label>
-            <input 
-              type="text" 
-              name="identifier"
-              className="form-control p-3 bg-light border-0" 
-              placeholder="jane@email.com"
-              value={formData.identifier}
-              onChange={handleChange}
-              required 
-            />
+            <label className="form-label fw-bold text-dark small mb-1">
+              Registered Email or Phone Number
+            </label>
+            <div className="position-relative">
+              <input 
+                type="text" 
+                name="identifier"
+                className="form-control" 
+                placeholder="name@email.com or 10-digit phone"
+                value={formData.identifier}
+                onChange={handleChange}
+                required 
+                autoComplete="username"
+              />
+            </div>
           </div>
-          <div className="mb-4">
-            <label className="form-label fw-bold">Password</label>
-            <input 
-              type="password" 
-              name="password"
-              className="form-control p-3 bg-light border-0" 
-              placeholder="••••••••••••"
-              value={formData.password}
-              onChange={handleChange}
-              required 
-            />
+
+          {/* Password Input with Show/Hide Toggle */}
+          <div className="mb-3">
+            <div className="d-flex justify-content-between align-items-center mb-1">
+              <label className="form-label fw-bold text-dark small mb-0">Password</label>
+              <Link to="/forgot-password" className="small text-decoration-none text-primary fw-semibold" tabIndex="-1">
+                Forgot password?
+              </Link>
+            </div>
+            <div className="position-relative d-flex align-items-center">
+              <input 
+                type={showPassword ? "text" : "password"} 
+                name="password"
+                className="form-control pe-5" 
+                placeholder="Enter your password"
+                value={formData.password}
+                onChange={handleChange}
+                required 
+                autoComplete="current-password"
+              />
+              <button 
+                type="button" 
+                className="btn position-absolute end-0 me-2 text-muted border-0 p-1"
+                onClick={() => setShowPassword(!showPassword)}
+                style={{ background: 'transparent' }}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                <i className={`fa ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+              </button>
+            </div>
           </div>
+
+          {/* Submit Button */}
           <button 
             type="submit" 
-            className="btn w-100 py-3 fw-bold fs-5 text-white shadow-sm" 
-            style={{ borderRadius: '12px', background: 'var(--color-primary)', border: 'none' }} 
+            className="btn btn-auth-submit w-100 mt-2 text-white shadow-sm d-flex align-items-center justify-content-center gap-2" 
+            style={{ background: 'linear-gradient(135deg, #4f46e5 0%, #3730a3 100%)' }} 
             disabled={loading}
           >
-            {loading ? 'Authenticating...' : 'Secure Login'}
+            {loading ? (
+              <>
+                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span>Authenticating...</span>
+              </>
+            ) : (
+              <>
+                <i className="fa fa-lock"></i>
+                <span>Sign In to Student LMS</span>
+              </>
+            )}
           </button>
         </form>
-        <div className="text-center mt-4">
-          <p className="text-muted">Don't have an account? <Link to={`/register${location.search}`} className="fw-bold text-decoration-none text-primary">Register here</Link></p>
+
+        {/* Registration Prompt */}
+        <div className="text-center mt-4 pt-2">
+          <p className="text-muted small mb-0">
+            Don't have an account?{' '}
+            <Link to={`/register${location.search}`} className="fw-bold text-decoration-none text-primary">
+              Register here
+            </Link>
+          </p>
         </div>
       </AuthLayout>
     </>

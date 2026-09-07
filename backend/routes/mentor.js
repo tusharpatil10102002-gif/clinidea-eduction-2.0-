@@ -21,6 +21,7 @@ const authenticateMentor = (req, res, next) => {
       return res.status(403).json({ error: 'Access denied: Mentor only' });
     }
     req.mentorId = decoded.adminId;
+    req.role = decoded.role;
     next();
   } catch (error) {
     return res.status(401).json({ error: 'Invalid token' });

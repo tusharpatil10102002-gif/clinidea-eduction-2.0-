@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import AuthLayout from '../components/shared/AuthLayout';
-// import { BASE_URL } from '../config';
+import { BASE_URL } from '../config';
 
 const CoordinatorLogin = () => {
   const navigate = useNavigate();
@@ -10,6 +10,7 @@ const CoordinatorLogin = () => {
     email: '',
     password: ''
   });
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -42,7 +43,7 @@ const CoordinatorLogin = () => {
         return;
       }
 
-      throw new Error(data.error || 'Invalid coordinator credentials');
+      throw new Error(data.error || 'Invalid coordinator credentials. Please try again.');
     } catch (err) {
       setError(err.message);
     } finally {
@@ -57,48 +58,83 @@ const CoordinatorLogin = () => {
   return (
     <>
       <Helmet>
-        <title>Coordinator Login | Clinidea Education</title>
+        <title>Coordinator Login | Clinidea Education LMS</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
       <AuthLayout 
-        title="Coordinator Portal" 
-        subtitle="Sign in to manage student operations" 
-        role="coordinator" 
-        accentColor="warning"
+        title="Student Coordinator Sign In" 
+        subtitle="Sign in to manage admissions, enrollments, and student operations" 
+        role="coordinator"
       >
-        {error && <div className="alert alert-danger p-3 text-center fw-bold">{error}</div>}
+        {error && (
+          <div className="alert alert-danger p-3 rounded-3 text-start small mb-4 d-flex align-items-center gap-2" role="alert">
+            <i className="fa fa-exclamation-circle fs-5 flex-shrink-0"></i>
+            <span>{error}</span>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit}>
+          {/* Email Input */}
           <div className="mb-3">
-            <label className="form-label fw-bold">Email</label>
-            <input 
-              type="email" 
-              name="email"
-              className="form-control p-3 bg-light border-0" 
-              placeholder="coordinator@clinidea.in"
-              value={formData.email}
-              onChange={handleChange}
-              required 
-            />
+            <label className="form-label fw-bold text-dark small mb-1">Coordinator Email Address</label>
+            <div className="position-relative">
+              <input 
+                type="email" 
+                name="email"
+                className="form-control" 
+                placeholder="coordinator@clinidea.in"
+                value={formData.email}
+                onChange={handleChange}
+                required 
+                autoComplete="email"
+              />
+            </div>
           </div>
-          <div className="mb-4">
-            <label className="form-label fw-bold">Password</label>
-            <input 
-              type="password" 
-              name="password"
-              className="form-control p-3 bg-light border-0" 
-              placeholder="••••••••••••"
-              value={formData.password}
-              onChange={handleChange}
-              required 
-            />
+
+          {/* Password Input with Show/Hide Toggle */}
+          <div className="mb-3">
+            <label className="form-label fw-bold text-dark small mb-1">Password</label>
+            <div className="position-relative d-flex align-items-center">
+              <input 
+                type={showPassword ? "text" : "password"} 
+                name="password"
+                className="form-control pe-5" 
+                placeholder="Enter coordinator password"
+                value={formData.password}
+                onChange={handleChange}
+                required 
+                autoComplete="current-password"
+              />
+              <button 
+                type="button" 
+                className="btn position-absolute end-0 me-2 text-muted border-0 p-1"
+                onClick={() => setShowPassword(!showPassword)}
+                style={{ background: 'transparent' }}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                <i className={`fa ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+              </button>
+            </div>
           </div>
+
+          {/* Submit Button */}
           <button 
             type="submit" 
-            className="btn text-white w-100 py-3 fw-bold fs-5 shadow-sm" 
-            style={{ borderRadius: '12px', background: 'linear-gradient(135deg, #4f46e5 0%, #3730a3 100%)', border: 'none' }} 
+            className="btn btn-auth-submit w-100 mt-2 text-white shadow-sm d-flex align-items-center justify-content-center gap-2" 
+            style={{ background: 'linear-gradient(135deg, #d97706 0%, #b45309 100%)' }} 
             disabled={loading}
           >
-            {loading ? 'Authenticating...' : 'Secure Login'}
+            {loading ? (
+              <>
+                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span>Authenticating Coordinator...</span>
+              </>
+            ) : (
+              <>
+                <i className="fa fa-user-tie"></i>
+                <span>Sign In to Coordinator Portal</span>
+              </>
+            )}
           </button>
         </form>
       </AuthLayout>

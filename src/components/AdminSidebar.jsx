@@ -83,6 +83,13 @@ const AdminSidebar = ({ mobileOpen, setMobileOpen }) => {
             </Link>
           </li>
 
+          {/* LMS & Study Materials */}
+          <li className="nav-item">
+            <Link to="/admin/lms" className={`nav-link p-3 rounded-3 fw-bold ${isActive('/admin/lms')}`}>
+              <span className="fa fa-photo-video me-2 text-info"></span> LMS & Study Materials
+            </Link>
+          </li>
+
           {/* 4. Placement Management */}
           <li className="nav-item">
             <Link to="/admin/placements" className={`nav-link p-3 rounded-3 fw-bold ${isActive('/admin/placements')}`}>
