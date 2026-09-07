@@ -5,8 +5,9 @@ const ProtectedRoute = ({ children }) => {
   const location = useLocation();
   const userToken = localStorage.getItem('userToken');
   const adminToken = localStorage.getItem('adminToken');
+  const mentorToken = localStorage.getItem('mentorToken');
   
-  if (!userToken && !adminToken) {
+  if (!userToken && !adminToken && !mentorToken) {
     // Redirect inactive or unauthorized users straight to the login barrier, preserving their intended destination
     const redirectPath = encodeURIComponent(location.pathname + location.search);
     return <Navigate to={`/login?redirect=${redirectPath}`} replace />;

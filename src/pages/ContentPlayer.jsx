@@ -18,7 +18,6 @@ const ContentPlayer = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [link, setLink] = useState('');
-  const [rawLink, setRawLink] = useState('');
   const [title, setTitle] = useState('');
   const [type, setType] = useState('');
   const [hasError, setHasError] = useState(false);
@@ -26,6 +25,15 @@ const ContentPlayer = () => {
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
 
   useEffect(() => {
+    // 1. Strict Authentication Guard
+    const userToken = localStorage.getItem('userToken');
+    const adminToken = localStorage.getItem('adminToken');
+    const mentorToken = localStorage.getItem('mentorToken');
+    if (!userToken && !adminToken && !mentorToken) {
+      navigate(`/login?redirect=${encodeURIComponent(location.pathname + location.search)}`, { replace: true });
+      return;
+    }
+
     const params = new URLSearchParams(location.search);
     const urlLink = params.get('link');
     const urlTitle = params.get('title');
@@ -36,15 +44,38 @@ const ContentPlayer = () => {
       return;
     }
 
-    setRawLink(urlLink);
     const formattedLink = getYouTubeEmbedUrl(urlLink);
     setLink(formattedLink);
     setTitle(urlTitle || 'Clinidea Video Session');
     setType(urlType || 'video');
 
+    // 2. Hide Raw Link from browser address bar to prevent copying/sharing
+    try {
+      window.history.replaceState({}, '', '/watch');
+    } catch (e) {
+      // ignore
+    }
+
+    // 3. Block keyboard shortcuts that expose video source
+    const handleKeyDown = (e) => {
+      if (
+        e.key === 'F12' ||
+        (e.ctrlKey && (e.key === 'u' || e.key === 'U' || e.key === 's' || e.key === 'S')) ||
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'i' || e.key === 'J' || e.key === 'j' || e.key === 'C' || e.key === 'c'))
+      ) {
+        e.preventDefault();
+        return false;
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+
     const handleResize = () => setWindowHeight(window.innerHeight);
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('resize', handleResize);
+    };
   }, [location, navigate]);
 
   const handleClose = () => {
@@ -104,7 +135,10 @@ const ContentPlayer = () => {
       </div>
 
       {/* Full Screen Video / Iframe Container */}
-      <div style={{ flex: 1, position: 'relative', width: '100%', height: '100%', backgroundColor: '#000', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <div 
+        onContextMenu={(e) => e.preventDefault()}
+        style={{ flex: 1, position: 'relative', width: '100%', height: '100%', backgroundColor: '#000', display: 'flex', justifyContent: 'center', alignItems: 'center', userSelect: 'none' }}
+      >
         {hasError ? (
           <div className="text-center p-4 text-white" style={{ maxWidth: '500px' }}>
             <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>⚠️</div>
@@ -112,36 +146,43 @@ const ContentPlayer = () => {
             <p className="text-muted small mb-4">
               This video session cannot be streamed directly. If it was recently uploaded, it may still be processing on YouTube or the file may need to be re-uploaded.
             </p>
-            <div className="d-flex justify-content-center gap-3">
-              <button onClick={handleClose} className="btn btn-primary px-4 py-2 rounded-pill fw-bold">
-                Back to Dashboard
-              </button>
-              {rawLink && (rawLink.startsWith('http') || rawLink.startsWith('https')) && (
-                <a href={rawLink} target="_blank" rel="noopener noreferrer" className="btn btn-outline-light px-4 py-2 rounded-pill fw-bold">
-                  Open Direct Link
-                </a>
-              )}
-            </div>
+            <button onClick={handleClose} className="btn btn-primary px-4 py-2 rounded-pill fw-bold">
+              Back to Dashboard
+            </button>
           </div>
         ) : isDirectVideo ? (
           <video 
             src={resolvedVideoSrc} 
             controls 
             autoPlay 
+            controlsList="nodownload"
             onError={() => setHasError(true)}
             style={{ width: '100%', height: '100%', outline: 'none', objectFit: 'contain' }}
           >
             Your browser does not support the video tag.
           </video>
         ) : (
-          <iframe 
-            src={link} 
-            style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
-            allowFullScreen
-            referrerPolicy="strict-origin-when-cross-origin"
-            title={title}
-          ></iframe>
+          <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+            {/* Top Transparent Shield: Blocks clicking on YouTube title & share button */}
+            <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '54px', zIndex: 10, background: 'transparent' }} />
+            
+            {/* Bottom-Right Shield: Blocks clicking on YouTube watermark logo */}
+            <div style={{ position: 'absolute', bottom: '12px', right: '48px', width: '60px', height: '36px', zIndex: 10, background: 'transparent' }} />
+
+            {/* Anti-Piracy Watermark */}
+            <div style={{ position: 'absolute', bottom: '18px', left: '18px', zIndex: 10, color: 'rgba(255,255,255,0.4)', fontSize: '0.75rem', pointerEvents: 'none', fontWeight: '500', textShadow: '0 1px 2px rgba(0,0,0,0.8)' }}>
+              Clinidea LMS Protected Session
+            </div>
+
+            <iframe 
+              src={link} 
+              style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+              allowFullScreen
+              referrerPolicy="strict-origin-when-cross-origin"
+              title={title}
+            ></iframe>
+          </div>
         )}
       </div>
     </div>
