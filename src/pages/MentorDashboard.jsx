@@ -213,40 +213,43 @@ const MentorDashboard = () => {
   // If no batch is selected, show the "My Assigned Batches" Selection Page first!
   if (!selectedBatch) {
     return (
-      <div className="min-vh-100 d-flex flex-column" style={{ background: '#f8fafc', color: '#1e293b' }}>
+      <div className="portal-root d-flex flex-column min-vh-100">
         <Helmet>
-          <title>My Assigned Batches | Clinidea Mentor</title>
+          <title>Mentor Dashboard | Clinidea</title>
           <meta name="robots" content="noindex, nofollow" />
         </Helmet>
 
         {/* Top Navbar */}
-        <header className="bg-white border-bottom py-3 px-4 shadow-sm">
-          <div className="container-fluid d-flex align-items-center justify-content-between">
-            <div className="d-flex align-items-center gap-3">
-              <div className="bg-white rounded-3 p-1 d-flex align-items-center justify-content-center border shadow-sm" style={{ width: '48px', height: '48px', borderColor: '#e2e8f0' }}>
-                <img src="/clinidea Logo/Clinidea_Education_Logo_header.webp" alt="Clinidea Education Logo" className="img-fluid" style={{ maxHeight: '100%', objectFit: 'contain' }} onError={(e) => { e.target.src = '/assets/images/logo.png'; }} />
+        <header className="portal-topbar">
+          <div className="d-flex align-items-center gap-3">
+            <div className="bg-white rounded-3 p-1 d-flex align-items-center justify-content-center border shadow-xs" style={{ width: '42px', height: '42px' }}>
+              <img src="/clinidea Logo/Clinidea_Education_Logo_header.webp" alt="Clinidea Education Logo" className="img-fluid" style={{ maxHeight: '100%', objectFit: 'contain' }} onError={(e) => { e.target.src = '/assets/images/logo.png'; }} />
+            </div>
+            <div>
+              <span className="fw-bold text-dark fs-5" style={{ letterSpacing: '-0.3px' }}>Clinidea</span>
+              <span className="portal-brand-badge ms-2" style={{ background: '#ecfdf5', color: '#059669' }}>Mentor Portal</span>
+            </div>
+          </div>
+          <div className="d-flex align-items-center gap-3">
+            <div className="portal-avatar-pill">
+              <div className="text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style={{ width: '32px', height: '32px', background: '#059669', fontSize: '0.85rem' }}>
+                <i className="fas fa-chalkboard-teacher"></i>
               </div>
-              <div>
-                <h4 className="mb-0 fw-bold text-dark fs-5" style={{ letterSpacing: '-0.3px' }}>Clinidea</h4>
-                <span className="badge bg-primary bg-opacity-10 text-primary fw-semibold px-2 py-0" style={{ fontSize: '11px' }}>Mentor Portal</span>
+              <div className="d-none d-sm-block text-start pe-1">
+                <p className="mb-0 fw-bold text-dark lh-1" style={{ fontSize: '0.85rem' }}>Mentor</p>
+                <small className="text-muted" style={{ fontSize: '0.72rem' }}>Faculty & Guide</small>
               </div>
             </div>
-            <div className="d-flex align-items-center gap-3">
-              <div className="d-none d-sm-block text-end">
-                <p className="mb-0 fw-bold text-dark" style={{ lineHeight: '1.2' }}>Mentor</p>
-                <small className="text-muted">Clinidea Team</small>
-              </div>
-              <button onClick={handleLogout} className="btn btn-sm rounded-4 px-3 py-2 fw-bold" style={{ background: '#fff1f2', color: '#e11d48', border: '1px solid #ffe4e6' }}>
-                <i className="fas fa-sign-out-alt me-1"></i> Logout
-              </button>
-            </div>
+            <button onClick={handleLogout} className="btn btn-sm rounded-pill px-3 py-2 fw-bold shadow-xs" style={{ background: '#fff1f2', color: '#e11d48', border: '1px solid #ffe4e6' }}>
+              <i className="fas fa-sign-out-alt me-1"></i> Logout
+            </button>
           </div>
         </header>
 
         {/* Main Content Area */}
-        <main className="flex-grow-1 container py-5">
+        <main className="flex-grow-1 container py-5 portal-scrollbar">
           <div className="text-center mb-5 max-w-2xl mx-auto">
-            <span className="badge rounded-pill bg-primary bg-opacity-10 text-primary px-3 py-2 fw-bold mb-3 fs-6">
+            <span className="badge rounded-pill px-3 py-2 fw-bold mb-3" style={{ background: '#ecfdf5', color: '#059669', fontSize: '0.85rem' }}>
               <i className="fas fa-users me-2"></i>My Assigned Batches
             </span>
             <h2 className="display-6 fw-bold text-dark mb-3">Select a Batch to Manage</h2>
@@ -264,22 +267,17 @@ const MentorDashboard = () => {
           <div className="row g-4 justify-content-center">
             {batches.map(b => (
               <div key={b.id} className="col-md-6 col-lg-4">
-                <div className="card border-0 rounded-4 h-100 bg-white batch-selection-card" 
-                     style={{ 
-                       boxShadow: '0 4px 25px rgba(0, 0, 0, 0.05)', 
-                       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                       border: '1px solid #e2e8f0' 
-                     }}>
+                <div className="portal-card h-100 bg-white batch-selection-card">
                   <div className="card-body p-4 p-md-5 d-flex flex-column text-center position-relative">
                     {/* Top Accent Strip */}
-                    <div className="position-absolute top-0 start-0 w-100 rounded-top-4" style={{ height: '5px', background: 'linear-gradient(90deg, #4f46e5 0%, #6366f1 100%)' }}></div>
+                    <div className="position-absolute top-0 start-0 w-100 rounded-top-4" style={{ height: '5px', background: 'linear-gradient(90deg, #059669 0%, #10b981 100%)' }}></div>
 
-                    <div className="bg-primary bg-opacity-10 text-primary rounded-circle d-inline-flex align-items-center justify-content-center mb-4 mt-2 mx-auto border" 
-                         style={{ width: '80px', height: '80px', borderColor: '#e0e7ff' }}>
+                    <div className="rounded-circle d-inline-flex align-items-center justify-content-center mb-4 mt-2 mx-auto border" 
+                         style={{ width: '80px', height: '80px', background: '#ecfdf5', color: '#059669', borderColor: '#a7f3d0' }}>
                       <i className="fas fa-graduation-cap fs-1"></i>
                     </div>
 
-                    <span className="badge bg-success bg-opacity-10 text-success fw-bold px-3 py-2 rounded-pill mx-auto mb-3" style={{ width: 'fit-content' }}>
+                    <span className="badge fw-bold px-3 py-2 rounded-pill mx-auto mb-3" style={{ width: 'fit-content', background: '#ecfdf5', color: '#059669' }}>
                       <i className="fas fa-circle me-1" style={{ fontSize: '8px' }}></i> Active Assigned Batch
                     </span>
 
@@ -288,7 +286,7 @@ const MentorDashboard = () => {
 
                     <button 
                       className="btn w-100 rounded-pill py-3 fw-bold shadow-sm text-white border-0 fs-6 d-flex align-items-center justify-content-center gap-2"
-                      style={{ background: 'linear-gradient(135deg, #4f46e5 0%, #6366f1 100%)', transition: 'all 0.2s' }}
+                      style={{ background: 'linear-gradient(135deg, #059669 0%, #10b981 100%)', transition: 'all 0.2s' }}
                       onClick={() => {
                         setSelectedBatch(b);
                         setActiveTab('schedule');

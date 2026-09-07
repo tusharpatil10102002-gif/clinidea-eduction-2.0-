@@ -384,408 +384,769 @@ const StudentDashboard = () => {
   const currentItems = categorizedContent[activeLMSCategory] || [];
 
   return (
-    <div className="d-flex" style={{ minHeight: 'calc(100vh - 60px)', marginTop: '60px', backgroundColor: 'var(--color-bg-light)', color: 'var(--color-text-dark)', fontFamily: 'var(--font-sans)', position: 'relative' }}>
-      
-      {/* Mobile Sidebar Overlay */}
-      {isSidebarOpen && (
-        <div 
-          className="d-md-none position-fixed w-100 h-100" 
-          style={{ top: '60px', left: 0, backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 1030 }}
-          onClick={() => setIsSidebarOpen(false)}
-        ></div>
-      )}
+    <div className="portal-root d-flex flex-column min-vh-100">
+      {/* 1. Universal Portal Topbar */}
+      <header className="portal-topbar">
+        <div className="d-flex align-items-center gap-3">
+          {/* Mobile menu toggle */}
+          <button 
+            className="btn btn-light d-md-none p-2 border rounded-3 shadow-xs" 
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            aria-label="Toggle menu"
+          >
+            <i className={`fa ${isSidebarOpen ? 'fa-times' : 'fa-bars'} fs-5 text-dark`}></i>
+          </button>
 
-      {/* Sidebar Navigation */}
-      <div 
-        className={`bg-white shadow-sm d-flex flex-column transition-all student-sidebar ${isSidebarOpen ? 'open' : ''}`}
-      >
-        <div className="p-4 d-flex justify-content-between align-items-center d-md-none border-bottom">
-           <h5 className="heading-premium mb-0 text-primary">Menu</h5>
-           <button className="btn text-muted p-0" onClick={() => setIsSidebarOpen(false)}><i className="fa fa-times fs-4"></i></button>
-        </div>
-        
-        <div className="p-3 flex-grow-1 overflow-auto">
-          <p className="text-muted small fw-bold text-uppercase px-3 mb-2 mt-2" style={{ letterSpacing: '1px', fontSize: '0.7rem' }}>Navigation</p>
-          <div className="list-group list-group-flush gap-2 pb-5">
-            {/* 1. Dashboard */}
-            <button onClick={() => { setActiveTab('dashboard'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'dashboard' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
-              <i className="fa fa-chart-pie me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Dashboard
-            </button>
-
-            {/* 2. Live Session */}
-            <button onClick={() => { setActiveTab('live'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'live' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
-              <i className="fa fa-video me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Live Session
-            </button>
-
-            {/* 3. Recorded Sessions */}
-            <button onClick={() => { setActiveTab('lms'); setActiveLMSCategory('Recorded sessions'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'lms' && activeLMSCategory === 'Recorded sessions' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
-              <i className="fa fa-play-circle me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Recorded Sessions
-            </button>
-
-            {/* 4. Study Material */}
-            <button onClick={() => { setActiveTab('lms'); setActiveLMSCategory('Study Material'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'lms' && activeLMSCategory === 'Study Material' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
-              <i className="fa fa-book me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Study Material
-            </button>
-
-            {/* 5. Question Bank */}
-            <button onClick={() => { setActiveTab('lms'); setActiveLMSCategory('Question Bank'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'lms' && activeLMSCategory === 'Question Bank' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
-              <i className="fa fa-question-circle me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Question Bank
-            </button>
-
-            {/* 6. Test and Exam */}
-            <button onClick={() => { setActiveTab('test-series'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'test-series' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
-              <i className="fa fa-edit me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Test and Exam
-            </button>
-
-            {/* 7. Assignment */}
-            <button onClick={() => { setActiveTab('assignments'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'assignments' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
-              <i className="fa fa-tasks me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Assignment
-            </button>
-
-            {/* 8. Tools Gating (Vigithink Safety, Vigithink eTMF, Vigithink CDMS) */}
-            <div className="my-1 p-2 rounded-3 border bg-light">
-              <small className="fw-bold text-muted px-2 d-block mb-1 text-uppercase" style={{ fontSize: '0.65rem' }}>Vigithink Tools</small>
-              <a href="https://clinidea.in/vigithink/login" target="_blank" rel="noreferrer" className="d-flex align-items-center gap-2 p-2 rounded text-dark text-decoration-none hover-bg-white mb-1" style={{ fontSize: '0.85rem' }}>
-                <i className="fa fa-shield-alt text-success"></i> Vigithink Safety
-              </a>
-              <a href="https://clinidea.in/vigithinketmf/login" target="_blank" rel="noreferrer" className="d-flex align-items-center gap-2 p-2 rounded text-dark text-decoration-none hover-bg-white mb-1" style={{ fontSize: '0.85rem' }}>
-                <i className="fa fa-folder-open text-warning"></i> Vigithink eTMF
-              </a>
-              {enrolledBatches.some(e => e.courseName && e.courseName.toLowerCase().includes('data management')) && (
-                <a href="https://clinidea.in/vigithinkcdms/login" target="_blank" rel="noreferrer" className="d-flex align-items-center gap-2 p-2 rounded text-dark text-decoration-none hover-bg-white" style={{ fontSize: '0.85rem' }}>
-                  <i className="fa fa-database text-primary"></i> Vigithink CDMS
-                </a>
-              )}
+          {/* Clinidea Brand Logo */}
+          <Link to="/dashboard" className="d-flex align-items-center gap-2 text-decoration-none">
+            <div className="bg-white rounded-3 p-1 d-flex align-items-center justify-content-center border shadow-xs" style={{ width: '42px', height: '42px' }}>
+              <img 
+                src="/clinidea Logo/Clinidea_Education_Logo_header.webp" 
+                alt="Clinidea" 
+                className="img-fluid" 
+                style={{ maxHeight: '100%', objectFit: 'contain' }} 
+                onError={(e) => { e.target.src = '/assets/images/logo.png'; }} 
+              />
             </div>
-
-            {/* 9. Fees Receipt */}
-            <button onClick={() => { setActiveTab('payments'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'payments' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
-              <i className="fa fa-receipt me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Fees Receipt
-            </button>
-
-            {/* 10. Certificates */}
-            <button onClick={() => { setActiveTab('vault'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'vault' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
-              <i className="fa fa-certificate me-3 fs-5" style={{ width: '24px', textAlign: 'center' }}></i> Certificates
-            </button>
-
-            {/* 11. Refer and Earn */}
-            <button onClick={() => { setActiveTab('refer-earn'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'refer-earn' ? 'bg-theme-secondary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
-              <i className="fa fa-gift me-3 fs-5" style={{ width: '24px', textAlign: 'center', color: '#e11d48' }}></i> Refer and Earn
-            </button>
-
-            {/* 12. 24/7 AI Doubt Solver */}
-            <button onClick={() => { setActiveTab('ai-tutor'); setIsSidebarOpen(false); }} className={`list-group-item list-group-item-action border-0 rounded-3 px-4 py-3 d-flex align-items-center ${activeTab === 'ai-tutor' ? 'bg-primary text-white fw-bold shadow-sm' : 'text-dark hover-bg-light'}`} style={{ transition: 'all 0.2s' }}>
-              <i className="fa fa-robot me-3 fs-5 text-primary" style={{ width: '24px', textAlign: 'center' }}></i> 24/7 AI Doubt Solver
-            </button>
-          </div>
-
-          <p className="text-muted small fw-bold text-uppercase px-3 mb-2 mt-4" style={{ letterSpacing: '1px', fontSize: '0.7rem' }}>Account</p>
-          <div className="list-group list-group-flush gap-2">
-            <button onClick={() => { setShowProfilePanel(true); setIsSidebarOpen(false); }} className="list-group-item list-group-item-action border rounded-3 px-4 py-3 d-flex align-items-center text-dark hover-bg-light shadow-sm" style={{ transition: 'all 0.2s' }}>
-              <i className="fa fa-user-edit me-3 fs-5 text-theme-secondary" style={{ width: '24px', textAlign: 'center' }}></i> Profile Settings
-            </button>
-            <button onClick={handleLogout} className="list-group-item list-group-item-action border rounded-3 px-4 py-3 d-flex align-items-center text-dark hover-bg-light shadow-sm mt-2" style={{ transition: 'all 0.2s' }}>
-              <i className="fa fa-sign-out-alt me-3 fs-5 text-danger" style={{ width: '24px', textAlign: 'center' }}></i> Logout
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Content Wrapper */}
-      <div 
-        className="flex-grow-1 d-flex flex-column w-100 sidebar-margin-responsive"
-        style={{ transition: 'margin-left 0.3s ease-in-out', minWidth: 0 }}
-      >
-        <style dangerouslySetInnerHTML={{__html: `
-          .student-sidebar {
-            width: 260px;
-            position: fixed;
-            top: 60px;
-            bottom: 0;
-            left: 0;
-            z-index: 1040;
-            border-right: 1px solid var(--color-border);
-            transform: translateX(-100%);
-            transition: transform 0.3s ease-in-out;
-            background-color: #ffffff;
-          }
-          .student-sidebar.open {
-            transform: translateX(0) !important;
-          }
-          @media (min-width: 768px) {
-            .student-sidebar {
-              transform: translateX(0) !important;
-            }
-            .sidebar-margin-responsive {
-              margin-left: 260px !important;
-            }
-          }
-          .hover-bg-light:hover { background-color: #f8fafc !important; }
-        `}} />
-        
-        {/* Topbar */}
-        <div className="shadow-sm px-4 py-3 d-flex justify-content-between align-items-center bg-white position-sticky" style={{ top: '60px', zIndex: 1000, borderBottom: '1px solid var(--color-border)' }}>
-          <div className="d-flex align-items-center gap-3">
-            <button className="btn btn-light d-md-none p-2 border rounded" onClick={() => setIsSidebarOpen(true)}>
-              <i className="fa fa-bars fs-5 text-dark"></i>
-            </button>
-            <div>
-              <h4 className="heading-premium mb-0 d-none d-sm-block text-dark" style={{ fontSize: '1.25rem' }}>Welcome back, {userContext.fullName || 'Student'}!</h4>
-              <h5 className="heading-premium mb-0 d-sm-none text-dark">Dashboard</h5>
-              <p className="text-muted small mb-0 d-none d-md-block">Track your progress and access your learning materials.</p>
+            <div className="d-none d-sm-block">
+              <span className="fw-bold text-dark fs-5" style={{ letterSpacing: '-0.3px' }}>Clinidea</span>
+              <span className="portal-brand-badge ms-2" style={{ background: '#eef2ff', color: '#4f46e5' }}>Student Portal</span>
             </div>
-          </div>
-          <div className="d-flex align-items-center gap-3">
-            {/* Notification Bell */}
-            <div className="position-relative">
-              <button className="btn btn-light rounded-circle shadow-sm position-relative" style={{ width: '40px', height: '40px' }} onClick={() => setShowNotifications(!showNotifications)}>
-                <i className="fa fa-bell text-muted"></i>
-                {notifications.length > 0 && (
-                  <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style={{ fontSize: '0.6rem' }}>
-                    {notifications.length}
-                  </span>
-                )}
-              </button>
-              {showNotifications && (
-                <div className="card-premium position-absolute mt-2 p-0 shadow-lg" style={{ width: '300px', zIndex: 1050, maxHeight: '400px', overflowY: 'auto', right: '-10px' }}>
-                  <div className="card-header bg-white border-bottom d-flex justify-content-between align-items-center p-3">
-                    <h6 className="mb-0 fw-bold">Notifications</h6>
-                    {notifications.length > 0 && (
-                      <button className="btn btn-sm btn-link text-decoration-none p-0" onClick={handleMarkNotificationsRead}>Mark all read</button>
-                    )}
-                  </div>
-                  <div className="list-group list-group-flush">
-                    {notifications.length === 0 ? (
-                      <div className="p-4 text-center text-muted small">No new notifications.</div>
-                    ) : (
-                      notifications.map(n => (
-                        <div key={n.id} className="list-group-item p-3 border-0 border-bottom bg-light">
-                          <div className="fw-bold mb-1" style={{ fontSize: '0.9rem' }}>{n.title}</div>
-                          <div className="text-muted small">{n.message}</div>
-                          <div className="text-muted mt-1" style={{ fontSize: '0.7rem' }}>{new Date(n.createdAt).toLocaleTimeString()}</div>
-                        </div>
-                      ))
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
-            
-            {/* User Avatar Placeholder */}
-            <div className="bg-primary bg-opacity-10 rounded-circle d-flex justify-content-center align-items-center border border-primary d-none d-sm-flex" style={{ width: '40px', height: '40px', cursor: 'pointer' }} onClick={() => setShowProfilePanel(true)} title="Profile Settings">
-               <span className="text-primary fw-bold">{userContext.fullName ? userContext.fullName.charAt(0).toUpperCase() : 'S'}</span>
-            </div>
-          </div>
+          </Link>
+
+          {/* Active Batch Badge */}
+          {(scheduleData.batchName || (enrolledBatches[0] && enrolledBatches[0].name)) && (
+            <span className="badge rounded-pill bg-light text-dark border px-3 py-2 d-none d-lg-inline-flex align-items-center gap-2 shadow-xs ms-2">
+              <i className="fa fa-layer-group text-primary"></i>
+              <span className="fw-bold">{scheduleData.batchName || enrolledBatches[0].name}</span>
+            </span>
+          )}
         </div>
 
-        {/* Dynamic Content Area */}
-        <div className="p-3 p-md-4 flex-grow-1 w-100 mx-auto" style={{ maxWidth: '1400px' }}>
-          
-          {payments.some(p => p.paymentStatus === 'pending' && new Date(p.dueDate) < new Date()) && !isFeeBlocked && (
-            <div className="alert alert-danger shadow-sm border-2 fw-bold d-flex justify-content-between align-items-center mb-4">
-              <div>
-                <i className="fa fa-exclamation-triangle me-2"></i>
-                You have overdue fee installments! Please clear your dues immediately to avoid account blocking.
-              </div>
-              <button className="btn btn-danger btn-sm" onClick={() => setActiveTab('payments')}>Pay Now</button>
-            </div>
+        {/* Topbar Right Actions */}
+        <div className="d-flex align-items-center gap-3">
+          {/* Live Class Pulsing Alert Button */}
+          {liveSessions.some(cls => cls.status === 'live') && (
+            <button 
+              onClick={() => setActiveTab('live')} 
+              className="btn btn-danger btn-sm rounded-pill px-3 py-1 fw-bold d-none d-md-flex align-items-center gap-2 shadow-sm heartbeat"
+            >
+              <i className="fa fa-video"></i> Live Class Now
+            </button>
           )}
 
-          {isFeeBlocked && activeTab !== 'payments' ? (
-             <div className="card-premium h-100 text-center py-5 mt-4">
-               <div className="card-body">
-                 <i className="fa fa-lock text-danger mb-3" style={{ fontSize: '4rem' }}></i>
-                 <h3 className="fw-bold text-danger">LMS Access Blocked</h3>
-                 <p className="text-muted fs-5">{feeBlockMessage || 'Your access has been temporarily revoked due to pending fee installments.'}</p>
-                 <button className="btn btn-danger btn-lg mt-3" onClick={() => setActiveTab('payments')}>
-                   <i className="fa fa-receipt me-2"></i> View Dues & Pay Online
-                 </button>
-               </div>
-             </div>
-          ) : (
-            <>
-
-        {/* Tab Content: Dashboard */}
-        {activeTab === 'dashboard' && (
-          <div className="row g-4">
-            <div className="col-12">
-              <div className="card-premium h-100">
-                <div className="card-header bg-white border-0 p-4" style={{ borderBottom: '1px solid var(--color-border) !important' }}>
-                  <h4 className="heading-premium text-dark mb-0"><i className="fa fa-chart-line text-primary me-2"></i> Overall Course Progress</h4>
+          {/* Notification Bell */}
+          <div className="position-relative">
+            <button 
+              className="btn btn-light rounded-circle position-relative border" 
+              style={{ width: '42px', height: '42px', display: 'flex', alignItems: 'center', justifyContent: 'center' }} 
+              onClick={() => setShowNotifications(!showNotifications)}
+              aria-label="Notifications"
+            >
+              <i className="fa fa-bell text-muted"></i>
+              {notifications.length > 0 && (
+                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style={{ fontSize: '0.65rem' }}>
+                  {notifications.length}
+                </span>
+              )}
+            </button>
+            {showNotifications && (
+              <div className="portal-card position-absolute mt-2 p-0 shadow-lg border" style={{ width: '320px', zIndex: 1060, maxHeight: '420px', overflowY: 'auto', right: '-5px' }}>
+                <div className="p-3 border-bottom d-flex justify-content-between align-items-center bg-light">
+                  <h6 className="mb-0 fw-bold text-dark"><i className="fa fa-bell me-2 text-primary"></i>Notifications</h6>
+                  {notifications.length > 0 && (
+                    <button className="btn btn-sm btn-link text-decoration-none p-0 text-primary fw-semibold" onClick={handleMarkNotificationsRead}>Mark all read</button>
+                  )}
                 </div>
-                <div className="card-body p-4 bg-light">
-                  <div className="row g-4">
-                    <div className="col-md-4">
-                      <div className="p-4 bg-white rounded-3 shadow-sm text-center border">
-                        <i className="fa fa-user-check text-success fs-1 mb-3"></i>
-                        <h5 className="fw-bold mb-1">Attendance</h5>
-                        <p className="text-muted mb-0">85%</p>
+                <div className="list-group list-group-flush">
+                  {notifications.length === 0 ? (
+                    <div className="p-4 text-center text-muted small">No new notifications.</div>
+                  ) : (
+                    notifications.map(n => (
+                      <div key={n.id} className="list-group-item p-3 border-bottom">
+                        <div className="fw-bold mb-1 text-dark" style={{ fontSize: '0.88rem' }}>{n.title}</div>
+                        <div className="text-muted small">{n.message}</div>
+                        <div className="text-muted mt-1" style={{ fontSize: '0.7rem' }}>{new Date(n.createdAt).toLocaleTimeString()}</div>
                       </div>
-                    </div>
-                    <div className="col-md-4">
-                      <div className="p-4 bg-white rounded-3 shadow-sm text-center border">
-                        <i className="fa fa-tasks text-info fs-1 mb-3"></i>
-                        <h5 className="fw-bold mb-1">Test Performance</h5>
-                        <p className="text-muted mb-0">Awaiting Scores</p>
-                      </div>
-                    </div>
-                    <div className="col-md-4">
-                      <div className="p-4 bg-white rounded-3 shadow-sm text-center border">
-                        <i className="fa fa-graduation-cap text-warning fs-1 mb-3"></i>
-                        <h5 className="fw-bold mb-1">Course Progress</h5>
-                        <p className="text-muted mb-0">In Progress</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mt-4 p-3 bg-white rounded shadow-sm border">
-                    <p className="text-muted mb-0 text-center"><i className="fa fa-info-circle me-2"></i> Detailed analytics will be available as you complete more modules and tests.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Tab Content: LMS */}
-        {activeTab === 'lms' && (
-          <div className="row g-4">
-
-            {pendingEnrollments.length > 0 && (
-              <div className="col-12">
-                <div className="card border-warning border-2 shadow-sm mb-2" style={{ backgroundColor: '#fffbeb' }}>
-                  <div className="card-body d-flex flex-column flex-md-row justify-content-between align-items-center">
-                    <div>
-                      <h5 className="text-warning mb-1"><i className="fa fa-exclamation-circle me-2"></i>Pending Fees Notice</h5>
-                      <p className="mb-0 text-dark">You have pending fees for your enrolled courses.</p>
-                    </div>
-                    <div className="d-flex flex-column gap-2 mt-3 mt-md-0 w-100" style={{ maxWidth: '400px' }}>
-                      {pendingEnrollments.map(enr => (
-                        <div key={enr.id} className="d-flex justify-content-between align-items-center bg-white p-2 border rounded shadow-sm">
-                          <span className="fw-bold text-dark" style={{fontSize: '0.9rem'}}>{enr.courseName} <br/><span className="text-danger">₹{enr.feesPending} Pending</span></span>
-                          <button onClick={() => handlePayPending(enr)} className="btn btn-sm text-white fw-bold shadow-sm" style={{ backgroundColor: '#4f46e5' }}>Pay Now</button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                    ))
+                  )}
                 </div>
               </div>
             )}
-
-            <div className="col-12">
-              <div className="card-premium p-4 min-vh-50">
-                <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
-                  <h4 className="heading-premium text-dark mb-0"><i className={`fa ${getCategoryIcon(activeLMSCategory)} me-2`}></i> {activeLMSCategory}</h4>
-                </div>
-                
-                {currentItems.length === 0 ? (
-                  <div className="text-center py-5">
-                    <div className="bg-light rounded-circle d-flex justify-content-center align-items-center mb-4 mx-auto" style={{ width: '80px', height: '80px' }}>
-                      <i className={`fa ${getCategoryIcon(activeLMSCategory)} fs-2 text-muted`}></i>
-                    </div>
-                    <h5 className="heading-premium text-muted">No content available in this category yet.</h5>
-                  </div>
-                ) : (
-                  <div className="row g-3">
-                    {currentItems.map(item => (
-                      <div key={item.id} className="col-md-6 col-lg-4 col-xl-3">
-                        <div 
-                          className="card-premium h-100" 
-                          style={{ cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s' }}
-                          onClick={() => {
-                            let contentUrl = null;
-                            if (item.localFileUrl) {
-                              contentUrl = `${BASE_URL}${item.localFileUrl}`;
-                            } else if (item.driveWebViewLink) {
-                              contentUrl = item.driveWebViewLink;
-                            }
-                            
-                            if (contentUrl) {
-                              const url = `/watch?link=${encodeURIComponent(contentUrl)}&title=${encodeURIComponent(item.title)}&type=${item.contentType}`;
-                              navigate(url);
-                            }
-                          }}
-                          onMouseOver={e => { e.currentTarget.style.transform='translateY(-4px)'; e.currentTarget.classList.add('shadow'); }}
-                          onMouseOut={e => { e.currentTarget.style.transform='translateY(0)'; e.currentTarget.classList.remove('shadow'); }}
-                          title="Click to open in new tab"
-                        >
-                          {/* LMS Video Thumbnail Area */}
-                          <div 
-                            className="position-relative w-100 border-bottom" 
-                            style={{ 
-                              aspectRatio: '16/9', 
-                              background: item.contentType === 'video' ? 'linear-gradient(135deg, #1e293b 0%, #0f172a 100%)' : 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
-                              display: 'flex', 
-                              justifyContent: 'center', 
-                              alignItems: 'center',
-                              overflow: 'hidden'
-                            }}
-                          >
-                            {/* Hover overlay for Play button animation */}
-                            <div className="position-absolute w-100 h-100 d-flex justify-content-center align-items-center" style={{ backgroundColor: 'rgba(0,0,0,0.1)', transition: 'background-color 0.3s' }}>
-                              <div className="rounded-circle d-flex justify-content-center align-items-center play-btn-overlay" style={{ width: '54px', height: '54px', backgroundColor: item.contentType === 'video' ? 'rgba(255,255,255,0.25)' : 'rgba(15,23,42,0.15)', backdropFilter: 'blur(5px)', transition: 'all 0.3s ease', boxShadow: '0 4px 15px rgba(0,0,0,0.2)' }}>
-                                <i className={`fa ${item.contentType === 'video' ? 'fa-play' : 'fa-file-alt'} fs-4`} style={{ color: item.contentType === 'video' ? '#fff' : '#0f172a', marginLeft: item.contentType === 'video' ? '4px' : '0' }}></i>
-                              </div>
-                            </div>
-
-                            {/* Module Name / Topic Badge at Top Left */}
-                            <div className="position-absolute" style={{ top: '12px', left: '12px', zIndex: 5 }}>
-                              <span className="badge rounded-pill" style={{ backgroundColor: 'rgba(0, 0, 0, 0.65)', backdropFilter: 'blur(4px)', color: '#fff', fontSize: '0.7rem', padding: '6px 12px', border: '1px solid rgba(255,255,255,0.1)', fontWeight: '600', letterSpacing: '0.5px' }}>
-                                {item.moduleName || 'General Topic'}
-                              </span>
-                            </div>
-                            
-                            {/* Duration / Type indicator at Bottom Right */}
-                            <div className="position-absolute" style={{ bottom: '8px', right: '8px', zIndex: 5 }}>
-                              <span className="badge rounded bg-dark text-white opacity-75" style={{ fontSize: '0.65rem', padding: '4px 6px' }}>
-                                {item.contentType === 'video' ? '1080p' : 'Doc'}
-                              </span>
-                            </div>
-                          </div>
-
-                          {/* Content Details Area */}
-                          <div className="card-body p-3 d-flex flex-column bg-white h-100">
-                            <h6 className="heading-premium text-dark mb-1 fw-bold" style={{ fontSize: '0.95rem', lineHeight: '1.4', display: '-webkit-box', WebkitLineClamp: '2', WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                              {item.title}
-                            </h6>
-                            <p className="text-muted small mb-0 mt-1" style={{ fontSize: '0.8rem', display: '-webkit-box', WebkitLineClamp: '2', WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                              {item.description ? item.description : (item.contentType === 'video' ? 'Recorded Video Lecture' : 'Downloadable Study Material')}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
           </div>
+
+          {/* Student Profile Avatar Pill */}
+          <div className="portal-avatar-pill" onClick={() => setShowProfilePanel(true)} title="Profile & Account Settings">
+            <div className="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style={{ width: '34px', height: '34px', fontSize: '0.85rem' }}>
+              {userContext.fullName ? userContext.fullName.charAt(0).toUpperCase() : 'S'}
+            </div>
+            <div className="d-none d-md-block text-start pe-1">
+              <div className="fw-bold text-dark lh-1 text-truncate" style={{ maxWidth: '120px', fontSize: '0.85rem' }}>{userContext.fullName || 'Student'}</div>
+              <small className="text-muted" style={{ fontSize: '0.72rem' }}>Verified Learner</small>
+            </div>
+            <i className="fa fa-chevron-down text-muted small ms-1 d-none d-md-inline-block" style={{ fontSize: '0.7rem' }}></i>
+          </div>
+        </div>
+      </header>
+
+      {/* 2. Workspace Body (Sidebar + Content) */}
+      <div className="d-flex flex-grow-1 position-relative">
+        
+        {/* Mobile Sidebar Overlay */}
+        {isSidebarOpen && (
+          <div 
+            className="d-md-none position-fixed w-100 h-100" 
+            style={{ top: '68px', left: 0, backgroundColor: 'rgba(15,23,42,0.6)', zIndex: 1040, backdropFilter: 'blur(4px)' }}
+            onClick={() => setIsSidebarOpen(false)}
+          ></div>
         )}
 
-        {/* Tab Content: Live Sessions */}
-        {activeTab === 'live' && (
-          <div className="row">
-            <div className="col-12">
-              <div className="card-premium">
-                <div className="card-header bg-white border-0 p-4" style={{ borderBottom: '1px solid var(--color-border) !important' }}>
-                  <h4 className="heading-premium text-dark mb-0">Upcoming & Live Sessions</h4>
-                  <p className="text-muted small mb-0 mt-1">Join your interactive classes via Clinidea Space.</p>
+        {/* Left Sidebar Navigation */}
+        <aside className={`portal-sidebar ${isSidebarOpen ? 'open' : ''} portal-scrollbar`}>
+          <div className="d-flex flex-column h-100">
+            
+            {/* Nav Group 1: Academics */}
+            <div className="portal-nav-section-title">Academic Portal</div>
+            
+            {/* 1. Dashboard */}
+            <button 
+              onClick={() => { setActiveTab('dashboard'); setIsSidebarOpen(false); }} 
+              className={`portal-nav-btn ${activeTab === 'dashboard' ? 'active-student' : ''}`}
+            >
+              <i className="fa fa-chart-pie"></i>
+              <span>Dashboard</span>
+            </button>
+
+            {/* 2. Live Classrooms */}
+            <button 
+              onClick={() => { setActiveTab('live'); setIsSidebarOpen(false); }} 
+              className={`portal-nav-btn ${activeTab === 'live' ? 'active-student' : ''}`}
+            >
+              <i className="fa fa-video"></i>
+              <span>Live Sessions</span>
+              {liveSessions.some(c => c.status === 'live') && (
+                <span className="badge bg-danger rounded-pill ms-auto" style={{ fontSize: '0.65rem' }}>LIVE</span>
+              )}
+            </button>
+
+            {/* 3. Recorded Video Lectures */}
+            <button 
+              onClick={() => { setActiveTab('lms'); setActiveLMSCategory('Recorded sessions'); setIsSidebarOpen(false); }} 
+              className={`portal-nav-btn ${activeTab === 'lms' && activeLMSCategory === 'Recorded sessions' ? 'active-student' : ''}`}
+            >
+              <i className="fa fa-play-circle"></i>
+              <span>Recorded Sessions</span>
+            </button>
+
+            {/* 4. Study Material & Notes */}
+            <button 
+              onClick={() => { setActiveTab('lms'); setActiveLMSCategory('Study Material'); setIsSidebarOpen(false); }} 
+              className={`portal-nav-btn ${activeTab === 'lms' && activeLMSCategory === 'Study Material' ? 'active-student' : ''}`}
+            >
+              <i className="fa fa-book-open"></i>
+              <span>Study Material</span>
+            </button>
+
+            {/* 5. Question Bank */}
+            <button 
+              onClick={() => { setActiveTab('lms'); setActiveLMSCategory('Question Bank'); setIsSidebarOpen(false); }} 
+              className={`portal-nav-btn ${activeTab === 'lms' && activeLMSCategory === 'Question Bank' ? 'active-student' : ''}`}
+            >
+              <i className="fa fa-question-circle"></i>
+              <span>Question Bank</span>
+            </button>
+
+            {/* 6. Test Series & Exams */}
+            <button 
+              onClick={() => { setActiveTab('test-series'); setIsSidebarOpen(false); }} 
+              className={`portal-nav-btn ${activeTab === 'test-series' ? 'active-student' : ''}`}
+            >
+              <i className="fa fa-file-signature"></i>
+              <span>Tests & Exams</span>
+            </button>
+
+            {/* 7. Assignments */}
+            <button 
+              onClick={() => { setActiveTab('assignments'); setIsSidebarOpen(false); }} 
+              className={`portal-nav-btn ${activeTab === 'assignments' ? 'active-student' : ''}`}
+            >
+              <i className="fa fa-tasks"></i>
+              <span>Assignments</span>
+            </button>
+
+            {/* Nav Group 2: Vigithink Enterprise Tools */}
+            <div className="portal-nav-section-title mt-3">Industry Software</div>
+            <div className="p-2 rounded-4 mb-2" style={{ background: '#f8fafc', border: '1px solid #e2e8f0' }}>
+              <a 
+                href="https://clinidea.in/vigithink/login" 
+                target="_blank" 
+                rel="noreferrer" 
+                className="d-flex align-items-center gap-2 p-2 rounded-3 text-dark text-decoration-none fw-semibold mb-1" 
+                style={{ fontSize: '0.82rem', transition: 'background 0.2s' }}
+              >
+                <i className="fa fa-shield-alt text-success"></i> Vigithink Safety
+              </a>
+              <a 
+                href="https://clinidea.in/vigithinketmf/login" 
+                target="_blank" 
+                rel="noreferrer" 
+                className="d-flex align-items-center gap-2 p-2 rounded-3 text-dark text-decoration-none fw-semibold mb-1" 
+                style={{ fontSize: '0.82rem', transition: 'background 0.2s' }}
+              >
+                <i className="fa fa-folder-open text-warning"></i> Vigithink eTMF
+              </a>
+              <a 
+                href="https://clinidea.in/vigithinkcdms/login" 
+                target="_blank" 
+                rel="noreferrer" 
+                className="d-flex align-items-center gap-2 p-2 rounded-3 text-dark text-decoration-none fw-semibold" 
+                style={{ fontSize: '0.82rem', transition: 'background 0.2s' }}
+              >
+                <i className="fa fa-database text-primary"></i> Vigithink CDMS
+              </a>
+            </div>
+
+            {/* Nav Group 3: Account & Support */}
+            <div className="portal-nav-section-title mt-3">Account & Career</div>
+
+            {/* 8. 24/7 AI Doubt Solver */}
+            <button 
+              onClick={() => { setActiveTab('ai-tutor'); setIsSidebarOpen(false); }} 
+              className={`portal-nav-btn ${activeTab === 'ai-tutor' ? 'active-student' : ''}`}
+            >
+              <i className="fa fa-robot text-primary"></i>
+              <span>AI Doubt Solver</span>
+              <span className="badge bg-primary bg-opacity-10 text-primary rounded-pill ms-auto" style={{ fontSize: '0.65rem' }}>24/7</span>
+            </button>
+
+            {/* 9. Fees Receipt */}
+            <button 
+              onClick={() => { setActiveTab('payments'); setIsSidebarOpen(false); }} 
+              className={`portal-nav-btn ${activeTab === 'payments' ? 'active-student' : ''}`}
+            >
+              <i className="fa fa-receipt"></i>
+              <span>Fees & Invoices</span>
+            </button>
+
+            {/* 10. Certificates */}
+            <button 
+              onClick={() => { setActiveTab('vault'); setIsSidebarOpen(false); }} 
+              className={`portal-nav-btn ${activeTab === 'vault' ? 'active-student' : ''}`}
+            >
+              <i className="fa fa-certificate"></i>
+              <span>Certificates</span>
+            </button>
+
+            {/* 11. Refer & Earn */}
+            <button 
+              onClick={() => { setActiveTab('refer-earn'); setIsSidebarOpen(false); }} 
+              className={`portal-nav-btn ${activeTab === 'refer-earn' ? 'active-student' : ''}`}
+            >
+              <i className="fa fa-gift text-danger"></i>
+              <span>Refer & Earn</span>
+            </button>
+
+            {/* Profile Settings */}
+            <button 
+              onClick={() => { setShowProfilePanel(true); setIsSidebarOpen(false); }} 
+              className="portal-nav-btn mt-2"
+            >
+              <i className="fa fa-user-edit"></i>
+              <span>Profile Settings</span>
+            </button>
+
+            {/* Logout */}
+            <button 
+              onClick={handleLogout} 
+              className="portal-nav-btn text-danger mt-1"
+            >
+              <i className="fa fa-sign-out-alt text-danger"></i>
+              <span>Logout</span>
+            </button>
+
+          </div>
+        </aside>
+
+        {/* 3. Main Dynamic Content Container */}
+        <main className="flex-grow-1 p-3 p-md-4 p-xl-5 portal-scrollbar" style={{ minWidth: 0, backgroundColor: '#f8fafc' }}>
+          
+          {/* Overdue Fee Banner Alert */}
+          {payments.some(p => p.paymentStatus === 'pending' && new Date(p.dueDate) < new Date()) && !isFeeBlocked && (
+            <div className="alert alert-danger shadow-sm border-2 fw-bold d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4 rounded-4 p-3">
+              <div className="mb-2 mb-sm-0">
+                <i className="fa fa-exclamation-triangle me-2 fs-5"></i>
+                You have overdue fee installments! Please clear your dues immediately to avoid account blocking.
+              </div>
+              <button className="btn btn-danger btn-sm rounded-pill px-4 fw-bold" onClick={() => setActiveTab('payments')}>Pay Now</button>
+            </div>
+          )}
+
+          {/* Fee Blocked Screen */}
+          {isFeeBlocked && activeTab !== 'payments' ? (
+            <div className="portal-card text-center py-5 my-4">
+              <div className="card-body py-5">
+                <div className="bg-danger bg-opacity-10 text-danger rounded-circle d-inline-flex align-items-center justify-content-center mb-4 p-4" style={{ width: '90px', height: '90px' }}>
+                  <i className="fa fa-lock fs-1"></i>
                 </div>
-                <div className="card-body p-4 bg-light">
+                <h3 className="fw-bold text-danger mb-2">LMS Access Blocked</h3>
+                <p className="text-muted fs-5 mb-4 mx-auto" style={{ maxWidth: '500px' }}>
+                  {feeBlockMessage || 'Your access has been temporarily revoked due to pending fee installments.'}
+                </p>
+                <button className="btn btn-danger btn-lg rounded-pill px-5 fw-bold shadow" onClick={() => setActiveTab('payments')}>
+                  <i className="fa fa-receipt me-2"></i> View Dues & Pay Online
+                </button>
+              </div>
+            </div>
+          ) : (
+            <>
+              {/* TAB 1: DASHBOARD OVERVIEW */}
+              {activeTab === 'dashboard' && (
+                <div className="d-flex flex-column gap-4">
+                  
+                  {/* Hero "Resume Learning" Banner */}
+                  <div className="portal-hero-banner">
+                    <div className="row align-items-center position-relative" style={{ zIndex: 2 }}>
+                      <div className="col-lg-8">
+                        <div className="d-flex align-items-center gap-2 mb-3">
+                          <span className="badge rounded-pill" style={{ background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)', color: '#fff', fontSize: '0.75rem', padding: '6px 14px' }}>
+                            <i className="fa fa-sparkles me-1 text-warning"></i> Clinidea Next-Gen LMS 2.0
+                          </span>
+                          {(scheduleData.batchName || (enrolledBatches[0] && enrolledBatches[0].name)) && (
+                            <span className="badge rounded-pill bg-indigo text-white" style={{ background: '#4f46e5', fontSize: '0.75rem', padding: '6px 14px' }}>
+                              {scheduleData.batchName || enrolledBatches[0].name}
+                            </span>
+                          )}
+                        </div>
+                        <h1 className="fw-bold text-white mb-2" style={{ fontSize: '2rem', letterSpacing: '-0.5px' }}>
+                          Welcome back, {userContext.fullName || 'Student'}! 👋
+                        </h1>
+                        <p className="text-light opacity-75 mb-4" style={{ maxWidth: '600px', fontSize: '1rem', lineHeight: '1.6' }}>
+                          Continue your clinical research curriculum, review high-definition video archives, and track your industry skill milestones.
+                        </p>
+                        
+                        <div className="d-flex flex-wrap gap-3">
+                          <button 
+                            onClick={() => { setActiveTab('lms'); setActiveLMSCategory('Recorded sessions'); }} 
+                            className="btn btn-primary rounded-pill px-4 py-3 fw-bold d-inline-flex align-items-center gap-2 shadow-lg border-0"
+                            style={{ background: 'linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%)' }}
+                          >
+                            <i className="fa fa-play-circle fs-5"></i>
+                            <span>Resume Learning</span>
+                          </button>
+                          
+                          <button 
+                            onClick={() => setActiveTab('live')} 
+                            className="btn btn-outline-light rounded-pill px-4 py-3 fw-bold d-inline-flex align-items-center gap-2"
+                            style={{ borderColor: 'rgba(255,255,255,0.25)', backdropFilter: 'blur(8px)' }}
+                          >
+                            <i className="fa fa-calendar-alt"></i>
+                            <span>View Live Sessions</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Right Progress Summary inside Hero */}
+                      <div className="col-lg-4 mt-4 mt-lg-0">
+                        <div className="p-4 rounded-4" style={{ background: 'rgba(255,255,255,0.06)', backdropFilter: 'blur(16px)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                          <div className="d-flex justify-content-between align-items-center mb-2">
+                            <span className="text-white-50 small fw-bold text-uppercase">Profile & Verification</span>
+                            <span className="text-white fw-bold">{completionPercentage}%</span>
+                          </div>
+                          <div className="progress mb-3" style={{ height: '8px', backgroundColor: 'rgba(255,255,255,0.15)', borderRadius: '9999px' }}>
+                            <div className="progress-bar bg-success" style={{ width: `${completionPercentage}%`, borderRadius: '9999px' }}></div>
+                          </div>
+                          <p className="text-white-50 small mb-0">
+                            {completionPercentage === 100 
+                              ? 'Your student profile is 100% verified.' 
+                              : 'Upload remaining documents to complete your profile verification.'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 4 Modern Stat KPI Cards */}
+                  <div className="row g-3 g-md-4">
+                    
+                    {/* Stat 1: Attendance */}
+                    <div className="col-6 col-lg-3">
+                      <div className="portal-stat-card h-100">
+                        <div className="d-flex align-items-center justify-content-between mb-3">
+                          <span className="text-muted small fw-bold text-uppercase" style={{ letterSpacing: '0.5px' }}>Attendance</span>
+                          <div className="portal-stat-icon-wrapper" style={{ background: '#ecfdf5', color: '#059669' }}>
+                            <i className="fa fa-user-check"></i>
+                          </div>
+                        </div>
+                        <h3 className="fw-bold text-dark mb-1">85%</h3>
+                        <div className="d-flex align-items-center gap-1 text-success small fw-semibold">
+                          <i className="fa fa-check-circle"></i> Consistent Attendance
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Stat 2: Recorded Video Vault */}
+                    <div className="col-6 col-lg-3">
+                      <div className="portal-stat-card h-100" style={{ cursor: 'pointer' }} onClick={() => { setActiveTab('lms'); setActiveLMSCategory('Recorded sessions'); }}>
+                        <div className="d-flex align-items-center justify-content-between mb-3">
+                          <span className="text-muted small fw-bold text-uppercase" style={{ letterSpacing: '0.5px' }}>Video Vault</span>
+                          <div className="portal-stat-icon-wrapper" style={{ background: '#fef2f2', color: '#ef4444' }}>
+                            <i className="fa fa-play"></i>
+                          </div>
+                        </div>
+                        <h3 className="fw-bold text-dark mb-1">{contents.filter(c => c.contentType === 'video').length}</h3>
+                        <div className="d-flex align-items-center gap-1 text-muted small">
+                          <i className="fa fa-video text-danger"></i> Recorded Lectures
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Stat 3: Study Notes & Docs */}
+                    <div className="col-6 col-lg-3">
+                      <div className="portal-stat-card h-100" style={{ cursor: 'pointer' }} onClick={() => { setActiveTab('lms'); setActiveLMSCategory('Study Material'); }}>
+                        <div className="d-flex align-items-center justify-content-between mb-3">
+                          <span className="text-muted small fw-bold text-uppercase" style={{ letterSpacing: '0.5px' }}>Study Vault</span>
+                          <div className="portal-stat-icon-wrapper" style={{ background: '#eff6ff', color: '#3b82f6' }}>
+                            <i className="fa fa-book-open"></i>
+                          </div>
+                        </div>
+                        <h3 className="fw-bold text-dark mb-1">{contents.filter(c => c.contentType !== 'video').length}</h3>
+                        <div className="d-flex align-items-center gap-1 text-muted small">
+                          <i className="fa fa-file-pdf text-primary"></i> Documents & PPTs
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Stat 4: Test & Assignments */}
+                    <div className="col-6 col-lg-3">
+                      <div className="portal-stat-card h-100" style={{ cursor: 'pointer' }} onClick={() => setActiveTab('test-series')}>
+                        <div className="d-flex align-items-center justify-content-between mb-3">
+                          <span className="text-muted small fw-bold text-uppercase" style={{ letterSpacing: '0.5px' }}>Tests & Series</span>
+                          <div className="portal-stat-icon-wrapper" style={{ background: '#fef3c7', color: '#d97706' }}>
+                            <i className="fa fa-award"></i>
+                          </div>
+                        </div>
+                        <h3 className="fw-bold text-dark mb-1">{exams.length}</h3>
+                        <div className="d-flex align-items-center gap-1 text-warning small fw-semibold">
+                          <i className="fa fa-edit"></i> Exams & Quizzes
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+
+                  {/* Academic Modules & Tools Grid */}
+                  <div className="row g-4">
+                    
+                    {/* Left 8 Cols: Quick Action Grid */}
+                    <div className="col-lg-8">
+                      <div className="portal-card p-4">
+                        <h5 className="fw-bold text-dark mb-3 d-flex align-items-center gap-2">
+                          <i className="fa fa-rocket text-primary"></i> Learning Modules Quick Access
+                        </h5>
+                        <div className="row g-3">
+                          
+                          {/* Card: Live Space */}
+                          <div className="col-sm-6">
+                            <div 
+                              className="p-3 rounded-4 border bg-white h-100 d-flex flex-column justify-content-between" 
+                              style={{ transition: 'all 0.2s', cursor: 'pointer' }}
+                              onClick={() => setActiveTab('live')}
+                              onMouseEnter={(e) => e.currentTarget.style.borderColor = '#4f46e5'}
+                              onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
+                            >
+                              <div className="d-flex align-items-center gap-3 mb-2">
+                                <div className="p-3 rounded-3 bg-danger bg-opacity-10 text-danger">
+                                  <i className="fa fa-video fs-4"></i>
+                                </div>
+                                <div>
+                                  <h6 className="fw-bold mb-0 text-dark">Live Classroom</h6>
+                                  <small className="text-muted">Interactive live lectures</small>
+                                </div>
+                              </div>
+                              <span className="text-primary fw-semibold small mt-2 d-inline-flex align-items-center gap-1">
+                                Enter Classroom <i className="fa fa-arrow-right"></i>
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Card: Recorded Video Vault */}
+                          <div className="col-sm-6">
+                            <div 
+                              className="p-3 rounded-4 border bg-white h-100 d-flex flex-column justify-content-between" 
+                              style={{ transition: 'all 0.2s', cursor: 'pointer' }}
+                              onClick={() => { setActiveTab('lms'); setActiveLMSCategory('Recorded sessions'); }}
+                              onMouseEnter={(e) => e.currentTarget.style.borderColor = '#4f46e5'}
+                              onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
+                            >
+                              <div className="d-flex align-items-center gap-3 mb-2">
+                                <div className="p-3 rounded-3 bg-primary bg-opacity-10 text-primary">
+                                  <i className="fa fa-play-circle fs-4"></i>
+                                </div>
+                                <div>
+                                  <h6 className="fw-bold mb-0 text-dark">Lecture Archive</h6>
+                                  <small className="text-muted">High-definition recordings</small>
+                                </div>
+                              </div>
+                              <span className="text-primary fw-semibold small mt-2 d-inline-flex align-items-center gap-1">
+                                Browse Videos <i className="fa fa-arrow-right"></i>
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Card: Assignments */}
+                          <div className="col-sm-6">
+                            <div 
+                              className="p-3 rounded-4 border bg-white h-100 d-flex flex-column justify-content-between" 
+                              style={{ transition: 'all 0.2s', cursor: 'pointer' }}
+                              onClick={() => setActiveTab('assignments')}
+                              onMouseEnter={(e) => e.currentTarget.style.borderColor = '#4f46e5'}
+                              onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
+                            >
+                              <div className="d-flex align-items-center gap-3 mb-2">
+                                <div className="p-3 rounded-3 bg-warning bg-opacity-10 text-warning">
+                                  <i className="fa fa-tasks fs-4"></i>
+                                </div>
+                                <div>
+                                  <h6 className="fw-bold mb-0 text-dark">Assignments</h6>
+                                  <small className="text-muted">Submit and view feedback</small>
+                                </div>
+                              </div>
+                              <span className="text-primary fw-semibold small mt-2 d-inline-flex align-items-center gap-1">
+                                View Tasks <i className="fa fa-arrow-right"></i>
+                              </span>
+                            </div>
+                          </div>
+
+                          {/* Card: 24/7 AI Doubt Solver */}
+                          <div className="col-sm-6">
+                            <div 
+                              className="p-3 rounded-4 border bg-white h-100 d-flex flex-column justify-content-between" 
+                              style={{ transition: 'all 0.2s', cursor: 'pointer' }}
+                              onClick={() => setActiveTab('ai-tutor')}
+                              onMouseEnter={(e) => e.currentTarget.style.borderColor = '#4f46e5'}
+                              onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e2e8f0'}
+                            >
+                              <div className="d-flex align-items-center gap-3 mb-2">
+                                <div className="p-3 rounded-3 bg-info bg-opacity-10 text-info">
+                                  <i className="fa fa-robot fs-4"></i>
+                                </div>
+                                <div>
+                                  <h6 className="fw-bold mb-0 text-dark">AI Doubt Solver</h6>
+                                  <small className="text-muted">Instant clinical clarification</small>
+                                </div>
+                              </div>
+                              <span className="text-primary fw-semibold small mt-2 d-inline-flex align-items-center gap-1">
+                                Ask Questions <i className="fa fa-arrow-right"></i>
+                              </span>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Right 4 Cols: Vigithink Clinical Software */}
+                    <div className="col-lg-4">
+                      <div className="portal-card p-4 h-100 d-flex flex-column justify-content-between">
+                        <div>
+                          <div className="d-flex align-items-center justify-content-between mb-3">
+                            <h5 className="fw-bold text-dark mb-0"><i className="fa fa-laptop-code text-success me-2"></i>Vigithink Suite</h5>
+                            <span className="badge bg-success bg-opacity-10 text-success rounded-pill px-3 py-1 fw-bold">Live Clinical</span>
+                          </div>
+                          <p className="text-muted small mb-4">
+                            Gain hands-on clinical industry experience with simulated regulatory software environments.
+                          </p>
+
+                          <div className="d-flex flex-column gap-2">
+                            <a 
+                              href="https://clinidea.in/vigithink/login" 
+                              target="_blank" 
+                              rel="noreferrer" 
+                              className="d-flex align-items-center justify-content-between p-3 rounded-3 border text-decoration-none text-dark bg-light hover-bg-white"
+                            >
+                              <div className="d-flex align-items-center gap-2">
+                                <i className="fa fa-shield-alt text-success fs-5"></i>
+                                <span className="fw-bold small">Vigithink Safety (PV)</span>
+                              </div>
+                              <i className="fa fa-external-link-alt text-muted small"></i>
+                            </a>
+
+                            <a 
+                              href="https://clinidea.in/vigithinketmf/login" 
+                              target="_blank" 
+                              rel="noreferrer" 
+                              className="d-flex align-items-center justify-content-between p-3 rounded-3 border text-decoration-none text-dark bg-light hover-bg-white"
+                            >
+                              <div className="d-flex align-items-center gap-2">
+                                <i className="fa fa-folder-open text-warning fs-5"></i>
+                                <span className="fw-bold small">Vigithink eTMF</span>
+                              </div>
+                              <i className="fa fa-external-link-alt text-muted small"></i>
+                            </a>
+
+                            <a 
+                              href="https://clinidea.in/vigithinkcdms/login" 
+                              target="_blank" 
+                              rel="noreferrer" 
+                              className="d-flex align-items-center justify-content-between p-3 rounded-3 border text-decoration-none text-dark bg-light hover-bg-white"
+                            >
+                              <div className="d-flex align-items-center gap-2">
+                                <i className="fa fa-database text-primary fs-5"></i>
+                                <span className="fw-bold small">Vigithink CDMS</span>
+                              </div>
+                              <i className="fa fa-external-link-alt text-muted small"></i>
+                            </a>
+                          </div>
+                        </div>
+
+                        <div className="mt-4 p-3 rounded-3 bg-light border text-center">
+                          <small className="text-muted d-block">
+                            <i className="fa fa-info-circle me-1 text-primary"></i> Single sign-on credentials are provided upon batch commencement.
+                          </small>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 2: LMS CONTENT VAULT */}
+              {activeTab === 'lms' && (
+                <div className="d-flex flex-column gap-4">
+                  {/* Category Filter Pills */}
+                  <div className="portal-card p-3 d-flex flex-wrap gap-2 align-items-center justify-content-between">
+                    <div className="d-flex flex-wrap gap-2">
+                      {['Recorded sessions', 'Study Material', 'Question Bank'].map(cat => (
+                        <button
+                          key={cat}
+                          onClick={() => setActiveLMSCategory(cat)}
+                          className={`btn rounded-pill px-4 py-2 fw-bold text-sm ${activeLMSCategory === cat ? 'btn-primary shadow-sm' : 'btn-light border text-muted'}`}
+                        >
+                          <i className={`fa ${getCategoryIcon(cat)} me-2`}></i>
+                          {cat}
+                        </button>
+                      ))}
+                    </div>
+
+                    <Link to="/student/lms" className="btn btn-outline-primary rounded-pill px-4 py-2 fw-bold text-sm d-flex align-items-center gap-2">
+                      <i className="fa fa-tv"></i> Switch to Cinema Player View
+                    </Link>
+                  </div>
+
+                  {/* Items Grid */}
+                  <div className="portal-card p-4">
+                    <div className="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                      <div>
+                        <h4 className="fw-bold text-dark mb-1">
+                          <i className={`fa ${getCategoryIcon(activeLMSCategory)} text-primary me-2`}></i>
+                          {activeLMSCategory}
+                        </h4>
+                        <p className="text-muted small mb-0">Showing available resources for your batch curriculum.</p>
+                      </div>
+                      <span className="badge bg-light text-dark border px-3 py-2 rounded-pill fw-bold">
+                        {currentItems.length} Available
+                      </span>
+                    </div>
+
+                    {currentItems.length === 0 ? (
+                      <div className="text-center py-5">
+                        <div className="bg-light rounded-circle d-flex justify-content-center align-items-center mb-4 mx-auto" style={{ width: '80px', height: '80px' }}>
+                          <i className={`fa ${getCategoryIcon(activeLMSCategory)} fs-2 text-muted`}></i>
+                        </div>
+                        <h5 className="fw-bold text-dark mb-1">No content available in this category yet.</h5>
+                        <p className="text-muted small">Your mentors will upload materials shortly.</p>
+                      </div>
+                    ) : (
+                      <div className="row g-4">
+                        {currentItems.map(item => (
+                          <div key={item.id} className="col-md-6 col-lg-4 col-xl-3">
+                            <div 
+                              className="portal-card h-100 d-flex flex-column"
+                              style={{ cursor: 'pointer' }}
+                              onClick={() => {
+                                let contentUrl = null;
+                                if (item.localFileUrl) {
+                                  contentUrl = `${BASE_URL}${item.localFileUrl}`;
+                                } else if (item.driveWebViewLink) {
+                                  contentUrl = item.driveWebViewLink;
+                                }
+                                if (contentUrl) {
+                                  const url = `/watch?link=${encodeURIComponent(contentUrl)}&title=${encodeURIComponent(item.title)}&type=${item.contentType}`;
+                                  navigate(url);
+                                }
+                              }}
+                            >
+                              {/* 16:9 Thumbnail Area */}
+                              <div 
+                                className="position-relative w-100" 
+                                style={{ 
+                                  aspectRatio: '16/9', 
+                                  background: item.contentType === 'video' ? 'linear-gradient(135deg, #090e17 0%, #1e293b 100%)' : 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
+                                  display: 'flex', 
+                                  justifyContent: 'center', 
+                                  alignItems: 'center',
+                                  overflow: 'hidden'
+                                }}
+                              >
+                                <div className="rounded-circle d-flex justify-content-center align-items-center shadow-lg" style={{ width: '52px', height: '52px', background: item.contentType === 'video' ? 'rgba(255,255,255,0.25)' : 'rgba(15,23,42,0.1)', backdropFilter: 'blur(8px)' }}>
+                                  <i className={`fa ${item.contentType === 'video' ? 'fa-play text-white ms-1' : 'fa-file-alt text-dark'} fs-4`}></i>
+                                </div>
+
+                                <div className="position-absolute" style={{ top: '12px', left: '12px', zIndex: 5 }}>
+                                  <span className="badge rounded-pill" style={{ background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(4px)', color: '#fff', fontSize: '0.7rem', padding: '5px 10px', border: '1px solid rgba(255,255,255,0.1)' }}>
+                                    {item.moduleName || 'General Topic'}
+                                  </span>
+                                </div>
+
+                                <div className="position-absolute" style={{ bottom: '10px', right: '10px', zIndex: 5 }}>
+                                  <span className="badge rounded bg-dark text-white opacity-75" style={{ fontSize: '0.65rem', padding: '4px 6px' }}>
+                                    {item.contentType === 'video' ? '1080p DRM' : 'Document'}
+                                  </span>
+                                </div>
+                              </div>
+
+                              {/* Details */}
+                              <div className="p-3 d-flex flex-column flex-grow-1 bg-white">
+                                <h6 className="fw-bold text-dark mb-1 text-truncate" title={item.title}>{item.title}</h6>
+                                <p className="text-muted small mb-0 text-truncate" style={{ fontSize: '0.8rem' }}>
+                                  {item.description || (item.contentType === 'video' ? 'Clinidea Interactive Lecture' : 'Downloadable Study Material')}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* TAB 3: LIVE SESSIONS */}
+              {activeTab === 'live' && (
+                <div className="portal-card p-4">
+                  <div className="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom">
+                    <div>
+                      <h4 className="fw-bold text-dark mb-1"><i className="fa fa-video text-danger me-2"></i>Upcoming & Live Sessions</h4>
+                      <p className="text-muted small mb-0">Join your interactive classes via Clinidea Space.</p>
+                    </div>
+                  </div>
+
                   {liveSessions.length === 0 ? (
                     <div className="text-center py-5">
-                      <div className="bg-white rounded-circle d-flex justify-content-center align-items-center mb-4 mx-auto shadow-sm" style={{ width: '80px', height: '80px' }}>
+                      <div className="bg-light rounded-circle d-flex justify-content-center align-items-center mb-4 mx-auto" style={{ width: '80px', height: '80px' }}>
                         <i className="fa fa-calendar-times text-muted fs-2"></i>
                       </div>
-                      <h5 className="heading-premium text-muted">No Live Sessions Found</h5>
+                      <h5 className="fw-bold text-dark">No Live Sessions Found</h5>
                       <p className="text-muted small">You currently have no scheduled live classes.</p>
                     </div>
                   ) : (
                     <div className="row g-4">
                       {liveSessions.map(cls => (
                         <div key={cls.id} className="col-md-6 col-lg-4">
-                          <div className="card-premium h-100 overflow-hidden" style={{ transition: 'transform 0.2s', border: cls.status === 'live' ? '2px solid #ef4444' : 'none' }} onMouseOver={e => e.currentTarget.style.transform='translateY(-5px)'} onMouseOut={e => e.currentTarget.style.transform='translateY(0)'}>
-                            <div className="p-3" style={{ background: cls.status === 'live' ? '#ef4444' : 'var(--color-primary)' }}>
-                              <h6 className="heading-premium mb-0 text-white d-flex justify-content-between align-items-center">
+                          <div className="portal-card h-100 overflow-hidden" style={{ border: cls.status === 'live' ? '2px solid #ef4444' : '1px solid #e2e8f0' }}>
+                            <div className="p-3" style={{ background: cls.status === 'live' ? '#ef4444' : 'linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%)' }}>
+                              <h6 className="fw-bold mb-0 text-white d-flex justify-content-between align-items-center">
                                 <span><i className="fa fa-video me-2"></i> {cls.title || 'Live Class'}</span>
                                 {cls.status === 'live' && <span className="badge bg-white text-danger heartbeat rounded-pill" style={{ fontSize: '0.65rem' }}>LIVE NOW</span>}
                               </h6>
@@ -809,10 +1170,10 @@ const StudentDashboard = () => {
                                 href={`https://jitsi.belnet.be/Clinidea_LiveClass_Batch_${cls.batchId}_${cls.id}#userInfo.displayName="${encodeURIComponent(userContext.fullName || 'Student')}"&config.prejoinPageEnabled=false`} 
                                 target="_blank" 
                                 rel="noopener noreferrer" 
-                                className="btn-premium w-100 text-center text-decoration-none d-block fw-bold shadow-sm" 
-                                style={{ backgroundColor: cls.status === 'live' ? '#ef4444' : '#4f46e5', color: 'white', transition: 'all 0.2s' }}
+                                className="btn w-100 text-center text-decoration-none d-block fw-bold shadow-sm rounded-pill py-2" 
+                                style={{ backgroundColor: cls.status === 'live' ? '#ef4444' : '#4f46e5', color: 'white' }}
                               >
-                                {cls.status === 'live' ? 'Join Live Class' : 'Enter Meeting Space'} <i className="fa fa-external-link-alt ms-2"></i>
+                                {cls.status === 'live' ? 'Join Live Class Now' : 'Enter Meeting Space'} <i className="fa fa-external-link-alt ms-2"></i>
                               </a>
                             </div>
                           </div>
@@ -821,127 +1182,153 @@ const StudentDashboard = () => {
                     </div>
                   )}
                 </div>
-              </div>
-            </div>
-          </div>
-        )}
+              )}
 
-        {/* Tab Content: Vault */}
-        {activeTab === 'vault' && (
-          <div className="row g-4">
-            <div className="col-12">
-              <div className="card-premium h-100">
-                <div className="card-header bg-white border-0 p-4" style={{ borderBottom: '1px solid var(--color-border) !important' }}>
-                  <h4 className="heading-premium text-dark mb-0"><i className="fa fa-certificate text-warning me-2"></i> My Certificates</h4>
-                </div>
-                <div className="card-body p-4 bg-light">
-                  {certificates.length === 0 ? <p className="text-muted text-center py-4">No certificates issued yet.</p> : (
+              {/* TAB 4: CERTIFICATES VAULT */}
+              {activeTab === 'vault' && (
+                <div className="portal-card p-4">
+                  <h4 className="fw-bold text-dark mb-1"><i className="fa fa-certificate text-warning me-2"></i>My Certificates</h4>
+                  <p className="text-muted small mb-4">Official accredited certificates issued upon program completion.</p>
+
+                  {certificates.length === 0 ? (
+                    <div className="text-center py-5">
+                      <div className="bg-light rounded-circle d-inline-flex align-items-center justify-content-center p-4 mb-3" style={{ width: '80px', height: '80px' }}>
+                        <i className="fa fa-award text-muted fs-2"></i>
+                      </div>
+                      <h6 className="fw-bold text-dark">No certificates issued yet.</h6>
+                      <p className="text-muted small">Certificates will be published here upon fulfilling academic criteria.</p>
+                    </div>
+                  ) : (
                     <div className="d-flex flex-column gap-3">
                       {certificates.map(cert => (
-                        <div key={cert.id} className="p-3 border rounded-3 d-flex justify-content-between align-items-center bg-white shadow-sm">
+                        <div key={cert.id} className="p-3 border rounded-4 d-flex justify-content-between align-items-center bg-white shadow-xs">
                           <div>
-                            <h6 className="heading-premium mb-1 text-dark">{cert.course?.name || "Course"}</h6>
+                            <h6 className="fw-bold mb-1 text-dark">{cert.course?.name || "Course"}</h6>
                             <span className="badge mb-1" style={{ background: '#fffbeb', color: '#f59e0b', border: '1px solid #fcd34d' }}>{cert.certificateType}</span>
-                            <div className="small text-muted">ID: {cert.certificateId}</div>
+                            <div className="small text-muted">Verification ID: {cert.certificateId}</div>
                           </div>
-                          <a href={`${BASE_URL}${cert.fileUrl}`} target="_blank" rel="noreferrer" className="btn-premium px-4 py-2 fw-bold shadow-sm" style={{ backgroundColor: '#4f46e5', color: 'white', fontSize: '0.85rem', transition: 'all 0.2s' }}>Download</a>
+                          <a href={`${BASE_URL}${cert.fileUrl}`} target="_blank" rel="noreferrer" className="btn btn-primary rounded-pill px-4 py-2 fw-bold shadow-sm">
+                            <i className="fa fa-download me-1"></i> Download
+                          </a>
                         </div>
                       ))}
                     </div>
                   )}
                 </div>
-              </div>
-            </div>
-          </div>
-        )}
+              )}
 
-        {/* Tab Content: Payments */}
-        {activeTab === 'payments' && (
-          <StudentPayments payments={payments} fetchDashboardData={fetchDashboardData} />
-        )}
+              {/* TAB 5: PAYMENTS & INVOICES */}
+              {activeTab === 'payments' && (
+                <StudentPayments payments={payments} fetchDashboardData={fetchDashboardData} />
+              )}
 
-        {/* Tab Content: Assignment */}
-        {activeTab === 'assignments' && (
-          <StudentAssignments assignments={assignments} showMessage={(t, ty) => setMessage({text: t, type: ty})} fetchDashboardData={fetchDashboardData} />
-        )}
+              {/* TAB 6: ASSIGNMENTS */}
+              {activeTab === 'assignments' && (
+                <StudentAssignments assignments={assignments} showMessage={(t, ty) => setMessage({text: t, type: ty})} fetchDashboardData={fetchDashboardData} />
+              )}
 
-        {/* Tab Content: Test Series */}
-        {activeTab === 'test-series' && (
-          <StudentExams exams={exams} showMessage={(t, ty) => setMessage({text: t, type: ty})} fetchDashboardData={fetchDashboardData} />
-        )}
+              {/* TAB 7: TEST SERIES */}
+              {activeTab === 'test-series' && (
+                <StudentExams exams={exams} showMessage={(t, ty) => setMessage({text: t, type: ty})} fetchDashboardData={fetchDashboardData} />
+              )}
 
-        {/* Tab Content: Refer and Earn */}
-        {activeTab === 'refer-earn' && (
-          <div className="row g-4">
-            <div className="col-12">
-              <div className="card-premium h-100">
-                <div className="card-header bg-white border-0 p-4" style={{ borderBottom: '1px solid var(--color-border) !important' }}>
-                  <h4 className="heading-premium text-dark mb-0"><i className="fa fa-gift text-danger me-2"></i> Refer & Earn</h4>
-                </div>
-                <div className="card-body p-4 bg-light text-center">
+              {/* TAB 8: REFER AND EARN */}
+              {activeTab === 'refer-earn' && (
+                <div className="portal-card p-4 p-md-5 text-center">
                   <div className="py-4">
-                    <i className="fa fa-users text-danger fs-1 mb-3"></i>
-                    <h5 className="fw-bold text-dark">Refer your friends & earn rewards!</h5>
-                    <p className="text-muted mx-auto" style={{ maxWidth: '500px' }}>Share your unique referral link with friends. When they enroll in a course, you both earn exciting rewards and discounts!</p>
-                    <button className="btn btn-primary mt-3 px-4 py-2 rounded-pill fw-bold shadow-sm"><i className="fa fa-share-alt me-2"></i> Share Link</button>
+                    <div className="bg-danger bg-opacity-10 text-danger rounded-circle d-inline-flex align-items-center justify-content-center mb-4" style={{ width: '80px', height: '80px' }}>
+                      <i className="fa fa-gift fs-1"></i>
+                    </div>
+                    <h3 className="fw-bold text-dark mb-2">Refer your friends & earn rewards!</h3>
+                    <p className="text-muted mx-auto mb-4" style={{ maxWidth: '500px' }}>
+                      Share Clinidea Education with clinical research aspirants. When they enroll, both of you unlock certified workshop access and tuition credits!
+                    </p>
+                    <button 
+                      className="btn btn-danger px-5 py-3 rounded-pill fw-bold shadow-sm"
+                      onClick={() => {
+                        if (navigator.clipboard) {
+                          navigator.clipboard.writeText(`https://clinidea.in/courses`);
+                          alert('Clinidea referral link copied to clipboard!');
+                        }
+                      }}
+                    >
+                      <i className="fa fa-share-alt me-2"></i> Copy Referral Link
+                    </button>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        )}
-        </>
-        )}
-      </div>
-      {/* End Main Content Wrapper */}
+              )}
+
+              {/* TAB 9: 24/7 AI DOUBT SOLVER (Properly scoped inside main content area!) */}
+              {activeTab === 'ai-tutor' && (
+                <div className="portal-card p-4">
+                  <StudentAITutor />
+                </div>
+              )}
+
+            </>
+          )}
+
+        </main>
       </div>
 
-      {/* Slide-Over Profile Panel */}
+      {/* 4. Slide-Over Profile & Verification Drawer */}
       {showProfilePanel && (
         <>
-          <div className="modal-backdrop fade show" style={{ zIndex: 1040, background: 'rgba(0,0,0,0.5)' }} onClick={() => setShowProfilePanel(false)}></div>
-          <div className="bg-white shadow-lg overflow-auto" style={{ position: 'fixed', top: 0, right: 0, width: '450px', maxWidth: '100%', height: '100vh', zIndex: 1050, transition: 'transform 0.3s', borderLeft: '1px solid var(--color-border)' }}>
-            <div className="p-4 d-flex justify-content-between align-items-center position-sticky top-0 bg-white" style={{ zIndex: 10, borderBottom: '1px solid var(--color-border)' }}>
-              <h4 className="heading-premium mb-0 text-dark">Profile & Settings</h4>
-              <button onClick={() => setShowProfilePanel(false)} className="btn text-muted"><i className="fa fa-times fs-4"></i></button>
+          <div className="modal-backdrop fade show" style={{ zIndex: 1050, background: 'rgba(15,23,42,0.6)', backdropFilter: 'blur(4px)' }} onClick={() => setShowProfilePanel(false)}></div>
+          <div className="bg-white shadow-2xl overflow-auto portal-scrollbar" style={{ position: 'fixed', top: 0, right: 0, width: '480px', maxWidth: '100%', height: '100vh', zIndex: 1060, borderLeft: '1px solid var(--portal-border)' }}>
+            
+            <div className="p-4 d-flex justify-content-between align-items-center position-sticky top-0 bg-white border-bottom" style={{ zIndex: 10 }}>
+              <div className="d-flex align-items-center gap-2">
+                <div className="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center" style={{ width: '36px', height: '36px' }}>
+                  <i className="fa fa-user-cog"></i>
+                </div>
+                <h5 className="fw-bold mb-0 text-dark">Profile & Verification</h5>
+              </div>
+              <button onClick={() => setShowProfilePanel(false)} className="btn btn-light rounded-circle p-2 border" style={{ width: '36px', height: '36px' }}><i className="fa fa-times"></i></button>
             </div>
             
             <div className="p-4 bg-light min-vh-100">
-              {message.text && <div className={`alert alert-${message.type} small fw-bold shadow-sm`}>{message.text}</div>}
+              {message.text && <div className={`alert alert-${message.type} small fw-bold shadow-sm rounded-3`}>{message.text}</div>}
               
-              <div className="card-premium p-4 mb-4">
-                <h6 className="heading-premium mb-3 text-primary"><i className="fa fa-cloud-upload-alt me-2"></i> Document Vault</h6>
-                <form onSubmit={handleFileUpload} className="p-3 rounded-3 bg-light border">
-                  <select className="input-premium bg-white mb-3" value={uploadType} onChange={(e) => setUploadType(e.target.value)}>
+              {/* Document Vault Upload */}
+              <div className="portal-card p-4 mb-4">
+                <h6 className="fw-bold mb-3 text-primary"><i className="fa fa-shield-check me-2"></i>KYC Document Verification</h6>
+                <form onSubmit={handleFileUpload} className="p-3 rounded-4 bg-light border">
+                  <label className="form-label small fw-bold text-muted">Select Document Type</label>
+                  <select className="form-select mb-3 bg-white" value={uploadType} onChange={(e) => setUploadType(e.target.value)}>
                     <option value="photo">Passport Photo</option>
                     <option value="id_proof">Government ID / Aadhar</option>
                     <option value="education_certificate">Degree / Transcript</option>
                   </select>
-                  <input type="file" className="input-premium bg-white mb-3" style={{ padding: '8px' }} onChange={(e) => setSelectedFile(e.target.files[0])} />
-                  <button type="submit" disabled={uploading} className="btn w-100 py-2 text-white fw-bold shadow-sm bg-theme-secondary border-0" style={{ transition: 'all 0.2s' }}>
-                    {uploading ? 'Uploading...' : 'Secure Upload'}
+                  <label className="form-label small fw-bold text-muted">Upload File</label>
+                  <input type="file" className="form-control bg-white mb-3" onChange={(e) => setSelectedFile(e.target.files[0])} />
+                  <button type="submit" disabled={uploading} className="btn btn-primary w-100 py-2 rounded-pill fw-bold shadow-sm border-0">
+                    {uploading ? 'Uploading...' : 'Upload Securely'}
                   </button>
                 </form>
                 
                 {documents.length > 0 && (
                   <div className="mt-3 d-flex flex-wrap gap-2">
                     {documents.map(doc => (
-                      <span key={doc.id} className="badge bg-white text-dark border px-3 py-2 rounded-pill shadow-sm"><i className="fa fa-lock me-1 text-success"></i> {doc.documentType.replace('_', ' ')}</span>
+                      <span key={doc.id} className="badge bg-white text-dark border px-3 py-2 rounded-pill shadow-xs">
+                        <i className="fa fa-check-circle me-1 text-success"></i> {doc.documentType.replace('_', ' ')}
+                      </span>
                     ))}
                   </div>
                 )}
               </div>
 
-              <div className="card-premium p-4 mb-4">
-                <h6 className="heading-premium mb-3 text-primary"><i className="fa fa-user-edit me-2"></i> Demographics</h6>
+              {/* Demographics Form */}
+              <div className="portal-card p-4 mb-4">
+                <h6 className="fw-bold mb-3 text-primary"><i className="fa fa-user-edit me-2"></i>Student Demographics</h6>
                 <form onSubmit={handleProfileSubmit}>
                   <div className="mb-3">
                     <label className="form-label small fw-bold text-muted">Date of Birth</label>
-                    <input type="date" className="input-premium bg-light" name="dateOfBirth" value={profile.dateOfBirth} onChange={handleProfileChange} />
+                    <input type="date" className="form-control" name="dateOfBirth" value={profile.dateOfBirth} onChange={handleProfileChange} />
                   </div>
                   <div className="mb-3">
                     <label className="form-label small fw-bold text-muted">Gender</label>
-                    <select className="input-premium bg-light" name="gender" value={profile.gender} onChange={handleProfileChange}>
+                    <select className="form-select" name="gender" value={profile.gender} onChange={handleProfileChange}>
                       <option value="">Select</option>
                       <option value="Male">Male</option>
                       <option value="Female">Female</option>
@@ -950,57 +1337,51 @@ const StudentDashboard = () => {
                   </div>
                   <div className="mb-3">
                     <label className="form-label small fw-bold text-muted">Address</label>
-                    <input type="text" className="input-premium bg-light" name="address" value={profile.address} onChange={handleProfileChange} />
+                    <input type="text" className="form-control" name="address" value={profile.address} onChange={handleProfileChange} />
                   </div>
                   <div className="row g-2 mb-3">
-                    <div className="col-12 col-sm-4">
+                    <div className="col-4">
                       <label className="form-label small fw-bold text-muted">City</label>
-                      <input type="text" className="input-premium bg-light" name="city" value={profile.city} onChange={handleProfileChange} />
+                      <input type="text" className="form-control" name="city" value={profile.city} onChange={handleProfileChange} />
                     </div>
-                    <div className="col-12 col-sm-4">
+                    <div className="col-4">
                       <label className="form-label small fw-bold text-muted">State</label>
-                      <input type="text" className="input-premium bg-light" name="state" value={profile.state} onChange={handleProfileChange} />
+                      <input type="text" className="form-control" name="state" value={profile.state} onChange={handleProfileChange} />
                     </div>
-                    <div className="col-12 col-sm-4">
+                    <div className="col-4">
                       <label className="form-label small fw-bold text-muted">Pin</label>
-                      <input type="text" className="input-premium bg-light" name="pincode" value={profile.pincode} onChange={handleProfileChange} />
+                      <input type="text" className="form-control" name="pincode" value={profile.pincode} onChange={handleProfileChange} />
                     </div>
                   </div>
                   <div className="mb-3">
                     <label className="form-label small fw-bold text-muted">Qualification</label>
-                    <input type="text" className="input-premium bg-light" name="qualification" value={profile.qualification} onChange={handleProfileChange} />
+                    <input type="text" className="form-control" name="qualification" value={profile.qualification} onChange={handleProfileChange} />
                   </div>
                   <div className="mb-3">
                     <label className="form-label small fw-bold text-muted">College</label>
-                    <input type="text" className="input-premium bg-light" name="collegeName" value={profile.collegeName} onChange={handleProfileChange} />
+                    <input type="text" className="form-control" name="collegeName" value={profile.collegeName} onChange={handleProfileChange} />
                   </div>
                   <div className="mb-4">
                     <label className="form-label small fw-bold text-muted">Grad Year</label>
-                    <input type="text" className="input-premium bg-light" name="graduationYear" value={profile.graduationYear} onChange={handleProfileChange} />
+                    <input type="text" className="form-control" name="graduationYear" value={profile.graduationYear} onChange={handleProfileChange} />
                   </div>
                   
-                  <button type="submit" disabled={saving} className="btn w-100 py-3 text-white fw-bold shadow-sm bg-theme-secondary border-0" style={{ transition: 'all 0.2s' }}>
+                  <button type="submit" disabled={saving} className="btn btn-primary w-100 py-3 rounded-pill fw-bold shadow-sm">
                     {saving ? 'Saving...' : 'Save Profile Details'}
                   </button>
                 </form>
               </div>
+
             </div>
           </div>
-        {activeTab === 'ai-tutor' && (
-          <div className="row g-4">
-            <div className="col-12">
-              <StudentAITutor />
-            </div>
-          </div>
-        )}
         </>
       )}
 
-      {/* Student Absence Reason Modal (Strict Popup) */}
+      {/* 5. Student Absence Reason Modal */}
       {pendingAbsence && (
-        <div className="modal show d-block" style={{ backgroundColor: 'rgba(0,0,0,0.85)', zIndex: 1060 }}>
+        <div className="modal show d-block" style={{ backgroundColor: 'rgba(15,23,42,0.85)', zIndex: 1070 }}>
           <div className="modal-dialog modal-dialog-centered">
-            <div className="modal-content border-0 rounded-4 shadow-lg">
+            <div className="modal-content border-0 rounded-4 shadow-2xl">
               <div className="modal-header bg-danger text-white border-bottom-0 rounded-top-4">
                 <h5 className="modal-title fw-bold"><i className="fas fa-exclamation-triangle me-2"></i> Action Required: Absence Recorded</h5>
               </div>
@@ -1029,6 +1410,7 @@ const StudentDashboard = () => {
           </div>
         </div>
       )}
+
     </div>
   );
 };

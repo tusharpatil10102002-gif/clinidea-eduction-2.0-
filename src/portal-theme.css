@@ -1,0 +1,368 @@
+/* ============================================================ */
+/* CLINIDEA UNIVERSAL LMS DESIGN SYSTEM (v2.0)                 */
+/* ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Role Palettes */
+  --role-student-primary: #4f46e5;
+  --role-student-secondary: #3b82f6;
+  --role-student-grad: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
+  --role-student-glow: rgba(79, 70, 229, 0.35);
+
+  --role-mentor-primary: #059669;
+  --role-mentor-secondary: #10b981;
+  --role-mentor-grad: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  --role-mentor-glow: rgba(5, 150, 105, 0.35);
+
+  --role-coord-primary: #d97706;
+  --role-coord-secondary: #f59e0b;
+  --role-coord-grad: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+  --role-coord-glow: rgba(217, 119, 6, 0.35);
+
+  --role-admin-primary: #4338ca;
+  --role-admin-secondary: #6366f1;
+  --role-admin-grad: linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
+  --role-admin-glow: rgba(99, 102, 241, 0.35);
+
+  /* Surface & Typography Tokens */
+  --portal-bg: #f8fafc;
+  --portal-surface: #ffffff;
+  --portal-border: #e2e8f0;
+  --portal-border-hover: #cbd5e1;
+  --portal-text-main: #0f172a;
+  --portal-text-muted: #64748b;
+  --portal-font-heading: 'Outfit', -apple-system, sans-serif;
+  --portal-font-body: 'Inter', -apple-system, sans-serif;
+}
+
+/* Base Body Styles for Portals */
+.portal-root {
+  background-color: var(--portal-bg);
+  color: var(--portal-text-main);
+  font-family: var(--portal-font-body);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+.portal-root h1, .portal-root h2, .portal-root h3, .portal-root h4, .portal-root h5, .portal-root h6 {
+  font-family: var(--portal-font-heading);
+  letter-spacing: -0.02em;
+}
+
+/* ============================================================ */
+/* 1. TOPBAR STYLING                                           */
+/* ============================================================ */
+.portal-topbar {
+  height: 68px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--portal-border);
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+  box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.03);
+}
+
+.portal-brand-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.portal-avatar-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.35rem 0.85rem;
+  background: #f1f5f9;
+  border: 1px solid var(--portal-border);
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.portal-avatar-pill:hover {
+  background: #e2e8f0;
+  transform: translateY(-1px);
+}
+
+/* ============================================================ */
+/* 2. SIDEBAR STYLING                                          */
+/* ============================================================ */
+.portal-sidebar {
+  width: 270px;
+  height: calc(100vh - 68px);
+  position: sticky;
+  top: 68px;
+  background: #ffffff;
+  border-right: 1px solid var(--portal-border);
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 1.25rem 0.85rem;
+  z-index: 1020;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (max-width: 768px) {
+  .portal-sidebar {
+    position: fixed;
+    top: 68px;
+    bottom: 0;
+    left: 0;
+    height: calc(100vh - 68px);
+    transform: translateX(-100%);
+    box-shadow: 10px 0 30px rgba(15, 23, 42, 0.15);
+    z-index: 1045;
+  }
+  .portal-sidebar.open {
+    transform: translateX(0) !important;
+  }
+}
+
+.portal-nav-section-title {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #94a3b8;
+  padding: 0.75rem 0.85rem 0.35rem;
+}
+
+.portal-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #475569;
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  text-align: left;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-bottom: 3px;
+}
+
+.portal-nav-btn i {
+  font-size: 1.05rem;
+  width: 22px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.portal-nav-btn:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+  transform: translateX(3px);
+}
+
+.portal-nav-btn:hover i {
+  transform: scale(1.1);
+}
+
+.portal-nav-btn.active-student {
+  background: var(--role-student-grad) !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 18px -2px var(--role-student-glow) !important;
+  transform: translateX(4px);
+}
+
+.portal-nav-btn.active-mentor {
+  background: var(--role-mentor-grad) !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 18px -2px var(--role-mentor-glow) !important;
+  transform: translateX(4px);
+}
+
+.portal-nav-btn.active-coord {
+  background: var(--role-coord-grad) !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 18px -2px var(--role-coord-glow) !important;
+  transform: translateX(4px);
+}
+
+.portal-nav-btn.active-admin {
+  background: var(--role-admin-grad) !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 18px -2px var(--role-admin-glow) !important;
+  transform: translateX(4px);
+}
+
+/* ============================================================ */
+/* 3. CARD & STAT METRICS                                      */
+/* ============================================================ */
+.portal-card {
+  background: #ffffff;
+  border: 1px solid var(--portal-border);
+  border-radius: 20px;
+  box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.04);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.portal-card:hover {
+  box-shadow: 0 12px 30px -6px rgba(15, 23, 42, 0.08);
+  border-color: var(--portal-border-hover);
+}
+
+.portal-stat-card {
+  background: #ffffff;
+  border: 1px solid var(--portal-border);
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px -4px rgba(15, 23, 42, 0.04);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.portal-stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px -6px rgba(15, 23, 42, 0.08);
+  border-color: var(--portal-border-hover);
+}
+
+.portal-stat-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+/* ============================================================ */
+/* 4. HERO "RESUME LEARNING" BANNER                            */
+/* ============================================================ */
+.portal-hero-banner {
+  background: linear-gradient(135deg, #090e17 0%, #0f172a 50%, #1e1b4b 100%);
+  color: #ffffff;
+  border-radius: 24px;
+  padding: 2rem 2.5rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 16px 36px -8px rgba(15, 23, 42, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.portal-hero-banner::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  right: -10%;
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, rgba(79, 70, 229, 0.3) 0%, rgba(79, 70, 229, 0) 70%);
+  filter: blur(60px);
+  pointer-events: none;
+}
+
+/* ============================================================ */
+/* 5. CINEMA GRADE VIDEO PLAYER                                */
+/* ============================================================ */
+.portal-player-frame {
+  background: #000000;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 20px 45px -10px rgba(0, 0, 0, 0.5);
+  border: 1px solid #1e293b;
+  position: relative;
+}
+
+.portal-watermark-overlay {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(8px);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  pointer-events: none;
+  z-index: 10;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* ============================================================ */
+/* 6. MODERN TABLE & BADGE STYLING                             */
+/* ============================================================ */
+.portal-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.portal-table thead th {
+  background: #f8fafc;
+  color: #64748b;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--portal-border);
+}
+
+.portal-table tbody td {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #f1f5f9;
+  color: #1e293b;
+  font-size: 0.9rem;
+  vertical-align: middle;
+}
+
+.portal-table tbody tr {
+  transition: background-color 0.15s ease;
+}
+
+.portal-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+.portal-badge {
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+/* Scrollbars */
+.portal-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.portal-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.portal-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+.portal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

@@ -78,6 +78,7 @@ const PlacementsPage = safeLazy(() => import('./pages/PlacementsPage'));
 const RegisterInstructions = safeLazy(() => import('./pages/RegisterInstructions'));
 
 import ScrollToTop from './components/ScrollToTop';
+import './portal-theme.css';
 
 import ProtectedRoute from './components/ProtectedRoute';
 import AdminRoute from './components/AdminRoute';

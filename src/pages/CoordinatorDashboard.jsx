@@ -113,59 +113,62 @@ const CoordinatorDashboard = () => {
   const currentStages = activePipeline === 'course' ? courseStages : webinarStages;
 
   return (
-    <div className="min-vh-100 d-flex flex-column" style={{ background: '#f8fafc', color: '#1e293b' }}>
+    <div className="portal-root d-flex flex-column min-vh-100">
       <Helmet>
         <title>Student Coordinator CRM | Clinidea</title>
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
 
       {/* Header */}
-      <header className="bg-white border-bottom py-3 px-4 shadow-sm sticky-top" style={{ zIndex: 1030 }}>
-        <div className="container-fluid d-flex align-items-center justify-content-between">
-          <div className="d-flex align-items-center gap-3">
-            <div className="bg-white rounded-3 p-1 d-flex align-items-center justify-content-center border shadow-sm" style={{ width: '48px', height: '48px', borderColor: '#e2e8f0' }}>
-              <img src="/clinidea Logo/Clinidea_Education_Logo_header.webp" alt="Clinidea Education Logo" className="img-fluid" style={{ maxHeight: '100%', objectFit: 'contain' }} onError={(e) => { e.target.src = '/assets/images/logo.png'; }} />
-            </div>
-            <div>
-              <h4 className="mb-0 fw-bold text-dark fs-5">Clinidea CRM</h4>
-              <span className="badge bg-warning bg-opacity-10 text-dark fw-bold px-2 py-0" style={{ fontSize: '11px' }}>Student Coordinator Portal</span>
-            </div>
+      <header className="portal-topbar">
+        <div className="d-flex align-items-center gap-3">
+          <div className="bg-white rounded-3 p-1 d-flex align-items-center justify-content-center border shadow-xs" style={{ width: '42px', height: '42px' }}>
+            <img src="/clinidea Logo/Clinidea_Education_Logo_header.webp" alt="Clinidea" className="img-fluid" style={{ maxHeight: '100%', objectFit: 'contain' }} onError={(e) => { e.target.src = '/assets/images/logo.png'; }} />
           </div>
+          <div>
+            <span className="fw-bold text-dark fs-5" style={{ letterSpacing: '-0.3px' }}>Clinidea CRM</span>
+            <span className="portal-brand-badge ms-2" style={{ background: '#fffbeb', color: '#d97706' }}>Coordinator Portal</span>
+          </div>
+        </div>
 
-          <div className="d-flex align-items-center gap-3">
-            <div className="d-none d-sm-block text-end me-2">
-              <p className="mb-0 fw-bold text-dark" style={{ lineHeight: '1.2' }}>{coordinatorEmail.split('@')[0]}</p>
-              <small className="text-muted">Student Coordinator</small>
+        <div className="d-flex align-items-center gap-3">
+          <div className="portal-avatar-pill">
+            <div className="bg-warning text-white rounded-circle d-flex align-items-center justify-content-center fw-bold" style={{ width: '32px', height: '32px', fontSize: '0.85rem' }}>
+              <i className="fas fa-headset text-white"></i>
             </div>
-            <button onClick={handleLogout} className="btn btn-sm rounded-4 px-3 py-2 fw-bold" style={{ background: '#fff1f2', color: '#e11d48', border: '1px solid #ffe4e6' }}>
-              <i className="fas fa-sign-out-alt me-1"></i> Logout
-            </button>
+            <div className="d-none d-sm-block text-start pe-1">
+              <p className="mb-0 fw-bold text-dark lh-1" style={{ fontSize: '0.85rem' }}>{coordinatorEmail.split('@')[0]}</p>
+              <small className="text-muted" style={{ fontSize: '0.72rem' }}>Coordinator</small>
+            </div>
           </div>
+          <button onClick={handleLogout} className="btn btn-sm rounded-pill px-3 py-2 fw-bold shadow-xs" style={{ background: '#fff1f2', color: '#e11d48', border: '1px solid #ffe4e6' }}>
+            <i className="fas fa-sign-out-alt me-1"></i> Logout
+          </button>
         </div>
       </header>
 
       {/* Main Container */}
-      <main className="flex-grow-1 container-fluid px-3 px-md-4 py-4">
+      <main className="flex-grow-1 container-fluid px-3 px-md-4 py-4 portal-scrollbar" style={{ backgroundColor: '#f8fafc' }}>
         
         {/* Pipeline Toggle */}
-        <div className="d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3 mb-4 bg-white p-3 rounded-4 border shadow-sm" style={{ borderColor: '#e2e8f0' }}>
+        <div className="portal-card p-3 mb-4 d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3">
           <div className="btn-group p-1 bg-light rounded-pill border" style={{ borderColor: '#e2e8f0' }}>
             <button 
-              className={`btn rounded-pill px-4 py-2 fw-bold border-0 ${activePipeline === 'course' ? 'bg-primary text-white shadow-sm' : 'text-muted'}`}
+              className={`btn rounded-pill px-4 py-2 fw-bold border-0 transition-all ${activePipeline === 'course' ? 'bg-primary text-white shadow-sm' : 'text-muted'}`}
               onClick={() => { setActivePipeline('course'); setActiveStage('NEW'); }}
             >
               <i className="fas fa-graduation-cap me-2"></i> 1. Course Leads Pipeline
             </button>
             <button 
-              className={`btn rounded-pill px-4 py-2 fw-bold border-0 ${activePipeline === 'webinar' ? 'bg-primary text-white shadow-sm' : 'text-muted'}`}
+              className={`btn rounded-pill px-4 py-2 fw-bold border-0 transition-all ${activePipeline === 'webinar' ? 'bg-primary text-white shadow-sm' : 'text-muted'}`}
               onClick={() => { setActivePipeline('webinar'); setActiveStage('NEW'); }}
             >
-              <i className="fas fa-video me-2"></i> 2. Webinar & Event Leads Pipeline
+              <i className="fas fa-video me-2"></i> 2. Webinar & Event Leads
             </button>
           </div>
 
           <div className="d-flex align-items-center gap-2">
-            <span className="badge bg-success bg-opacity-10 text-success fw-bold px-3 py-2 rounded-pill border border-success-subtle">
+            <span className="badge bg-success bg-opacity-10 text-success fw-bold px-3 py-2 rounded-pill border border-success-subtle shadow-xs">
               <i className="fas fa-sync-alt me-1"></i> Equal Auto Lead Distribution Active
             </span>
           </div>
@@ -178,26 +181,30 @@ const CoordinatorDashboard = () => {
         )}
 
         {/* Stage Filter Chips */}
-        <div className="d-flex gap-2 overflow-auto pb-3 mb-4 custom-scrollbar">
+        <div className="d-flex gap-2 overflow-auto pb-3 mb-4 portal-scrollbar">
           {currentStages.map(st => {
             const count = leads.filter(l => (activePipeline === 'course' ? (l.stage || 'NEW') : (l.webinarStage || 'NEW')) === st.id).length;
             const isSelected = activeStage === st.id;
             return (
               <button
                 key={st.id}
-                className={`btn text-nowrap rounded-4 px-3 py-2 fw-bold border d-flex align-items-center gap-2 transition-all ${isSelected ? 'btn-primary shadow-sm text-white border-primary' : 'bg-white text-dark border-secondary-subtle'}`}
+                className={`btn text-nowrap rounded-pill px-4 py-2 fw-bold border d-flex align-items-center gap-2 transition-all ${isSelected ? 'shadow-sm text-white' : 'bg-white text-dark shadow-xs'}`}
+                style={{ 
+                  background: isSelected ? 'linear-gradient(135deg, #d97706 0%, #f59e0b 100%)' : '#ffffff', 
+                  borderColor: isSelected ? '#d97706' : '#e2e8f0' 
+                }}
                 onClick={() => setActiveStage(st.id)}
               >
                 <i className={`fas ${st.icon}`}></i>
                 <span>{st.label}</span>
-                <span className={`badge rounded-pill ${isSelected ? 'bg-white text-primary' : 'bg-light text-dark border'}`}>{count}</span>
+                <span className={`badge rounded-pill ${isSelected ? 'bg-white text-dark' : 'bg-light text-muted border'}`}>{count}</span>
               </button>
             );
           })}
         </div>
 
         {/* Leads Table Card */}
-        <div className="card border rounded-4 bg-white overflow-hidden shadow-sm" style={{ borderColor: '#e2e8f0' }}>
+        <div className="portal-card overflow-hidden">
           <div className="card-header bg-light p-3 px-4 d-flex align-items-center justify-content-between border-bottom" style={{ borderColor: '#e2e8f0' }}>
             <h5 className="mb-0 fw-bold text-dark">
               {currentStages.find(s => s.id === activeStage)?.label} ({filteredLeads.length})
