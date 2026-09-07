@@ -4,12 +4,12 @@ import { BASE_URL } from '../config';
 
 function getYouTubeEmbedUrl(url) {
   if (!url) return '';
-  const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+  const match = url.match(/(?:youtu\.be\/|youtube(?:-nocookie)?\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|live\/|shorts\/))([\w-]{11})/);
   if (match && match[1]) {
-    return `https://www.youtube.com/embed/${match[1]}?autoplay=1&rel=0&modestbranding=1`;
+    return `https://www.youtube-nocookie.com/embed/${match[1]}?autoplay=1&rel=0&modestbranding=1&enablejsapi=1`;
   }
   if (url.length === 11 && !url.includes('/') && !url.includes('.')) {
-    return `https://www.youtube.com/embed/${url}?autoplay=1&rel=0&modestbranding=1`;
+    return `https://www.youtube-nocookie.com/embed/${url}?autoplay=1&rel=0&modestbranding=1&enablejsapi=1`;
   }
   return url;
 }
@@ -18,8 +18,10 @@ const ContentPlayer = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [link, setLink] = useState('');
+  const [rawLink, setRawLink] = useState('');
   const [title, setTitle] = useState('');
   const [type, setType] = useState('');
+  const [hasError, setHasError] = useState(false);
 
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
 
@@ -34,6 +36,7 @@ const ContentPlayer = () => {
       return;
     }
 
+    setRawLink(urlLink);
     const formattedLink = getYouTubeEmbedUrl(urlLink);
     setLink(formattedLink);
     setTitle(urlTitle || 'Clinidea Video Session');
@@ -58,7 +61,7 @@ const ContentPlayer = () => {
   if (!link) return null;
 
   const isDirectVideo = link.endsWith('.mp4') || link.endsWith('.webm') || link.endsWith('.ogg') || link.includes('/uploads/');
-  const isYouTube = link.includes('youtube.com') || link.includes('youtu.be');
+  const isYouTube = link.includes('youtube.com') || link.includes('youtu.be') || link.includes('youtube-nocookie.com');
 
   let resolvedVideoSrc = link;
   if (isDirectVideo) {
@@ -102,11 +105,30 @@ const ContentPlayer = () => {
 
       {/* Full Screen Video / Iframe Container */}
       <div style={{ flex: 1, position: 'relative', width: '100%', height: '100%', backgroundColor: '#000', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        {isDirectVideo ? (
+        {hasError ? (
+          <div className="text-center p-4 text-white" style={{ maxWidth: '500px' }}>
+            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>⚠️</div>
+            <h4 className="fw-bold mb-2 text-white">Video Unavailable</h4>
+            <p className="text-muted small mb-4">
+              This video session cannot be streamed directly. If it was recently uploaded, it may still be processing on YouTube or the file may need to be re-uploaded.
+            </p>
+            <div className="d-flex justify-content-center gap-3">
+              <button onClick={handleClose} className="btn btn-primary px-4 py-2 rounded-pill fw-bold">
+                Back to Dashboard
+              </button>
+              {rawLink && (rawLink.startsWith('http') || rawLink.startsWith('https')) && (
+                <a href={rawLink} target="_blank" rel="noopener noreferrer" className="btn btn-outline-light px-4 py-2 rounded-pill fw-bold">
+                  Open Direct Link
+                </a>
+              )}
+            </div>
+          </div>
+        ) : isDirectVideo ? (
           <video 
             src={resolvedVideoSrc} 
             controls 
             autoPlay 
+            onError={() => setHasError(true)}
             style={{ width: '100%', height: '100%', outline: 'none', objectFit: 'contain' }}
           >
             Your browser does not support the video tag.
@@ -117,6 +139,7 @@ const ContentPlayer = () => {
             style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
             allowFullScreen
+            referrerPolicy="strict-origin-when-cross-origin"
             title={title}
           ></iframe>
         )}
