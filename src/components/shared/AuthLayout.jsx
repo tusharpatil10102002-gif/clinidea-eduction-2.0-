@@ -3,36 +3,60 @@ import { Link } from 'react-router-dom';
 
 const ROLE_CONFIGS = {
   student: {
-    label: 'Student Portal',
+    key: 'student',
+    label: 'Student',
+    fullTitle: 'Student Learning Portal',
     icon: 'fa-graduation-cap',
     path: '/login',
-    badgeClass: 'bg-primary text-white',
     accentColor: '#4f46e5',
-    tagline: 'Student Learning Management System'
+    secondaryColor: '#3b82f6',
+    gradient: 'linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%)',
+    glowColor: 'rgba(79, 70, 229, 0.4)',
+    bgOrb: 'rgba(79, 70, 229, 0.25)',
+    tagline: 'Access clinical research courses, live sessions & study materials',
+    badgeText: 'STUDENT LMS'
   },
   mentor: {
-    label: 'Mentor Portal',
+    key: 'mentor',
+    label: 'Mentor',
+    fullTitle: 'Faculty & Mentor Portal',
     icon: 'fa-chalkboard-teacher',
     path: '/mentor/login',
-    badgeClass: 'bg-success text-white',
     accentColor: '#059669',
-    tagline: 'Faculty & Curriculum Command'
+    secondaryColor: '#10b981',
+    gradient: 'linear-gradient(135deg, #059669 0%, #10b981 100%)',
+    glowColor: 'rgba(5, 150, 105, 0.4)',
+    bgOrb: 'rgba(5, 150, 105, 0.25)',
+    tagline: 'Manage batch schedules, study materials, and assessments',
+    badgeText: 'FACULTY LMS'
   },
   coordinator: {
-    label: 'Coordinator Portal',
+    key: 'coordinator',
+    label: 'Coordinator',
+    fullTitle: 'Student Operations Portal',
     icon: 'fa-user-tie',
     path: '/studentcoordinator/login',
-    badgeClass: 'bg-warning text-dark',
     accentColor: '#d97706',
-    tagline: 'Admissions & Student Operations'
+    secondaryColor: '#f59e0b',
+    gradient: 'linear-gradient(135deg, #d97706 0%, #f59e0b 100%)',
+    glowColor: 'rgba(217, 119, 6, 0.4)',
+    bgOrb: 'rgba(217, 119, 6, 0.25)',
+    tagline: 'Manage admissions, enrollments, and student operations',
+    badgeText: 'OPERATIONS'
   },
   admin: {
-    label: 'Admin Portal',
+    key: 'admin',
+    label: 'Admin',
+    fullTitle: 'Institutional Command',
     icon: 'fa-shield-alt',
     path: '/admin/login',
-    badgeClass: 'bg-dark text-white',
-    accentColor: '#4338ca',
-    tagline: 'Central Institutional Administration'
+    accentColor: '#6366f1',
+    secondaryColor: '#8b5cf6',
+    gradient: 'linear-gradient(135deg, #4338ca 0%, #6366f1 100%)',
+    glowColor: 'rgba(99, 102, 241, 0.4)',
+    bgOrb: 'rgba(99, 102, 241, 0.25)',
+    tagline: 'Institution administration, LMS, and system controls',
+    badgeText: 'SUPER ADMIN'
   }
 };
 
@@ -40,253 +64,341 @@ const AuthLayout = ({ title, subtitle, role = 'student', children }) => {
   const currentRole = ROLE_CONFIGS[role] || ROLE_CONFIGS.student;
 
   return (
-    <div className="auth-root-wrapper" style={{ minHeight: '100vh', display: 'flex', backgroundColor: '#f8fafc', overflowX: 'hidden' }}>
-      <div className="row g-0 w-100 flex-grow-1 position-relative">
+    <div 
+      className="auth-ultra-wrapper position-relative min-vh-100 d-flex flex-column justify-content-center align-items-center py-4 px-3"
+      style={{
+        backgroundColor: '#090e17',
+        backgroundImage: `
+          radial-gradient(at 0% 0%, ${currentRole.bgOrb} 0px, transparent 50%),
+          radial-gradient(at 100% 100%, ${currentRole.bgOrb} 0px, transparent 50%),
+          radial-gradient(at 50% 50%, rgba(15, 23, 42, 0.8) 0px, transparent 100%)
+        `,
+        overflowX: 'hidden',
+        fontFamily: "'Outfit', 'Inter', -apple-system, sans-serif"
+      }}
+    >
+      {/* Background Cyber Grid Lines */}
+      <div 
+        className="position-absolute w-100 h-100 top-0 start-0 pointer-events-none"
+        style={{
+          backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px)',
+          backgroundSize: '40px 40px',
+          opacity: 0.8,
+          zIndex: 0
+        }}
+      />
+
+      {/* Floating Ambient Glow Flare */}
+      <div 
+        className="position-absolute rounded-circle pointer-events-none"
+        style={{
+          width: '500px',
+          height: '500px',
+          background: currentRole.glowColor,
+          filter: 'blur(120px)',
+          top: '10%',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          opacity: 0.35,
+          zIndex: 0,
+          transition: 'all 0.5s ease-in-out'
+        }}
+      />
+
+      {/* Main Container */}
+      <div className="container position-relative z-2" style={{ maxWidth: '1140px' }}>
         
-        {/* ============================================================ */}
-        {/* LEFT SIDE: Modern LMS Graphic Showcase (Hidden on Mobile)     */}
-        {/* ============================================================ */}
-        <div 
-          className="d-none d-lg-flex col-lg-5 col-xl-5 flex-column justify-content-between p-5 position-relative overflow-hidden" 
-          style={{ 
-            background: 'linear-gradient(145deg, #090d16 0%, #0f172a 40%, #1e1b4b 100%)',
-            color: '#ffffff',
-            boxShadow: 'inset -1px 0 0 rgba(255, 255, 255, 0.08)'
-          }}
-        >
-          {/* Ambient Glow Orbs */}
-          <div 
-            className="position-absolute" 
-            style={{ 
-              top: '-15%', 
-              left: '-15%', 
-              width: '520px', 
-              height: '520px', 
-              background: 'radial-gradient(circle, rgba(79, 70, 229, 0.28) 0%, rgba(79, 70, 229, 0) 70%)', 
-              filter: 'blur(70px)', 
-              pointerEvents: 'none' 
-            }} 
-          />
-          <div 
-            className="position-absolute" 
-            style={{ 
-              bottom: '-15%', 
-              right: '-15%', 
-              width: '450px', 
-              height: '450px', 
-              background: 'radial-gradient(circle, rgba(14, 165, 233, 0.2) 0%, rgba(14, 165, 233, 0) 70%)', 
-              filter: 'blur(60px)', 
-              pointerEvents: 'none' 
-            }} 
-          />
-          
-          {/* Subtle Grid Pattern Overlay */}
-          <div 
-            className="position-absolute w-100 h-100 top-0 start-0" 
-            style={{ 
-              backgroundImage: 'radial-gradient(rgba(255, 255, 255, 0.12) 1px, transparent 1px)', 
-              backgroundSize: '32px 32px', 
-              opacity: 0.25, 
-              pointerEvents: 'none' 
-            }} 
-          />
-
-          {/* Top Branding */}
-          <div className="position-relative z-2">
-            <Link to="/" className="d-inline-flex align-items-center gap-3 text-decoration-none">
-              <div 
-                className="rounded-4 p-2 bg-white d-flex align-items-center justify-content-center shadow" 
-                style={{ width: '56px', height: '56px', border: '1px solid rgba(255,255,255,0.2)' }}
-              >
-                <img 
-                  src="/clinidea Logo/Clinidea_Education_Logo_header.webp" 
-                  alt="Clinidea Education" 
-                  className="img-fluid" 
-                  style={{ maxHeight: '100%', objectFit: 'contain' }}
-                  onError={(e) => { e.target.src = '/assets/images/logo.png'; }} 
-                />
-              </div>
-              <div>
-                <h3 className="mb-0 fw-bold text-white fs-4" style={{ letterSpacing: '-0.5px' }}>Clinidea LMS</h3>
-                <small className="text-white-50 text-uppercase fw-semibold" style={{ fontSize: '11px', letterSpacing: '1px' }}>Education & Research</small>
-              </div>
-            </Link>
-          </div>
-
-          {/* Mid Value Props */}
-          <div className="position-relative z-2 my-auto py-5">
-            <div className="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-4" style={{ background: 'rgba(255, 255, 255, 0.08)', border: '1px solid rgba(255, 255, 255, 0.12)' }}>
-              <span className="badge rounded-pill bg-warning text-dark fw-bold px-2 py-1" style={{ fontSize: '10px' }}>PRO LMS 2.0</span>
-              <span className="small text-white-50 fw-semibold">Clinical Research Excellence</span>
+        {/* Top Header Bar */}
+        <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-4 gap-3">
+          <Link to="/" className="d-flex align-items-center gap-3 text-decoration-none">
+            <div 
+              className="p-2 rounded-4 d-flex align-items-center justify-content-center shadow-lg"
+              style={{
+                width: '52px',
+                height: '52px',
+                background: 'rgba(255, 255, 255, 0.95)',
+                backdropFilter: 'blur(10px)',
+                border: '1px solid rgba(255, 255, 255, 0.3)'
+              }}
+            >
+              <img 
+                src="/clinidea Logo/Clinidea_Education_Logo_header.webp" 
+                alt="Clinidea Education" 
+                className="img-fluid"
+                style={{ maxHeight: '100%', objectFit: 'contain' }}
+                onError={(e) => { e.target.src = '/assets/images/logo.png'; }}
+              />
             </div>
-
-            <h1 className="display-6 fw-bold mb-3 text-white" style={{ lineHeight: '1.25', letterSpacing: '-0.8px' }}>
-              Advanced Clinical Research & Pharmacovigilance Learning System
-            </h1>
-            <p className="fs-6 text-white-50 mb-4" style={{ maxWidth: '90%', lineHeight: '1.6' }}>
-              Access industry-grade curriculum, live expert mentorship, DRM-protected video archives, and real-time assessments.
-            </p>
-
-            {/* Feature Highlights Grid */}
-            <div className="row g-3 mt-2" style={{ maxWidth: '95%' }}>
-              <div className="col-12 col-sm-6">
-                <div className="p-3 rounded-4" style={{ background: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                  <div className="d-flex align-items-center gap-2 mb-1">
-                    <i className="fa fa-video-camera text-danger"></i>
-                    <strong className="small text-white">Live & HD Archives</strong>
-                  </div>
-                  <small className="text-white-50 d-block" style={{ fontSize: '12px' }}>Anti-piracy DRM playback with interactive doubt resolution.</small>
-                </div>
+            <div>
+              <div className="d-flex align-items-center gap-2">
+                <span className="fw-bold text-white fs-4" style={{ letterSpacing: '-0.5px' }}>CLINIDEA</span>
+                <span 
+                  className="badge rounded-pill px-2 py-1 fw-bold text-uppercase"
+                  style={{
+                    fontSize: '10px',
+                    letterSpacing: '0.8px',
+                    background: currentRole.gradient,
+                    color: '#ffffff',
+                    boxShadow: `0 2px 8px ${currentRole.glowColor}`
+                  }}
+                >
+                  LMS 2.0
+                </span>
               </div>
-              <div className="col-12 col-sm-6">
-                <div className="p-3 rounded-4" style={{ background: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                  <div className="d-flex align-items-center gap-2 mb-1">
-                    <i className="fa fa-book text-info"></i>
-                    <strong className="small text-white">ICH-GCP Materials</strong>
-                  </div>
-                  <small className="text-white-50 d-block" style={{ fontSize: '12px' }}>Comprehensive presentations, study modules, and protocols.</small>
-                </div>
-              </div>
-              <div className="col-12 col-sm-6">
-                <div className="p-3 rounded-4" style={{ background: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                  <div className="d-flex align-items-center gap-2 mb-1">
-                    <i className="fa fa-shield text-success"></i>
-                    <strong className="small text-white">Role-Scoped Security</strong>
-                  </div>
-                  <small className="text-white-50 d-block" style={{ fontSize: '12px' }}>Dedicated portals for Students, Mentors, and Administrators.</small>
-                </div>
-              </div>
-              <div className="col-12 col-sm-6">
-                <div className="p-3 rounded-4" style={{ background: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                  <div className="d-flex align-items-center gap-2 mb-1">
-                    <i className="fa fa-certificate text-warning"></i>
-                    <strong className="small text-white">Accredited Credentials</strong>
-                  </div>
-                  <small className="text-white-50 d-block" style={{ fontSize: '12px' }}>Verifiable certificates and 100% placement track record.</small>
-                </div>
-              </div>
+              <small className="text-white-50 d-block" style={{ fontSize: '11px', letterSpacing: '0.5px' }}>
+                Institute of Clinical Research & Pharmacovigilance
+              </small>
             </div>
-          </div>
+          </Link>
 
-          {/* Bottom Stats Banner */}
-          <div className="position-relative z-2 pt-4" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
-            <div className="d-flex align-items-center justify-content-between text-white-50 small">
-              <span><i className="fa fa-lock text-success me-1"></i> 256-bit SSL Encrypted</span>
-              <span><i className="fa fa-users text-primary me-1"></i> 1,200+ Alumni</span>
-              <span><i className="fa fa-check-circle text-warning me-1"></i> ISO Certified Institute</span>
-            </div>
+          {/* System Status Pill */}
+          <div 
+            className="d-none d-sm-inline-flex align-items-center gap-2 px-3 py-2 rounded-pill shadow-sm"
+            style={{
+              background: 'rgba(255, 255, 255, 0.06)',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              backdropFilter: 'blur(10px)'
+            }}
+          >
+            <span className="live-pulse-dot" style={{ backgroundColor: '#10b981' }}></span>
+            <span className="text-white-50 small fw-medium" style={{ fontSize: '12px' }}>
+              System Status: <strong className="text-white">Active & DRM Protected</strong>
+            </span>
           </div>
         </div>
 
-        {/* ============================================================ */}
-        {/* RIGHT SIDE: Harmonized Auth Card & Role Switcher             */}
-        {/* ============================================================ */}
-        <div className="col-12 col-lg-7 col-xl-7 d-flex flex-column justify-content-center align-items-center position-relative py-5 px-3 px-sm-4">
-          
-          {/* Subtle background glow on right side */}
+        {/* 4-Way Segmented Portal Switcher */}
+        <div className="d-flex justify-content-center mb-4">
           <div 
-            className="position-absolute top-0 end-0" 
-            style={{ 
-              width: '400px', 
-              height: '400px', 
-              background: 'radial-gradient(circle, rgba(79, 70, 229, 0.06) 0%, rgba(79, 70, 229, 0) 70%)', 
-              filter: 'blur(50px)', 
-              pointerEvents: 'none' 
-            }} 
-          />
-
-          <div className="w-100 position-relative z-2" style={{ maxWidth: '500px' }}>
-            
-            {/* Mobile Header Branding */}
-            <div className="d-lg-none text-center mb-4">
-              <Link to="/" className="d-inline-flex align-items-center gap-2 text-decoration-none">
-                <div 
-                  className="rounded-3 p-2 bg-white d-inline-flex align-items-center justify-content-center shadow-sm" 
-                  style={{ width: '48px', height: '48px', border: '1px solid #e2e8f0' }}
-                >
-                  <img 
-                    src="/clinidea Logo/Clinidea_Education_Logo_header.webp" 
-                    alt="Clinidea" 
-                    className="img-fluid" 
-                    onError={(e) => { e.target.src = '/assets/images/logo.png'; }} 
-                  />
-                </div>
-                <div className="text-start">
-                  <h4 className="mb-0 fw-bold text-dark fs-5">Clinidea Education</h4>
-                  <small className="text-muted">Clinical Research LMS</small>
-                </div>
-              </Link>
-            </div>
-
-            {/* Quick Role Switcher Pill Navigation */}
-            <div className="mb-4">
-              <div 
-                className="d-flex p-1 rounded-4 shadow-sm bg-white border" 
-                style={{ borderColor: '#e2e8f0', gap: '4px' }}
-              >
-                {Object.entries(ROLE_CONFIGS).map(([key, cfg]) => {
-                  const isActive = role === key;
-                  return (
-                    <Link
-                      key={key}
-                      to={cfg.path}
-                      className={`btn flex-fill py-2 px-1 px-sm-2 rounded-3 text-decoration-none text-center fw-bold transition-all ${
-                        isActive 
-                          ? 'shadow-sm text-white' 
-                          : 'text-muted hover-light'
-                      }`}
-                      style={{
-                        fontSize: '12px',
-                        background: isActive ? 'linear-gradient(135deg, #4f46e5 0%, #3730a3 100%)' : 'transparent',
-                        border: 'none',
-                        whiteSpace: 'nowrap',
-                        transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)'
-                      }}
-                    >
-                      <i className={`fa ${cfg.icon} me-1 d-none d-sm-inline`}></i>
-                      {key.charAt(0).toUpperCase() + key.slice(1)}
-                    </Link>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Main Auth Card */}
-            <div 
-              className="bg-white p-4 p-sm-5 rounded-4 shadow-sm border position-relative" 
-              style={{ 
-                borderColor: '#e2e8f0',
-                boxShadow: '0 20px 40px -15px rgba(15, 23, 42, 0.07)'
-              }}
-            >
-              {/* Role Indicator Accent Pill */}
-              <div className="text-center mb-4">
-                <div 
-                  className="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-3 shadow-xs"
+            className="d-inline-flex p-1 rounded-4 shadow-lg"
+            style={{
+              background: 'rgba(15, 23, 42, 0.75)',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+              backdropFilter: 'blur(16px)',
+              maxWidth: '100%',
+              overflowX: 'auto'
+            }}
+          >
+            {Object.values(ROLE_CONFIGS).map((cfg) => {
+              const isActive = role === cfg.key;
+              return (
+                <Link
+                  key={cfg.key}
+                  to={cfg.path}
+                  className={`btn py-2 px-3 px-md-4 rounded-3 text-decoration-none d-flex align-items-center gap-2 fw-bold text-nowrap transition-all ${
+                    isActive ? 'text-white' : 'text-white-50 hover-tab'
+                  }`}
                   style={{
-                    background: '#f1f5f9',
-                    border: '1px solid #e2e8f0',
-                    color: '#334155',
                     fontSize: '13px',
-                    fontWeight: '600'
+                    letterSpacing: '-0.2px',
+                    background: isActive ? cfg.gradient : 'transparent',
+                    boxShadow: isActive ? `0 4px 14px ${cfg.glowColor}` : 'none',
+                    border: 'none',
+                    transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)'
                   }}
                 >
-                  <i className={`fa ${currentRole.icon}`} style={{ color: currentRole.accentColor }}></i>
-                  <span>{currentRole.label}</span>
-                </div>
+                  <i className={`fa ${cfg.icon}`}></i>
+                  <span>{cfg.label}</span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
 
-                <h2 className="fw-bold mb-2 text-dark" style={{ letterSpacing: '-0.5px' }}>{title}</h2>
-                <p className="text-muted small mb-0">{subtitle || currentRole.tagline}</p>
+        {/* Dual-Pane Grid Layout */}
+        <div className="row g-4 align-items-stretch justify-content-center">
+          
+          {/* LEFT COLUMN: Modern Feature Showcase (Desktop & Tablet) */}
+          <div className="col-lg-6 col-xl-6 d-none d-lg-flex flex-column justify-content-between p-4 p-xl-5 rounded-4 position-relative overflow-hidden"
+            style={{
+              background: 'rgba(15, 23, 42, 0.55)',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              backdropFilter: 'blur(16px)',
+              boxShadow: '0 20px 40px rgba(0, 0, 0, 0.3)'
+            }}
+          >
+            {/* Ambient inner glow */}
+            <div 
+              className="position-absolute"
+              style={{
+                top: '-20%',
+                left: '-20%',
+                width: '350px',
+                height: '350px',
+                background: currentRole.glowColor,
+                filter: 'blur(80px)',
+                opacity: 0.2,
+                pointerEvents: 'none'
+              }}
+            />
+
+            <div>
+              {/* Role Indicator Pill */}
+              <div 
+                className="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-4"
+                style={{
+                  background: 'rgba(255, 255, 255, 0.08)',
+                  border: '1px solid rgba(255, 255, 255, 0.15)'
+                }}
+              >
+                <i className={`fa ${currentRole.icon}`} style={{ color: currentRole.secondaryColor }}></i>
+                <span className="small text-white fw-semibold" style={{ letterSpacing: '0.5px', fontSize: '11px' }}>
+                  {currentRole.fullTitle.toUpperCase()}
+                </span>
               </div>
 
-              {/* Form Content */}
-              <div className="login-form-wrapper">
+              <h1 className="display-6 fw-bold text-white mb-3" style={{ letterSpacing: '-0.8px', lineHeight: '1.2' }}>
+                Next-Gen Clinical Research Learning Management System
+              </h1>
+
+              <p className="text-white-50 mb-4" style={{ fontSize: '15px', lineHeight: '1.6' }}>
+                Empowering clinical researchers, pharmacovigilance specialists, and mentors with encrypted high-definition streaming, real-time GCP curriculums, and secure multi-tenant portals.
+              </p>
+
+              {/* 3 Modern Feature Cards */}
+              <div className="d-flex flex-column gap-3 mb-4">
+                <div 
+                  className="p-3 rounded-4 d-flex align-items-center gap-3 transition-all feature-chip"
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.04)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)'
+                  }}
+                >
+                  <div 
+                    className="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+                    style={{
+                      width: '42px',
+                      height: '42px',
+                      background: 'rgba(239, 68, 68, 0.15)',
+                      color: '#ef4444'
+                    }}
+                  >
+                    <i className="fa fa-play-circle fs-5"></i>
+                  </div>
+                  <div>
+                    <h6 className="fw-bold text-white mb-0" style={{ fontSize: '14px' }}>Anti-Piracy Video Player</h6>
+                    <small className="text-white-50" style={{ fontSize: '12px' }}>High-definition lecture streaming protected with anti-copy DRM and verified roster access.</small>
+                  </div>
+                </div>
+
+                <div 
+                  className="p-3 rounded-4 d-flex align-items-center gap-3 transition-all feature-chip"
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.04)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)'
+                  }}
+                >
+                  <div 
+                    className="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+                    style={{
+                      width: '42px',
+                      height: '42px',
+                      background: 'rgba(14, 165, 233, 0.15)',
+                      color: '#0ea5e9'
+                    }}
+                  >
+                    <i className="fa fa-book fs-5"></i>
+                  </div>
+                  <div>
+                    <h6 className="fw-bold text-white mb-0" style={{ fontSize: '14px' }}>Curriculum & Study Materials</h6>
+                    <small className="text-white-50" style={{ fontSize: '12px' }}>Instant access to presentations, ICH-GCP protocols, and regulatory case studies.</small>
+                  </div>
+                </div>
+
+                <div 
+                  className="p-3 rounded-4 d-flex align-items-center gap-3 transition-all feature-chip"
+                  style={{
+                    background: 'rgba(255, 255, 255, 0.04)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)'
+                  }}
+                >
+                  <div 
+                    className="rounded-3 d-flex align-items-center justify-content-center flex-shrink-0"
+                    style={{
+                      width: '42px',
+                      height: '42px',
+                      background: 'rgba(16, 185, 129, 0.15)',
+                      color: '#10b981'
+                    }}
+                  >
+                    <i className="fa fa-shield fs-5"></i>
+                  </div>
+                  <div>
+                    <h6 className="fw-bold text-white mb-0" style={{ fontSize: '14px' }}>Role-Based Institutional Security</h6>
+                    <small className="text-white-50" style={{ fontSize: '12px' }}>Dedicated access boundaries for Students, Faculty Mentors, and Administrators.</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Trust Indicators */}
+            <div className="pt-4 border-top d-flex justify-content-between align-items-center text-white-50 small" style={{ borderColor: 'rgba(255, 255, 255, 0.08)' }}>
+              <span><i className="fa fa-lock text-success me-1"></i> 256-Bit SSL Encrypted</span>
+              <span><i className="fa fa-graduation-cap text-primary me-1"></i> 1,200+ Alumni</span>
+              <span><i className="fa fa-certificate text-warning me-1"></i> ISO 9001:2015</span>
+            </div>
+          </div>
+
+          {/* RIGHT COLUMN: Ultra-Modern Glassmorphic Auth Card */}
+          <div className="col-12 col-md-8 col-lg-6 col-xl-5 d-flex flex-column justify-content-center">
+            <div 
+              className="p-4 p-sm-5 rounded-4 shadow-2xl position-relative auth-glass-card"
+              style={{
+                background: 'rgba(255, 255, 255, 0.98)',
+                backdropFilter: 'blur(20px)',
+                border: '1px solid rgba(255, 255, 255, 0.8)',
+                boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.2)',
+                borderRadius: '24px'
+              }}
+            >
+              {/* Active Role Accent Stripe */}
+              <div 
+                className="position-absolute top-0 start-50 translate-middle-x rounded-pill"
+                style={{
+                  width: '80px',
+                  height: '4px',
+                  background: currentRole.gradient,
+                  boxShadow: `0 2px 10px ${currentRole.glowColor}`
+                }}
+              />
+
+              {/* Card Header */}
+              <div className="text-center mb-4 pt-1">
+                <div 
+                  className="d-inline-flex align-items-center gap-2 px-3 py-1 rounded-pill mb-3"
+                  style={{
+                    background: `${currentRole.accentColor}12`,
+                    border: `1px solid ${currentRole.accentColor}30`,
+                    color: currentRole.accentColor,
+                    fontSize: '12px',
+                    fontWeight: '700',
+                    letterSpacing: '0.3px'
+                  }}
+                >
+                  <i className={`fa ${currentRole.icon}`}></i>
+                  <span>{currentRole.badgeText}</span>
+                </div>
+
+                <h2 className="fw-bold mb-2 text-dark" style={{ letterSpacing: '-0.6px', fontSize: '24px' }}>
+                  {title}
+                </h2>
+                <p className="text-muted small mb-0" style={{ fontSize: '13px', lineHeight: '1.5' }}>
+                  {subtitle || currentRole.tagline}
+                </p>
+              </div>
+
+              {/* Injected Form Component */}
+              <div className="auth-form-container">
                 {children}
               </div>
 
-              {/* Card Footer: Back to Website & Security Notice */}
+              {/* Card Footer: Back to Website Link */}
               <div className="pt-4 mt-4 border-top text-center" style={{ borderColor: '#f1f5f9' }}>
-                <Link to="/" className="text-muted small text-decoration-none d-inline-flex align-items-center gap-1 hover-primary">
+                <Link 
+                  to="/" 
+                  className="text-muted small text-decoration-none d-inline-flex align-items-center gap-2 hover-back-link fw-semibold"
+                  style={{ transition: 'all 0.2s' }}
+                >
                   <i className="fa fa-arrow-left"></i>
                   <span>Back to Clinidea Website</span>
                 </Link>
@@ -294,61 +406,121 @@ const AuthLayout = ({ title, subtitle, role = 'student', children }) => {
 
             </div>
 
-            {/* Copyright Note */}
-            <div className="text-center mt-4">
-              <small className="text-muted" style={{ fontSize: '11px' }}>
-                &copy; {new Date().getFullYear()} Clinidea Education LMS. All Rights Reserved. Protected by anti-copy DRM.
+            {/* Mobile / Tablet Trust Badges (Visible below card on small screens) */}
+            <div className="d-lg-none d-flex justify-content-center align-items-center gap-3 text-white-50 small mt-4 text-center">
+              <span><i className="fa fa-lock text-success me-1"></i> 256-Bit SSL</span>
+              <span>•</span>
+              <span><i className="fa fa-shield text-info me-1"></i> DRM Protected</span>
+              <span>•</span>
+              <span><i className="fa fa-check-circle text-warning me-1"></i> ISO Certified</span>
+            </div>
+
+            {/* Copyright */}
+            <div className="text-center mt-3">
+              <small className="text-white-50" style={{ fontSize: '11px', opacity: 0.7 }}>
+                &copy; {new Date().getFullYear()} Clinidea Education LMS. All Rights Reserved.
               </small>
             </div>
 
           </div>
+
         </div>
 
       </div>
 
+      {/* Global Embedded Styles for Ultra-Modern LMS Theme */}
       <style dangerouslySetInnerHTML={{__html: `
-        .auth-root-wrapper input.form-control {
-          background-color: #f8fafc !important;
-          border: 1px solid #cbd5e1 !important;
-          border-radius: 12px !important;
-          padding: 12px 16px !important;
-          font-size: 15px !important;
-          color: #1e293b !important;
-          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        .live-pulse-dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          display: inline-block;
+          box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+          animation: pulse-green 2s infinite;
         }
-        .auth-root-wrapper input.form-control:focus {
-          background-color: #ffffff !important;
-          border-color: #4f46e5 !important;
-          box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.15) !important;
+        @keyframes pulse-green {
+          0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+          70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
         }
-        .auth-root-wrapper .input-group-text {
-          background-color: #f8fafc !important;
-          border: 1px solid #cbd5e1 !important;
-          color: #64748b !important;
-          border-radius: 12px !important;
+        .hover-tab:hover {
+          color: #ffffff !important;
+          background: rgba(255, 255, 255, 0.08) !important;
         }
-        .auth-root-wrapper .btn-auth-submit {
-          border-radius: 12px !important;
+        .feature-chip:hover {
+          background: rgba(255, 255, 255, 0.08) !important;
+          transform: translateX(4px);
+        }
+        .hover-back-link:hover {
+          color: ${currentRole.accentColor} !important;
+          transform: translateX(-3px);
+        }
+        
+        /* Ultra Modern Input Field Styling */
+        .auth-ultra-wrapper .input-group-modern {
+          background-color: #f8fafc;
+          border: 1.5px solid #e2e8f0;
+          border-radius: 14px !important;
+          transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+          overflow: hidden;
+        }
+        .auth-ultra-wrapper .input-group-modern:focus-within {
+          background-color: #ffffff;
+          border-color: ${currentRole.accentColor};
+          box-shadow: 0 0 0 4px ${currentRole.glowColor} !important;
+        }
+        .auth-ultra-wrapper .input-group-modern .input-group-text {
+          background: transparent !important;
+          border: none !important;
+          color: #64748b;
+          font-size: 15px;
+          padding-left: 16px;
+          padding-right: 12px;
+        }
+        .auth-ultra-wrapper .input-group-modern:focus-within .input-group-text {
+          color: ${currentRole.accentColor};
+        }
+        .auth-ultra-wrapper .input-group-modern .form-control {
+          background: transparent !important;
+          border: none !important;
+          padding: 13px 16px 13px 0 !important;
+          font-size: 14px !important;
+          color: #0f172a !important;
+          font-weight: 500;
+        }
+        .auth-ultra-wrapper .input-group-modern .form-control:focus {
+          box-shadow: none !important;
+        }
+        .auth-ultra-wrapper .input-group-modern .btn-eye-toggle {
+          background: transparent !important;
+          border: none !important;
+          color: #94a3b8;
+          padding: 0 16px;
+          transition: color 0.2s;
+        }
+        .auth-ultra-wrapper .input-group-modern .btn-eye-toggle:hover {
+          color: #0f172a;
+        }
+
+        /* Modern Submit Button */
+        .auth-ultra-wrapper .btn-modern-submit {
+          background: ${currentRole.gradient} !important;
+          color: #ffffff !important;
+          border: none !important;
+          border-radius: 14px !important;
           padding: 14px 20px !important;
           font-weight: 700 !important;
-          font-size: 16px !important;
+          font-size: 15px !important;
           letter-spacing: -0.2px !important;
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), 0 10px 20px -5px ${currentRole.glowColor} !important;
           transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
-          border: none !important;
         }
-        .auth-root-wrapper .btn-auth-submit:hover:not(:disabled) {
+        .auth-ultra-wrapper .btn-modern-submit:hover:not(:disabled) {
           transform: translateY(-2px);
-          box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.35) !important;
+          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 14px 25px -4px ${currentRole.glowColor} !important;
         }
-        .auth-root-wrapper .btn-auth-submit:active:not(:disabled) {
+        .auth-ultra-wrapper .btn-modern-submit:active:not(:disabled) {
           transform: translateY(0);
-        }
-        .hover-light:hover {
-          background: #f1f5f9 !important;
-          color: #1e293b !important;
-        }
-        .hover-primary:hover {
-          color: #4f46e5 !important;
         }
       `}} />
     </div>

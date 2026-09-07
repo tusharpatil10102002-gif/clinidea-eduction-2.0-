@@ -77,7 +77,10 @@ const CoordinatorLogin = () => {
           {/* Email Input */}
           <div className="mb-3">
             <label className="form-label fw-bold text-dark small mb-1">Coordinator Email Address</label>
-            <div className="position-relative">
+            <div className="input-group input-group-modern">
+              <span className="input-group-text">
+                <i className="fa fa-envelope-o"></i>
+              </span>
               <input 
                 type="email" 
                 name="email"
@@ -94,11 +97,14 @@ const CoordinatorLogin = () => {
           {/* Password Input with Show/Hide Toggle */}
           <div className="mb-3">
             <label className="form-label fw-bold text-dark small mb-1">Password</label>
-            <div className="position-relative d-flex align-items-center">
+            <div className="input-group input-group-modern">
+              <span className="input-group-text">
+                <i className="fa fa-lock"></i>
+              </span>
               <input 
                 type={showPassword ? "text" : "password"} 
                 name="password"
-                className="form-control pe-5" 
+                className="form-control" 
                 placeholder="Enter coordinator password"
                 value={formData.password}
                 onChange={handleChange}
@@ -107,9 +113,8 @@ const CoordinatorLogin = () => {
               />
               <button 
                 type="button" 
-                className="btn position-absolute end-0 me-2 text-muted border-0 p-1"
+                className="btn btn-eye-toggle"
                 onClick={() => setShowPassword(!showPassword)}
-                style={{ background: 'transparent' }}
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 <i className={`fa ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
@@ -120,8 +125,7 @@ const CoordinatorLogin = () => {
           {/* Submit Button */}
           <button 
             type="submit" 
-            className="btn btn-auth-submit w-100 mt-2 text-white shadow-sm d-flex align-items-center justify-content-center gap-2" 
-            style={{ background: 'linear-gradient(135deg, #d97706 0%, #b45309 100%)' }} 
+            className="btn btn-modern-submit w-100 mt-3 d-flex align-items-center justify-content-center gap-2" 
             disabled={loading}
           >
             {loading ? (

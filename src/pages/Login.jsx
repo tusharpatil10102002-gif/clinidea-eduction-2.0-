@@ -73,7 +73,10 @@ const Login = () => {
             <label className="form-label fw-bold text-dark small mb-1">
               Registered Email or Phone Number
             </label>
-            <div className="position-relative">
+            <div className="input-group input-group-modern">
+              <span className="input-group-text">
+                <i className="fa fa-envelope-o"></i>
+              </span>
               <input 
                 type="text" 
                 name="identifier"
@@ -95,11 +98,14 @@ const Login = () => {
                 Forgot password?
               </Link>
             </div>
-            <div className="position-relative d-flex align-items-center">
+            <div className="input-group input-group-modern">
+              <span className="input-group-text">
+                <i className="fa fa-lock"></i>
+              </span>
               <input 
                 type={showPassword ? "text" : "password"} 
                 name="password"
-                className="form-control pe-5" 
+                className="form-control" 
                 placeholder="Enter your password"
                 value={formData.password}
                 onChange={handleChange}
@@ -108,9 +114,8 @@ const Login = () => {
               />
               <button 
                 type="button" 
-                className="btn position-absolute end-0 me-2 text-muted border-0 p-1"
+                className="btn btn-eye-toggle"
                 onClick={() => setShowPassword(!showPassword)}
-                style={{ background: 'transparent' }}
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 <i className={`fa ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
@@ -121,8 +126,7 @@ const Login = () => {
           {/* Submit Button */}
           <button 
             type="submit" 
-            className="btn btn-auth-submit w-100 mt-2 text-white shadow-sm d-flex align-items-center justify-content-center gap-2" 
-            style={{ background: 'linear-gradient(135deg, #4f46e5 0%, #3730a3 100%)' }} 
+            className="btn btn-modern-submit w-100 mt-3 d-flex align-items-center justify-content-center gap-2" 
             disabled={loading}
           >
             {loading ? (
@@ -132,7 +136,7 @@ const Login = () => {
               </>
             ) : (
               <>
-                <i className="fa fa-lock"></i>
+                <i className="fa fa-sign-in"></i>
                 <span>Sign In to Student LMS</span>
               </>
             )}

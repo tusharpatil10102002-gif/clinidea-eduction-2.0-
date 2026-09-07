@@ -68,7 +68,10 @@ const AdminLogin = () => {
           {/* Email Input */}
           <div className="mb-3">
             <label className="form-label fw-bold text-dark small mb-1">Administrator Email</label>
-            <div className="position-relative">
+            <div className="input-group input-group-modern">
+              <span className="input-group-text">
+                <i className="fa fa-envelope-o"></i>
+              </span>
               <input 
                 type="email" 
                 className="form-control" 
@@ -84,10 +87,13 @@ const AdminLogin = () => {
           {/* Password Input with Show/Hide Toggle */}
           <div className="mb-3">
             <label className="form-label fw-bold text-dark small mb-1">Master Password</label>
-            <div className="position-relative d-flex align-items-center">
+            <div className="input-group input-group-modern">
+              <span className="input-group-text">
+                <i className="fa fa-lock"></i>
+              </span>
               <input 
                 type={showPassword ? "text" : "password"} 
-                className="form-control pe-5" 
+                className="form-control" 
                 placeholder="Enter admin password"
                 value={formData.password}
                 onChange={e => setFormData({ ...formData, password: e.target.value })}
@@ -96,9 +102,8 @@ const AdminLogin = () => {
               />
               <button 
                 type="button" 
-                className="btn position-absolute end-0 me-2 text-muted border-0 p-1"
+                className="btn btn-eye-toggle"
                 onClick={() => setShowPassword(!showPassword)}
-                style={{ background: 'transparent' }}
                 aria-label={showPassword ? "Hide password" : "Show password"}
               >
                 <i className={`fa ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
@@ -109,8 +114,7 @@ const AdminLogin = () => {
           {/* Submit Button */}
           <button 
             type="submit" 
-            className="btn btn-auth-submit w-100 mt-2 text-white shadow-sm d-flex align-items-center justify-content-center gap-2" 
-            style={{ background: 'linear-gradient(135deg, #4338ca 0%, #312e81 100%)' }} 
+            className="btn btn-modern-submit w-100 mt-3 d-flex align-items-center justify-content-center gap-2" 
             disabled={loading}
           >
             {loading ? (
@@ -120,7 +124,7 @@ const AdminLogin = () => {
               </>
             ) : (
               <>
-                <i className="fa fa-shield-alt"></i>
+                <i className="fa fa-shield"></i>
                 <span>Sign In to Admin Portal</span>
               </>
             )}
